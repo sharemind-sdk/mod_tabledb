@@ -1664,14 +1664,14 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     std::set<std::string> signatures;
     signatures.insert("tdb_open");
     signatures.insert("tdb_close");
-    signatures.insert("tdb_tbl_create");
+    //signatures.insert("tdb_tbl_create");
     //signatures.insert("tdb_tbl_delete");
     //signatures.insert("tdb_tbl_exists");
     //signatures.insert("tdb_tbl_size");
     //signatures.insert("tdb_delete_col");
     //signatures.insert("tdb_delete_row");
     //signatures.insert("tdb_insert_col");
-    signatures.insert("tdb_insert_row");
+    //signatures.insert("tdb_insert_row");
     //signatures.insert("tdb_read_col");
     //signatures.insert("tdb_read_row");
     //signatures.insert("tdb_update_col");

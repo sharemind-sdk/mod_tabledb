@@ -1,0 +1,1792 @@
+/*
+ * This file is a part of the Sharemind framework.
+ * Copyright (C) Cybernetica AS
+ *
+ * All rights are reserved. Reproduction in whole or part is prohibited
+ * without the written consent of the copyright owner. The usage of this
+ * code is subject to the appropriate license agreement.
+ */
+
+#include <cassert>
+#include <sharemind/common/Logger/ILogger.h>
+#include <sharemind/common/Logger/Debug.h>
+#include <sharemind/common/Random/Random.h>
+#include <sharemind/libmodapi/api_0x1.h>
+#include <sharemind/miner/Facilities/datastoreapi.h>
+#include "TdbModule.h"
+#include "TdbTypesUtil.h"
+
+#define SHAREMIND_INTERNAL__
+#include "TdbVectorMap.h"
+
+namespace { SHAREMIND_DEFINE_PREFIXED_LOGS("[TdbModule] "); }
+
+namespace {
+
+using namespace sharemind;
+
+template < size_t NumArgs
+         , bool   NeedReturnValue = false
+         , size_t NumRefs = 0
+         , size_t NumCRefs = 0
+         >
+struct SyscallArgs {
+    static inline bool check (size_t num_args,
+                              const SharemindModuleApi0x1Reference* refs,
+                              const SharemindModuleApi0x1CReference* crefs,
+                              SharemindCodeBlock * returnValue)
+    {
+        if (num_args != NumArgs) {
+            return false;
+        }
+
+        if (NeedReturnValue && ! returnValue) {
+            return false;
+        }
+
+        if (refs != 0) {
+            size_t i = 0;
+            for (; refs[i].pData != 0; ++ i);
+            if (i != NumRefs)
+                return false;
+        }
+        else {
+            if (NumRefs != 0)
+                return false;
+        }
+
+        if (crefs != 0) {
+            size_t i = 0;
+            for (; crefs[i].pData != 0; ++ i);
+            if (i != NumCRefs)
+                return false;
+        }
+        else {
+            if (NumCRefs != 0)
+                return false;
+        }
+
+        return true;
+    }
+};
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_open,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_open", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_close,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_close", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_create,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_tbl_create", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_insert_row,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_insert_row", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_stmt_exec,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_stmt_exec", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<0u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue)) {
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+    }
+
+    try {
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+        uint64_t vmapId = 0;
+        if (!m->newVectorMap(c->process_internal, vmapId))
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = vmapId;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_delete,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+        if (!m->deleteVectorMap(c->process_internal, vmapId))
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_index,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->size<TdbIndex>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_index,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbIndex & idx = map->at<TdbIndex>(name, num);
+
+        returnValue->uint64[0] = idx.idx;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_index,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t val = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        TdbIndex * idx = sharemind::TdbIndex_new(val);
+        try {
+            map->push_back<TdbIndex>(name, idx);
+        } catch (...) {
+            sharemind::TdbIndex_delete(idx);
+            throw;
+        }
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_index,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->pop_back<TdbIndex>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_index,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->clear<TdbIndex>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_index_vector,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->count<TdbIndex>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_string,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->size<TdbString>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_string,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0u].uint64[0u];
+        const uint64_t num = args[1u].uint64[0u];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbString & str = map->at<TdbString>(name, num);
+
+        const uint64_t mem_size = strlen(str.str) + 1u;
+        const uint64_t mem_hndl = (* c->publicAlloc)(c, mem_size);
+        char * const mem_ptr = static_cast<char *>((* c->publicMemPtrData)(c, mem_hndl));
+        strncpy(mem_ptr, str.str, mem_size);
+        returnValue[0].uint64[0] = mem_hndl;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_string,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 2u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || crefs[1u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0'
+            || static_cast<const char *>(crefs[1u].pData)[crefs[1u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+        const std::string str(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        TdbString * s = sharemind::TdbString_new(str);
+        try {
+            map->push_back<TdbString>(name, s);
+        } catch (...) {
+            sharemind::TdbString_delete(s);
+            throw;
+        }
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_string,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->pop_back<TdbString>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_string,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->clear<TdbString>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_string_vector,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->count<TdbString>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_type,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->size<TdbType>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_domain,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbType & t = map->at<TdbType>(name, num);
+
+        const char * str = t.domain;
+        const uint64_t mem_size = strlen(str) + 1u;
+        const uint64_t mem_hndl = (* c->publicAlloc)(c, mem_size);
+        char * const mem_ptr = static_cast<char *>((* c->publicMemPtrData)(c, mem_hndl));
+        strncpy(mem_ptr, str, mem_size);
+        returnValue[0].uint64[0] = mem_hndl;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_name,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbType & t = map->at<TdbType>(name, num);
+
+        const char * str = t.name;
+        const uint64_t mem_size = strlen(str) + 1u;
+        const uint64_t mem_hndl = (* c->publicAlloc)(c, mem_size);
+        char * const mem_ptr = static_cast<char *>((* c->publicMemPtrData)(c, mem_hndl));
+        strncpy(mem_ptr, str, mem_size);
+        returnValue[0].uint64[0] = mem_hndl;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_size,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbType & t = map->at<TdbType>(name, num);
+        returnValue[0].uint64[0] = t.size;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_type,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, false, 0u, 3u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || crefs[1u].size == 0u
+            || crefs[2u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0'
+            || static_cast<const char *>(crefs[1u].pData)[crefs[1u].size - 1u] != '\0'
+            || static_cast<const char *>(crefs[2u].pData)[crefs[2u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t typeSize = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+        const std::string typeDomain(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
+        const std::string typeName(static_cast<const char *>(crefs[2u].pData), crefs[2u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        TdbType * t = sharemind::TdbType_new(typeDomain, typeName, typeSize);
+        try {
+            map->push_back<TdbType>(name, t);
+        } catch (...) {
+            sharemind::TdbType_delete(t);
+            throw;
+        }
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_type,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->pop_back<TdbType>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_type,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->clear<TdbType>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_type_vector,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->count<TdbType>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_value,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->size<TdbValue>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_domain,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbValue & v = map->at<TdbValue>(name, num);
+
+        const char * str = v.type->domain;
+        const uint64_t mem_size = strlen(str) + 1u;
+        const uint64_t mem_hndl = (* c->publicAlloc)(c, mem_size);
+        char * const mem_ptr = static_cast<char *>((* c->publicMemPtrData)(c, mem_hndl));
+        strncpy(mem_ptr, str, mem_size);
+        returnValue[0].uint64[0] = mem_hndl;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_name,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbValue & v = map->at<TdbValue>(name, num);
+
+        const char * str = v.type->name;
+        const uint64_t mem_size = strlen(str) + 1u;
+        const uint64_t mem_hndl = (* c->publicAlloc)(c, mem_size);
+        char * const mem_ptr = static_cast<char *>((* c->publicMemPtrData)(c, mem_hndl));
+        strncpy(mem_ptr, str, mem_size);
+        returnValue[0].uint64[0] = mem_hndl;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_size,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbValue & v = map->at<TdbValue>(name, num);
+        returnValue[0].uint64[0] = v.type->size;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (num_args != 2)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (refs && refs[1u].pData != NULL)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (!crefs || crefs[1u].pData != NULL)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        const TdbValue & v = map->at<TdbValue>(name, num);
+
+        if (refs) {
+            // TODO: the following is a workaround! We are always allocating one
+            // byte too much as VM does not allow us to allocate 0 sized memory block.
+            if (v.size != refs[0u].size - 1)
+                return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+            memcpy(refs[0u].pData, v.buffer, v.size);
+        }
+
+        if (returnValue)
+            returnValue[0].uint64[0] = v.size;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, false, 0u, 4u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || crefs[1u].size == 0u
+            || crefs[2u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0'
+            || static_cast<const char *>(crefs[1u].pData)[crefs[1u].size - 1u] != '\0'
+            || static_cast<const char *>(crefs[2u].pData)[crefs[2u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[3u].size == 0u)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t typeSize = args[1].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+        const std::string typeDomain(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
+        const std::string typeName(static_cast<const char *>(crefs[2u].pData), crefs[2u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        // TODO: the following is a workaround! We are always allocating one
+        // byte too much as VM does not allow us to allocate 0 sized memory block.
+        const uint64_t bufSize = crefs[3u].size - 1;
+
+        TdbValue * v = sharemind::TdbValue_new(typeDomain, typeName, typeSize, crefs[3u].pData, bufSize);
+        try {
+            map->push_back<TdbValue>(name, v);
+        } catch (...) {
+            sharemind::TdbValue_delete(v);
+            throw;
+        }
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_value,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->pop_back<TdbValue>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_value,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[1u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->clear<TdbValue>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_value_vector,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->count<TdbValue>(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_count,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->count(name);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_erase,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (num_args != 1)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (refs)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (!crefs || crefs[1].pData != NULL)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        uint64_t rv = map->erase(name);
+
+        if (returnValue)
+            returnValue->uint64[0] = rv;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->clear();
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_reset,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->reset();
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_set_batch,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<2u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+        const uint64_t num = args[1].uint64[0];
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->setBatch(num);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_next_batch,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->nextBatch();
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_prev_batch,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->previousBatch();
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_add_batch,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        map->addBatch();
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_batch_count,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<1u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+    try {
+        const uint64_t vmapId = args[0].uint64[0];
+
+        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        if (!map)
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->uint64[0] = map->batchCount();
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const sharemind::TdbVectorMap::Exception & e) {
+        LogError(m->logger()) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+} /* namespace { */
+
+extern "C" {
+
+SHAREMIND_MODULE_API_MODULE_INFO("tabledb",
+                                 0x00010000,
+                                 0x1);
+
+SHAREMIND_MODULE_API_0x1_INITIALIZER(c) __attribute__ ((visibility("default")));
+SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
+    assert(c);
+
+    /*
+     * Get facilities
+     */
+    const SharemindModuleApi0x1Facility * flog = c->getModuleFacility(c, "Logger");
+    if (!flog || !flog->facility)
+        return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
+
+    const SharemindModuleApi0x1Facility * frng = c->getModuleFacility(c, "Random");
+    if (!frng || !frng->facility)
+        return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
+
+    const SharemindModuleApi0x1Facility * fdsm = c->getModuleFacility(c, "DataStoreManager");
+    if (!fdsm || !fdsm->facility)
+        return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
+
+    sharemind::ILogger * logger = static_cast<sharemind::ILogger *>(flog->facility);
+    sharemind::IRandom * random = static_cast<sharemind::IRandom *>(frng->facility);
+    DataStoreManager * dsm = static_cast<DataStoreManager *>(fdsm->facility);
+
+    /*
+     * Check for the module configuration
+     */
+    if (!c->conf) {
+        LogError(*logger) << "No module configuration given.";
+        return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
+    }
+
+    /*
+     * Construct a list of syscalls that must be defined in the submodules
+     */
+    std::set<std::string> signatures;
+    signatures.insert("tdb_open");
+    signatures.insert("tdb_close");
+    signatures.insert("tdb_tbl_create");
+    //signatures.insert("tdb_tbl_delete");
+    //signatures.insert("tdb_tbl_exists");
+    //signatures.insert("tdb_tbl_size");
+    //signatures.insert("tdb_delete_col");
+    //signatures.insert("tdb_delete_row");
+    //signatures.insert("tdb_insert_col");
+    signatures.insert("tdb_insert_row");
+    //signatures.insert("tdb_read_col");
+    //signatures.insert("tdb_read_row");
+    //signatures.insert("tdb_update_col");
+    //signatures.insert("tdb_update_row");
+    signatures.insert("tdb_stmt_exec");
+
+    /*
+     * Initialize the module handle
+     */
+    try {
+        c->moduleHandle = new sharemind::TdbModule(*logger, *random, *dsm, c->conf, signatures);
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const TdbModule::InitializationException & e) {
+        LogError(*logger) << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    } catch (const TdbModule::ConfigurationException & e) {
+        LogError(*logger) << e.what();
+        return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) __attribute__ ((visibility("default")));
+SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
+    assert(c);
+    assert(c->moduleHandle);
+
+    try {
+        delete static_cast<sharemind::TdbModule *>(c->moduleHandle);
+    } catch (...) {
+        const SharemindModuleApi0x1Facility * flog = c->getModuleFacility(c, "Logger");
+        if (flog && flog->facility) {
+            sharemind::ILogger * logger = static_cast<sharemind::ILogger *>(flog->facility);
+            LogWarning(*logger) << "Exception was caught during module deinitialization";
+        }
+    }
+
+    c->moduleHandle = 0;
+
+    return SHAREMIND_MODULE_API_0x1_OK;
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
+
+    /* High level database operations */
+    { "tdb_open",                           &tdb_open }
+    , { "tdb_close",                        &tdb_close }
+
+    /* Table database API */
+    , { "tdb_tbl_create",                   &tdb_tbl_create }
+    //, { "tdb_tbl_delete", &tdb_tbl_delete }
+    //, { "tdb_tbl_exists", &tdb_tbl_exists }
+    //, { "tdb_tbl_size",   &tdb_tbl_size }
+    //, { "tdb_delete_col", &tdb_delete_col }
+    //, { "tdb_delete_row", &tdb_delete_row }
+    //, { "tdb_insert_col", &tdb_insert_col }
+    , { "tdb_insert_row",                   &tdb_insert_row }
+    //, { "tdb_read_col",   &tdb_read_col }
+    //, { "tdb_read_row",   &tdb_read_row }
+    //, { "tdb_update_col", &tdb_update_col }
+    //, { "tdb_update_row", &tdb_update_row }
+
+    /* Table database statement API */
+    , { "tdb_stmt_exec",                    &tdb_stmt_exec }
+
+    /* Parameter and result vector map API */
+    /* Constructor/Destructor */
+    , { "tdb_vmap_new",                     &tdb_vmap_new }
+    , { "tdb_vmap_delete",                  &tdb_vmap_delete }
+
+    /* Value manipulation */
+    , { "tdb_vmap_size_index",              &tdb_vmap_size_index }
+    , { "tdb_vmap_at_index",                &tdb_vmap_at_index }
+    , { "tdb_vmap_push_back_index",         &tdb_vmap_push_back_index }
+    , { "tdb_vmap_pop_back_index",          &tdb_vmap_pop_back_index }
+    , { "tdb_vmap_clear_index",             &tdb_vmap_clear_index }
+    , { "tdb_vmap_is_index_vector",         &tdb_vmap_is_index_vector }
+    , { "tdb_vmap_size_string",             &tdb_vmap_size_string }
+    , { "tdb_vmap_at_string",               &tdb_vmap_at_string }
+    , { "tdb_vmap_push_back_string",        &tdb_vmap_push_back_string }
+    , { "tdb_vmap_pop_back_string",         &tdb_vmap_pop_back_string }
+    , { "tdb_vmap_clear_string",            &tdb_vmap_clear_string }
+    , { "tdb_vmap_is_string_vector",        &tdb_vmap_is_string_vector }
+    , { "tdb_vmap_size_type",               &tdb_vmap_size_type }
+    , { "tdb_vmap_at_type_domain",          &tdb_vmap_at_type_domain }
+    , { "tdb_vmap_at_type_name",            &tdb_vmap_at_type_name }
+    , { "tdb_vmap_at_type_size",            &tdb_vmap_at_type_size }
+    , { "tdb_vmap_push_back_type",          &tdb_vmap_push_back_type }
+    , { "tdb_vmap_pop_back_type",           &tdb_vmap_pop_back_type }
+    , { "tdb_vmap_clear_type",              &tdb_vmap_clear_type }
+    , { "tdb_vmap_is_type_vector",          &tdb_vmap_is_type_vector }
+    , { "tdb_vmap_size_value",              &tdb_vmap_size_value }
+    , { "tdb_vmap_at_value_type_domain",    &tdb_vmap_at_value_type_domain }
+    , { "tdb_vmap_at_value_type_name",      &tdb_vmap_at_value_type_name }
+    , { "tdb_vmap_at_value_type_size",      &tdb_vmap_at_value_type_size }
+    , { "tdb_vmap_at_value",                &tdb_vmap_at_value }
+    , { "tdb_vmap_push_back_value",         &tdb_vmap_push_back_value }
+    , { "tdb_vmap_pop_back_value",          &tdb_vmap_pop_back_value }
+    , { "tdb_vmap_clear_value",             &tdb_vmap_clear_value }
+    , { "tdb_vmap_is_value_vector",         &tdb_vmap_is_value_vector }
+    , { "tdb_vmap_count",                   &tdb_vmap_count }
+    , { "tdb_vmap_erase",                   &tdb_vmap_erase }
+    , { "tdb_vmap_clear",                   &tdb_vmap_clear }
+
+    /* Batch manipulation */
+    , { "tdb_vmap_reset",                   &tdb_vmap_reset }
+    , { "tdb_vmap_set_batch",               &tdb_vmap_set_batch }
+    , { "tdb_vmap_next_batch",              &tdb_vmap_next_batch }
+    , { "tdb_vmap_prev_batch",              &tdb_vmap_prev_batch }
+    , { "tdb_vmap_add_batch",               &tdb_vmap_add_batch }
+    , { "tdb_vmap_batch_count",             &tdb_vmap_batch_count }
+);
+
+} /* extern "C" { */

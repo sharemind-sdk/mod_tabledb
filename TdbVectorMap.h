@@ -28,63 +28,6 @@
 #include "tdbvectormapapi.h"
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-TdbVectorMapError TdbVectorMap_size_index(TdbVectorMap * map, const char * key, size_t * size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_at_index(TdbVectorMap * map, const char * key, const uint64_t n, TdbIndex * idx) __attribute__ ((nonnull(1, 2, 4)));
-TdbVectorMapError TdbVectorMap_push_back_index(TdbVectorMap * map, const char * key, TdbIndex * idx) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_pop_back_index(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_clear_index(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_get_index_vector(TdbVectorMap * map, const char * key, TdbIndex *** vec, size_t * size) __attribute__ ((nonnull(1, 2, 3, 4)));
-TdbVectorMapError TdbVectorMap_set_index_vector(TdbVectorMap * map, const char * key, TdbIndex ** vec, const size_t size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_is_index_vector(TdbVectorMap * map, const char * key, bool * rv) __attribute__ ((nonnull(1, 2, 3)));
-
-TdbVectorMapError TdbVectorMap_size_string(TdbVectorMap * map, const char * key, size_t * size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_at_string(TdbVectorMap * map, const char * key, const uint64_t n, TdbString * str) __attribute__ ((nonnull(1, 2, 4)));
-TdbVectorMapError TdbVectorMap_push_back_string(TdbVectorMap * map, const char * key, TdbString * str) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_pop_back_string(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_clear_string(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_get_string_vector(TdbVectorMap * map, const char * key, TdbString *** vec, size_t * size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_set_string_vector(TdbVectorMap * map, const char * key, TdbString ** vec, const size_t size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_is_string_vector(TdbVectorMap * map, const char * key, bool * rv) __attribute__ ((nonnull(1, 2, 3)));
-
-TdbVectorMapError TdbVectorMap_size_type(TdbVectorMap * map, const char * key, size_t * size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_at_type(TdbVectorMap * map, const char * key, const uint64_t n, TdbType * type) __attribute__ ((nonnull(1, 2, 4)));
-TdbVectorMapError TdbVectorMap_push_back_type(TdbVectorMap * map, const char * key, TdbType * type) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_pop_back_type(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_clear_type(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_get_type_vector(TdbVectorMap * map, const char * key, TdbType *** vec, size_t * size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_set_type_vector(TdbVectorMap * map, const char * key, TdbType ** vec, const size_t size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_is_type_vector(TdbVectorMap * map, const char * key, bool * rv) __attribute__ ((nonnull(1, 2, 3)));
-
-TdbVectorMapError TdbVectorMap_size_value(TdbVectorMap * map, const char * key, size_t * size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_at_value(TdbVectorMap * map, const char * key, const uint64_t n, TdbValue * val) __attribute__ ((nonnull(1, 2, 4)));
-TdbVectorMapError TdbVectorMap_push_back_value(TdbVectorMap * map, const char * key, TdbValue * val) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_pop_back_value(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_clear_value(TdbVectorMap * map, const char * key) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_get_value_vector(TdbVectorMap * map, const char * key, TdbValue *** vec, size_t * size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_set_value_vector(TdbVectorMap * map, const char * key, TdbValue ** vec, const size_t size) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_is_value_vector(TdbVectorMap * map, const char * key, bool * rv) __attribute__ ((nonnull(1, 2, 3)));
-
-TdbVectorMapError TdbVectorMap_count(TdbVectorMap * map, const char * key, bool * rv) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_erase(TdbVectorMap * map, const char * key, bool * rv) __attribute__ ((nonnull(1, 2, 3)));
-TdbVectorMapError TdbVectorMap_clear(TdbVectorMap * map) __attribute__ ((nonnull(1)));
-
-TdbVectorMapError TdbVectorMap_set_batch(TdbVectorMap * map, const size_t n) __attribute__ ((nonnull(1)));
-TdbVectorMapError TdbVectorMap_prev_batch(TdbVectorMap * map, bool * b) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_next_batch(TdbVectorMap * map, bool * b) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_add_batch(TdbVectorMap * map) __attribute__ ((nonnull(1)));
-TdbVectorMapError TdbVectorMap_batch_count(TdbVectorMap * map, size_t * count) __attribute__ ((nonnull(1, 2)));
-TdbVectorMapError TdbVectorMap_reset(TdbVectorMap * map) __attribute__ ((nonnull(1)));
-
-uint64_t TdbVectorMap_get_id(TdbVectorMap * map) __attribute__ ((nonnull(1)));
-
-#ifdef __cplusplus
-} /* extern "C" { */
-#endif
-
 namespace sharemind {
 
 // We want a custom clone allocator and deleter for some of the types, however

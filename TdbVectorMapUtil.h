@@ -17,18 +17,6 @@
 #include "tdbvectormapapi.h"
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-TdbVectorMap * TdbVectorMapUtil_new_map(TdbVectorMapUtil * util, DataStore * datastore) __attribute__ ((nonnull(1, 2)));
-bool TdbVectorMapUtil_delete_map(TdbVectorMapUtil * util, DataStore * datastore, const uint64_t vmapId) __attribute__ ((nonnull(1, 2)));
-TdbVectorMap * TdbVectorMapUtil_get_map(TdbVectorMapUtil * util, DataStore * datastore, const uint64_t vmapId) __attribute__ ((nonnull(1, 2)));
-
-#ifdef __cplusplus
-} /* extern "C" { */
-#endif
-
 namespace sharemind {
 
 class IRandom;

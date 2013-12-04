@@ -31,11 +31,14 @@ template < size_t NumArgs
          , size_t NumCRefs = 0
          >
 struct SyscallArgs {
-    static inline bool check (size_t num_args,
-                              const SharemindModuleApi0x1Reference* refs,
-                              const SharemindModuleApi0x1CReference* crefs,
-                              SharemindCodeBlock * returnValue)
+    static inline bool check(SharemindCodeBlock * args,
+                             size_t num_args,
+                             const SharemindModuleApi0x1Reference* refs,
+                             const SharemindModuleApi0x1CReference* crefs,
+                             SharemindCodeBlock * returnValue)
     {
+        (void) args;
+
         if (num_args != NumArgs) {
             return false;
         }
@@ -194,7 +197,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<0u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue)) {
+    if (!SyscallArgs<0u, true, 0u, 0u>::check(args, num_args, refs, crefs, returnValue)) {
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
     }
 
@@ -219,7 +222,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_delete,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     try {
@@ -242,7 +245,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_index,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -276,7 +279,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_index,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -313,7 +316,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_index,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -354,7 +357,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_index,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -388,7 +391,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_index,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -422,7 +425,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_index_vector,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -456,7 +459,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_string,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -490,7 +493,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_string,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -531,7 +534,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_string,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 2u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 2u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -574,7 +577,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_string,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -608,7 +611,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_string,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -642,7 +645,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_string_vector,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -676,7 +679,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_type,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -710,7 +713,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_domain,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -752,7 +755,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_name,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -794,7 +797,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_size,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -830,7 +833,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_type,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, false, 0u, 3u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, false, 0u, 3u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -877,7 +880,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_type,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -911,7 +914,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_type,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -945,7 +948,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_type_vector,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -979,7 +982,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_value,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1013,7 +1016,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_domain,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1055,7 +1058,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_name,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1097,7 +1100,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_size,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1186,7 +1189,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, false, 0u, 4u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, false, 0u, 4u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1240,7 +1243,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_value,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1274,7 +1277,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_value,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1308,7 +1311,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_value_vector,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1342,7 +1345,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_count,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 1u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1419,7 +1422,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
@@ -1448,7 +1451,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_reset,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
@@ -1477,7 +1480,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_set_batch,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<2u, false, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
@@ -1507,7 +1510,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_next_batch,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
@@ -1536,7 +1539,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_prev_batch,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
@@ -1565,7 +1568,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_add_batch,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, false, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, false, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
@@ -1594,7 +1597,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_batch_count,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<1u, true, 0u, 0u>::check(num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<1u, true, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);

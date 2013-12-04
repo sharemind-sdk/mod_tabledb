@@ -50,12 +50,12 @@ private: /* Methods: */
 
     template<class T>
     static inline T * new_clone(const T & r) {
-        boost::new_clone(r);
+        return boost::new_clone(r);
     }
 
     template<class T>
     static inline T * new_clone(const T * r) {
-        boost::new_clone(r);
+        return boost::new_clone(r);
     }
 
     template<class T>
@@ -348,8 +348,7 @@ public: /* Methods: */
         addBatch();
     }
 
-    inline uint64_t getId() { return m_id; }
-    inline const uint64_t getId() const { return m_id; }
+    inline uint64_t getId() const { return m_id; }
 
     inline TdbVectorMapWrapper * getWrapper() { return &m_wrapper; }
     inline const TdbVectorMapWrapper * getWrapper() const { return &m_wrapper; }

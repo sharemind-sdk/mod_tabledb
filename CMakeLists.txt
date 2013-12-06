@@ -9,7 +9,14 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(SHAREMIND_MOD_TABLEDB)
 
-# Find packages:
+ADD_COMPILE_OPTIONS(
+  "-Wall" "-Wextra" "-O2"
+  "$<$<NOT:$<STREQUAL:$<CONFIGURATION>,Release>>:-ggdb>"
+  "$<$<NOT:$<STREQUAL:$<CONFIGURATION>,Release>>:-fno-omit-frame-pointer>"
+  "$<$<STREQUAL:$<CONFIGURATION>,Release>:-DNDEBUG>"
+  "$<$<STREQUAL:$<CONFIGURATION>,Release>:-fomit-frame-pointer>"
+)
+
 FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(SharemindLibmodapi REQUIRED)
 INCLUDE_DIRECTORIES(
@@ -45,23 +52,14 @@ SET(TABLEDB_HEADERS
     tdbvectormapapi.h
 )
 
-# compile the library
 ADD_LIBRARY(sharemind_mod_tabledb MODULE ${TABLEDB_SOURCES} ${TABLEDB_HEADERS})
-SET_TARGET_PROPERTIES(sharemind_mod_tabledb PROPERTIES
-                      COMPILE_FLAGS "-O2 -ggdb")
-
-# Use these libraries during linking
 TARGET_LINK_LIBRARIES(sharemind_mod_tabledb
-
 ################################################################################
 ##  THE FOLLOWING LIBRARIES ARE CURRENTLY PROVIDED HERE ONLY BECAUSE OUR      ##
 ##  INTERFACES ARE EPICALLY BROKEN. THIS LINK-LEVEL DEPENDENCY HACK MUST BE   ##
 ##  REMOVED, BECAUSE IT MAY CAUSE RUNTIME DYNAMIC LINKER ERRORS.              ##
 ################################################################################
-
     sharemind_dbcommon
 )
 
-# Install the library and headers
-INSTALL(TARGETS sharemind_mod_tabledb
-        LIBRARY DESTINATION "lib")
+INSTALL(TARGETS sharemind_mod_tabledb LIBRARY DESTINATION "lib")

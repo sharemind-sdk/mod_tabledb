@@ -16,31 +16,31 @@
 extern "C" {
 #endif
 
-struct TdbIndex_;
-typedef TdbIndex_ TdbIndex;
-struct TdbString_;
-typedef TdbString_ TdbString;
-struct TdbValue_;
-typedef TdbValue_ TdbValue;
-struct TdbType_;
-typedef TdbType_ TdbType;
+struct SharemindTdbIndex_;
+typedef SharemindTdbIndex_ SharemindTdbIndex;
+struct SharemindTdbString_;
+typedef SharemindTdbString_ SharemindTdbString;
+struct SharemindTdbValue_;
+typedef SharemindTdbValue_ SharemindTdbValue;
+struct SharemindTdbType_;
+typedef SharemindTdbType_ SharemindTdbType;
 
-struct TdbIndex_ {
+struct SharemindTdbIndex_ {
     uint64_t idx;
 };
 
-struct TdbString_ {
+struct SharemindTdbString_ {
     char * str;
 };
 
-struct TdbType_ {
+struct SharemindTdbType_ {
     char * domain;
     char * name;
     uint64_t size;
 };
 
-struct TdbValue_ {
-    TdbType * type;
+struct SharemindTdbValue_ {
+    SharemindTdbType * type;
     void * buffer;
     uint64_t size;
 };

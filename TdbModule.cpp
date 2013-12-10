@@ -32,7 +32,7 @@ template <class T> void destroy(void * ptr) throw() { delete static_cast<T *>(pt
 
 namespace sharemind {
 
-TdbModule::TdbModule(ILogger & logger, IRandom & rng, DataStoreManager & dataStoreManager, const std::string & config, const std::set<std::string> & signatures)
+TdbModule::TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager & dataStoreManager, const std::string & config, const std::set<std::string> & signatures)
     : m_logger(logger)
     , m_dataStoreManager(dataStoreManager)
     , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures))
@@ -129,7 +129,7 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
 }
 
 bool TdbModule::newVectorMap(const void * process, uint64_t & stmtId) {
-    DataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
+    SharemindDataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
                                                         process,
                                                         "mod_tabledb/vector_maps");
     if (!maps) {
@@ -147,7 +147,7 @@ bool TdbModule::newVectorMap(const void * process, uint64_t & stmtId) {
 }
 
 bool TdbModule::deleteVectorMap(const void * process, const uint64_t stmtId) {
-    DataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
+    SharemindDataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
                                                         process,
                                                         "mod_tabledb/vector_maps");
     if (!maps) {
@@ -159,7 +159,7 @@ bool TdbModule::deleteVectorMap(const void * process, const uint64_t stmtId) {
 }
 
 TdbVectorMap * TdbModule::getVectorMap(const void * process, const uint64_t stmtId) const {
-    DataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
+    SharemindDataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
                                                         process,
                                                         "mod_tabledb/vector_maps");
     if (!maps) {

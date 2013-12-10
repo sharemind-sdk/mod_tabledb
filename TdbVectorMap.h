@@ -63,8 +63,8 @@ private: /* Methods: */
         boost::delete_clone(r);
     }
 
-    static inline TdbString * new_clone(const TdbString & r) {
-        TdbString * res = new TdbString;
+    static inline SharemindTdbString * new_clone(const SharemindTdbString & r) {
+        SharemindTdbString * res = new SharemindTdbString;
 
         const size_t len = strlen(r.str);
         res->str = new char[len + 1];
@@ -73,13 +73,13 @@ private: /* Methods: */
         return res;
     }
 
-    static inline void delete_clone(const TdbString * r) {
+    static inline void delete_clone(const SharemindTdbString * r) {
         delete[] r->str;
         boost::checked_delete(r);
     }
 
-    static inline TdbType * new_clone(const TdbType & r) {
-        TdbType * res = new TdbType(r);
+    static inline SharemindTdbType * new_clone(const SharemindTdbType & r) {
+        SharemindTdbType * res = new SharemindTdbType(r);
 
         if (r.domain) {
             size_t len = strlen(r.domain);
@@ -95,14 +95,14 @@ private: /* Methods: */
         return res;
     }
 
-    static inline void delete_clone(const TdbType * r) {
+    static inline void delete_clone(const SharemindTdbType * r) {
         delete[] r->domain;
         delete[] r->name;
         boost::checked_delete(r);
     }
 
-    static inline TdbValue * new_clone(const TdbValue & r) {
-        TdbValue * res = new TdbValue;
+    static inline SharemindTdbValue * new_clone(const SharemindTdbValue & r) {
+        SharemindTdbValue * res = new SharemindTdbValue;
 
         res->type = new_clone(*r.type);
         res->buffer = ::operator new(r.size);
@@ -112,7 +112,7 @@ private: /* Methods: */
         return res;
     }
 
-    static inline void delete_clone(const TdbValue * r) {
+    static inline void delete_clone(const SharemindTdbValue * r) {
         ::operator delete(r->buffer);
         delete_clone(r->type);
         boost::checked_delete(r);
@@ -152,7 +152,7 @@ public: /* Types: */
 
 private: /* Types: */
 
-    typedef ::TdbVectorMap TdbVectorMapWrapper;
+    typedef SharemindTdbVectorMap TdbVectorMapWrapper;
 
     typedef std::map<std::string, boost::any> AnyValueMap;
 

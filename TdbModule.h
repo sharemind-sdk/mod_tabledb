@@ -65,7 +65,7 @@ public: /* Types: */
 
 public: /* Methods: */
 
-    TdbModule(ILogger & logger, IRandom & rng, DataStoreManager & dataStoreManager, const std::string & config, const std::set<std::string> & signatures);
+    TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager & dataStoreManager, const std::string & config, const std::set<std::string> & signatures);
     ~TdbModule();
 
     SharemindModuleApi0x1Error doSyscall(const std::string & dsName,
@@ -84,14 +84,14 @@ public: /* Methods: */
     inline ILogger & logger() { return m_logger; }
     inline const ILogger & logger() const { return m_logger; }
 
-    inline DataStoreManager & dataStoreManager() { return m_dataStoreManager; }
-    inline const DataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
+    inline SharemindDataStoreManager & dataStoreManager() { return m_dataStoreManager; }
+    inline const SharemindDataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
 
 private: /* Fields: */
 
     /* Cached references: */
     ILogger & m_logger;
-    DataStoreManager & m_dataStoreManager;
+    SharemindDataStoreManager & m_dataStoreManager;
 
     TdbConfiguration m_configuration;
     boost::scoped_ptr<moduleLoader::ModuleLoader> m_dbModuleLoader;

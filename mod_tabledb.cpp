@@ -262,7 +262,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_index,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->size<TdbIndex>(name);
+        returnValue->uint64[0] = map->size<SharemindTdbIndex>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -297,7 +297,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_index,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbIndex & idx = map->at<TdbIndex>(name, num);
+        const SharemindTdbIndex & idx = map->at<SharemindTdbIndex>(name, num);
 
         returnValue->uint64[0] = idx.idx;
 
@@ -334,9 +334,9 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_index,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        TdbIndex * idx = sharemind::TdbIndex_new(val);
+        SharemindTdbIndex * idx = sharemind::TdbIndex_new(val);
         try {
-            map->push_back<TdbIndex>(name, idx);
+            map->push_back<SharemindTdbIndex>(name, idx);
         } catch (...) {
             sharemind::TdbIndex_delete(idx);
             throw;
@@ -374,7 +374,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_index,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->pop_back<TdbIndex>(name);
+        map->pop_back<SharemindTdbIndex>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -408,7 +408,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_index,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->clear<TdbIndex>(name);
+        map->clear<SharemindTdbIndex>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -442,7 +442,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_index_vector,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->count<TdbIndex>(name);
+        returnValue->uint64[0] = map->count<SharemindTdbIndex>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -476,7 +476,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_string,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->size<TdbString>(name);
+        returnValue->uint64[0] = map->size<SharemindTdbString>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -511,7 +511,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_string,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbString & str = map->at<TdbString>(name, num);
+        const SharemindTdbString & str = map->at<SharemindTdbString>(name, num);
 
         const uint64_t mem_size = strlen(str.str) + 1u;
         const uint64_t mem_hndl = (* c->publicAlloc)(c, mem_size);
@@ -554,9 +554,9 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_string,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        TdbString * s = sharemind::TdbString_new(str);
+        SharemindTdbString * s = sharemind::TdbString_new(str);
         try {
-            map->push_back<TdbString>(name, s);
+            map->push_back<SharemindTdbString>(name, s);
         } catch (...) {
             sharemind::TdbString_delete(s);
             throw;
@@ -594,7 +594,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_string,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->pop_back<TdbString>(name);
+        map->pop_back<SharemindTdbString>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -628,7 +628,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_string,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->clear<TdbString>(name);
+        map->clear<SharemindTdbString>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -662,7 +662,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_string_vector,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->count<TdbString>(name);
+        returnValue->uint64[0] = map->count<SharemindTdbString>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -696,7 +696,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_type,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->size<TdbType>(name);
+        returnValue->uint64[0] = map->size<SharemindTdbType>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -731,7 +731,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_domain,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbType & t = map->at<TdbType>(name, num);
+        const SharemindTdbType & t = map->at<SharemindTdbType>(name, num);
 
         const char * str = t.domain;
         const uint64_t mem_size = strlen(str) + 1u;
@@ -773,7 +773,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_name,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbType & t = map->at<TdbType>(name, num);
+        const SharemindTdbType & t = map->at<SharemindTdbType>(name, num);
 
         const char * str = t.name;
         const uint64_t mem_size = strlen(str) + 1u;
@@ -815,7 +815,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_size,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbType & t = map->at<TdbType>(name, num);
+        const SharemindTdbType & t = map->at<SharemindTdbType>(name, num);
         returnValue[0].uint64[0] = t.size;
 
         return SHAREMIND_MODULE_API_0x1_OK;
@@ -857,9 +857,9 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_type,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        TdbType * t = sharemind::TdbType_new(typeDomain, typeName, typeSize);
+        SharemindTdbType * t = sharemind::TdbType_new(typeDomain, typeName, typeSize);
         try {
-            map->push_back<TdbType>(name, t);
+            map->push_back<SharemindTdbType>(name, t);
         } catch (...) {
             sharemind::TdbType_delete(t);
             throw;
@@ -897,7 +897,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_type,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->pop_back<TdbType>(name);
+        map->pop_back<SharemindTdbType>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -931,7 +931,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_type,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->clear<TdbType>(name);
+        map->clear<SharemindTdbType>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -965,7 +965,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_type_vector,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->count<TdbType>(name);
+        returnValue->uint64[0] = map->count<SharemindTdbType>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -999,7 +999,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_value,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->size<TdbValue>(name);
+        returnValue->uint64[0] = map->size<SharemindTdbValue>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -1034,7 +1034,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_domain,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbValue & v = map->at<TdbValue>(name, num);
+        const SharemindTdbValue & v = map->at<SharemindTdbValue>(name, num);
 
         const char * str = v.type->domain;
         const uint64_t mem_size = strlen(str) + 1u;
@@ -1076,7 +1076,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_name,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbValue & v = map->at<TdbValue>(name, num);
+        const SharemindTdbValue & v = map->at<SharemindTdbValue>(name, num);
 
         const char * str = v.type->name;
         const uint64_t mem_size = strlen(str) + 1u;
@@ -1118,7 +1118,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_size,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbValue & v = map->at<TdbValue>(name, num);
+        const SharemindTdbValue & v = map->at<SharemindTdbValue>(name, num);
         returnValue[0].uint64[0] = v.type->size;
 
         return SHAREMIND_MODULE_API_0x1_OK;
@@ -1160,7 +1160,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        const TdbValue & v = map->at<TdbValue>(name, num);
+        const SharemindTdbValue & v = map->at<SharemindTdbValue>(name, num);
 
         if (refs) {
             // TODO: the following is a workaround! We are always allocating one
@@ -1220,9 +1220,9 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
         // byte too much as VM does not allow us to allocate 0 sized memory block.
         const uint64_t bufSize = crefs[3u].size - 1;
 
-        TdbValue * v = sharemind::TdbValue_new(typeDomain, typeName, typeSize, crefs[3u].pData, bufSize);
+        SharemindTdbValue * v = sharemind::TdbValue_new(typeDomain, typeName, typeSize, crefs[3u].pData, bufSize);
         try {
-            map->push_back<TdbValue>(name, v);
+            map->push_back<SharemindTdbValue>(name, v);
         } catch (...) {
             sharemind::TdbValue_delete(v);
             throw;
@@ -1260,7 +1260,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_value,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->pop_back<TdbValue>(name);
+        map->pop_back<SharemindTdbValue>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -1294,7 +1294,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_value,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        map->clear<TdbValue>(name);
+        map->clear<SharemindTdbValue>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -1328,7 +1328,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_value_vector,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        returnValue->uint64[0] = map->count<TdbValue>(name);
+        returnValue->uint64[0] = map->count<SharemindTdbValue>(name);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
@@ -1651,7 +1651,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
 
     sharemind::ILogger * logger = static_cast<sharemind::ILogger *>(flog->facility);
     sharemind::IRandom * random = static_cast<sharemind::IRandom *>(frng->facility);
-    DataStoreManager * dsm = static_cast<DataStoreManager *>(fdsm->facility);
+    SharemindDataStoreManager * dsm = static_cast<SharemindDataStoreManager *>(fdsm->facility);
 
     /*
      * Check for the module configuration

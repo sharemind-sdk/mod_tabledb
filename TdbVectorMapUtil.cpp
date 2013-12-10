@@ -19,7 +19,7 @@
 extern "C" {
 #endif
 
-TdbVectorMap * TdbVectorMapUtil_new_map(TdbVectorMapUtil * util, DataStore * datastore) {
+SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore) {
     assert(util);
     assert(util->internal);
     assert(datastore);
@@ -36,7 +36,7 @@ TdbVectorMap * TdbVectorMapUtil_new_map(TdbVectorMapUtil * util, DataStore * dat
     }
 }
 
-bool TdbVectorMapUtil_delete_map(TdbVectorMapUtil * util, DataStore * datastore, const uint64_t vmapId) {
+bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId) {
     assert(util);
     assert(util->internal);
     assert(datastore);
@@ -49,7 +49,7 @@ bool TdbVectorMapUtil_delete_map(TdbVectorMapUtil * util, DataStore * datastore,
     }
 }
 
-TdbVectorMap * TdbVectorMapUtil_get_map(TdbVectorMapUtil * util, DataStore * datastore, const uint64_t vmapId) {
+SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId) {
     assert(util);
     assert(util->internal);
     assert(datastore);
@@ -83,12 +83,12 @@ TdbVectorMapUtil::TdbVectorMapUtil(IRandom & rng)
     : m_rng(rng)
 {
     m_wrapper.internal = this;
-    m_wrapper.new_map = &TdbVectorMapUtil_new_map;
-    m_wrapper.delete_map = &TdbVectorMapUtil_delete_map;
-    m_wrapper.get_map = &TdbVectorMapUtil_get_map;
+    m_wrapper.new_map = &SharemindTdbVectorMapUtil_new_map;
+    m_wrapper.delete_map = &SharemindTdbVectorMapUtil_delete_map;
+    m_wrapper.get_map = &SharemindTdbVectorMapUtil_get_map;
 }
 
-TdbVectorMap * TdbVectorMapUtil::newVectorMap(DataStore * dataStore) const {
+TdbVectorMap * TdbVectorMapUtil::newVectorMap(SharemindDataStore * dataStore) const {
     assert(dataStore);
 
     uint64_t vmapId = 0;
@@ -110,7 +110,7 @@ TdbVectorMap * TdbVectorMapUtil::newVectorMap(DataStore * dataStore) const {
     return map;
 }
 
-bool TdbVectorMapUtil::deleteVectorMap(DataStore * dataStore, const uint64_t vmapId) const {
+bool TdbVectorMapUtil::deleteVectorMap(SharemindDataStore * dataStore, const uint64_t vmapId) const {
     assert(dataStore);
 
     std::ostringstream oss;
@@ -120,7 +120,7 @@ bool TdbVectorMapUtil::deleteVectorMap(DataStore * dataStore, const uint64_t vma
     return dataStore->remove(dataStore, oss.str().c_str());
 }
 
-TdbVectorMap * TdbVectorMapUtil::getVectorMap(DataStore * dataStore, const uint64_t vmapId) const {
+TdbVectorMap * TdbVectorMapUtil::getVectorMap(SharemindDataStore * dataStore, const uint64_t vmapId) const {
     assert(dataStore);
 
     std::ostringstream oss;

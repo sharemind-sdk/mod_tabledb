@@ -31,28 +31,28 @@ extern "C" {
 #endif
 
 /** Forward declarations: */
-struct TdbVectorMapUtil_;
-typedef TdbVectorMapUtil_ TdbVectorMapUtil;
-struct TdbVectorMap_;
-typedef TdbVectorMap_ TdbVectorMap;
+struct SharemindTdbVectorMapUtil_;
+typedef SharemindTdbVectorMapUtil_ SharemindTdbVectorMapUtil;
+struct SharemindTdbVectorMap_;
+typedef SharemindTdbVectorMap_ SharemindTdbVectorMap;
 
 /*******************************************************************************
-    TdbVectorMapUtil
+    SharemindTdbVectorMapUtil
 *******************************************************************************/
 
-struct TdbVectorMapUtil_ {
+struct SharemindTdbVectorMapUtil_ {
     SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
 
-    TdbVectorMap * (* new_map)(TdbVectorMapUtil * util, DataStore * datastore);
-    bool (* delete_map)(TdbVectorMapUtil * util, DataStore * datastore, const uint64_t vmapId);
-    TdbVectorMap * (* get_map)(TdbVectorMapUtil * util, DataStore * datastore, const uint64_t vmapId);
+    SharemindTdbVectorMap * (* new_map)(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore);
+    bool (* delete_map)(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId);
+    SharemindTdbVectorMap * (* get_map)(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId);
 };
 
 /*******************************************************************************
-    TdbVectorMap
+    SharemindTdbVectorMap
 *******************************************************************************/
 
-enum TdbVectorMapError_ {
+enum SharemindTdbVectorMapError_ {
 
     /** No error. */
     TDB_VECTOR_MAP_OK = 0,
@@ -73,59 +73,59 @@ enum TdbVectorMapError_ {
     TDB_VECTOR_MAP_TYPE_ERROR
 
 };
-typedef enum TdbVectorMapError_ TdbVectorMapError;
+typedef enum SharemindTdbVectorMapError_ SharemindTdbVectorMapError;
 
-struct TdbVectorMap_ {
+struct SharemindTdbVectorMap_ {
     SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
 
-    TdbVectorMapError (* size_index)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_index)(TdbVectorMap * map, const char * key, const uint64_t n, TdbIndex ** idx);
-    TdbVectorMapError (* push_back_index)(TdbVectorMap * map, const char * key, TdbIndex * idx);
-    TdbVectorMapError (* pop_back_index)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* clear_index)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* get_index_vector)(TdbVectorMap * map, const char * key, TdbIndex *** vec, size_t * size);
-    TdbVectorMapError (* set_index_vector)(TdbVectorMap * map, const char * key, TdbIndex ** vec, const size_t size);
-    TdbVectorMapError (* is_index_vector)(TdbVectorMap * map, const char * key, bool * rv);
+    SharemindTdbVectorMapError (* size_index)(SharemindTdbVectorMap * map, const char * key, size_t * size);
+    SharemindTdbVectorMapError (* at_index)(SharemindTdbVectorMap * map, const char * key, const uint64_t n, SharemindTdbIndex ** idx);
+    SharemindTdbVectorMapError (* push_back_index)(SharemindTdbVectorMap * map, const char * key, SharemindTdbIndex * idx);
+    SharemindTdbVectorMapError (* pop_back_index)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* clear_index)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* get_index_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbIndex *** vec, size_t * size);
+    SharemindTdbVectorMapError (* set_index_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbIndex ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_index_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
-    TdbVectorMapError (* size_string)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_string)(TdbVectorMap * map, const char * key, const uint64_t n, TdbString ** str);
-    TdbVectorMapError (* push_back_string)(TdbVectorMap * map, const char * key, TdbString * str);
-    TdbVectorMapError (* pop_back_string)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* clear_string)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* get_string_vector)(TdbVectorMap * map, const char * key, TdbString *** vec, size_t * size);
-    TdbVectorMapError (* set_string_vector)(TdbVectorMap * map, const char * key, TdbString ** vec, const size_t size);
-    TdbVectorMapError (* is_string_vector)(TdbVectorMap * map, const char * key, bool * rv);
+    SharemindTdbVectorMapError (* size_string)(SharemindTdbVectorMap * map, const char * key, size_t * size);
+    SharemindTdbVectorMapError (* at_string)(SharemindTdbVectorMap * map, const char * key, const uint64_t n, SharemindTdbString ** str);
+    SharemindTdbVectorMapError (* push_back_string)(SharemindTdbVectorMap * map, const char * key, SharemindTdbString * str);
+    SharemindTdbVectorMapError (* pop_back_string)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* clear_string)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* get_string_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbString *** vec, size_t * size);
+    SharemindTdbVectorMapError (* set_string_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbString ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_string_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
-    TdbVectorMapError (* size_type)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_type)(TdbVectorMap * map, const char * key, const uint64_t n, TdbType ** type);
-    TdbVectorMapError (* push_back_type)(TdbVectorMap * map, const char * key, TdbType * type);
-    TdbVectorMapError (* pop_back_type)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* clear_type)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* get_type_vector)(TdbVectorMap * map, const char * key, TdbType *** vec, size_t * size);
-    TdbVectorMapError (* set_type_vector)(TdbVectorMap * map, const char * key, TdbType ** vec, const size_t size);
-    TdbVectorMapError (* is_type_vector)(TdbVectorMap * map, const char * key, bool * rv);
+    SharemindTdbVectorMapError (* size_type)(SharemindTdbVectorMap * map, const char * key, size_t * size);
+    SharemindTdbVectorMapError (* at_type)(SharemindTdbVectorMap * map, const char * key, const uint64_t n, SharemindTdbType ** type);
+    SharemindTdbVectorMapError (* push_back_type)(SharemindTdbVectorMap * map, const char * key, SharemindTdbType * type);
+    SharemindTdbVectorMapError (* pop_back_type)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* clear_type)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* get_type_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbType *** vec, size_t * size);
+    SharemindTdbVectorMapError (* set_type_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbType ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_type_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
-    TdbVectorMapError (* size_value)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_value)(TdbVectorMap * map, const char * key, const uint64_t n, TdbValue ** val);
-    TdbVectorMapError (* push_back_value)(TdbVectorMap * map, const char * key, TdbValue * val);
-    TdbVectorMapError (* pop_back_value)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* clear_value)(TdbVectorMap * map, const char * key);
-    TdbVectorMapError (* get_value_vector)(TdbVectorMap * map, const char * key, TdbValue *** vec, size_t * size);
-    TdbVectorMapError (* set_value_vector)(TdbVectorMap * map, const char * key, TdbValue ** vec, const size_t size);
-    TdbVectorMapError (* is_value_vector)(TdbVectorMap * map, const char * key, bool * rv);
+    SharemindTdbVectorMapError (* size_value)(SharemindTdbVectorMap * map, const char * key, size_t * size);
+    SharemindTdbVectorMapError (* at_value)(SharemindTdbVectorMap * map, const char * key, const uint64_t n, SharemindTdbValue ** val);
+    SharemindTdbVectorMapError (* push_back_value)(SharemindTdbVectorMap * map, const char * key, SharemindTdbValue * val);
+    SharemindTdbVectorMapError (* pop_back_value)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* clear_value)(SharemindTdbVectorMap * map, const char * key);
+    SharemindTdbVectorMapError (* get_value_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbValue *** vec, size_t * size);
+    SharemindTdbVectorMapError (* set_value_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbValue ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_value_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
-    TdbVectorMapError (* count)(TdbVectorMap * map, const char * key, bool * rv);
-    TdbVectorMapError (* erase)(TdbVectorMap * map, const char * key, bool * rv);
-    TdbVectorMapError (* clear)(TdbVectorMap * map);
+    SharemindTdbVectorMapError (* count)(SharemindTdbVectorMap * map, const char * key, bool * rv);
+    SharemindTdbVectorMapError (* erase)(SharemindTdbVectorMap * map, const char * key, bool * rv);
+    SharemindTdbVectorMapError (* clear)(SharemindTdbVectorMap * map);
 
-    TdbVectorMapError (* set_batch)(TdbVectorMap * map, const size_t n);
-    TdbVectorMapError (* prev_batch)(TdbVectorMap * map, bool * b);
-    TdbVectorMapError (* next_batch)(TdbVectorMap * map, bool * b);
-    TdbVectorMapError (* add_batch)(TdbVectorMap * map);
-    TdbVectorMapError (* batch_count)(TdbVectorMap * map, size_t * count);
-    TdbVectorMapError (* reset)(TdbVectorMap * map);
+    SharemindTdbVectorMapError (* set_batch)(SharemindTdbVectorMap * map, const size_t n);
+    SharemindTdbVectorMapError (* prev_batch)(SharemindTdbVectorMap * map, bool * b);
+    SharemindTdbVectorMapError (* next_batch)(SharemindTdbVectorMap * map, bool * b);
+    SharemindTdbVectorMapError (* add_batch)(SharemindTdbVectorMap * map);
+    SharemindTdbVectorMapError (* batch_count)(SharemindTdbVectorMap * map, size_t * count);
+    SharemindTdbVectorMapError (* reset)(SharemindTdbVectorMap * map);
 
-    uint64_t (* get_id)(TdbVectorMap * map);
+    uint64_t (* get_id)(SharemindTdbVectorMap * map);
 };
 
 #ifdef __cplusplus

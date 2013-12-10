@@ -17,20 +17,20 @@
 
 namespace sharemind {
 
-TdbIndex * TdbIndex_new(const uint64_t idx);
-void TdbIndex_delete(const TdbIndex * ptr);
+SharemindTdbIndex * TdbIndex_new(const uint64_t idx);
+void TdbIndex_delete(const SharemindTdbIndex * ptr);
 
-TdbString * TdbString_new(const std::string & str);
-TdbString * TdbString_new(const char * str);
-void TdbString_delete(const TdbString * ptr);
+SharemindTdbString * TdbString_new(const std::string & str);
+SharemindTdbString * TdbString_new(const char * str);
+void TdbString_delete(const SharemindTdbString * ptr);
 
-TdbType * TdbType_new(const std::string & domain, const std::string & name, const uint64_t size);
-TdbType * TdbType_new(const char * domain, const char * name, const uint64_t size);
-void TdbType_delete(const TdbType * ptr);
+SharemindTdbType * TdbType_new(const std::string & domain, const std::string & name, const uint64_t size);
+SharemindTdbType * TdbType_new(const char * domain, const char * name, const uint64_t size);
+void TdbType_delete(const SharemindTdbType * ptr);
 
-TdbValue * TdbValue_new(const std::string & typeDomain, const std::string & typeName, const uint64_t typeSize, const void * buffer, const uint64_t size);
-TdbValue * TdbValue_new(const char * typeDomain, const char * typeName, const uint64_t typeSize, const void * buffer, const uint64_t size);
-void TdbValue_delete(const TdbValue * ptr);
+SharemindTdbValue * TdbValue_new(const std::string & typeDomain, const std::string & typeName, const uint64_t typeSize, const void * buffer, const uint64_t size);
+SharemindTdbValue * TdbValue_new(const char * typeDomain, const char * typeName, const uint64_t typeSize, const void * buffer, const uint64_t size);
+void TdbValue_delete(const SharemindTdbValue * ptr);
 
 }; /* namespace sharemind { */
 

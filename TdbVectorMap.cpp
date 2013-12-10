@@ -42,7 +42,7 @@ TdbVectorMapError TdbVectorMap_size_index(TdbVectorMap * map, const char * key, 
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
 
-TdbVectorMapError TdbVectorMap_at_index(TdbVectorMap * map, const char * key, const uint64_t n, TdbIndex * idx) {
+TdbVectorMapError TdbVectorMap_at_index(TdbVectorMap * map, const char * key, const uint64_t n, TdbIndex ** idx) {
     assert(map);
     assert(map->internal);
     assert(key);
@@ -50,7 +50,7 @@ TdbVectorMapError TdbVectorMap_at_index(TdbVectorMap * map, const char * key, co
 
     sharemind::TdbVectorMap * m = static_cast<sharemind::TdbVectorMap *>(map->internal);
     try {
-        idx = &m->at<TdbIndex>(key, n);
+        *idx = &m->at<TdbIndex>(key, n);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -141,7 +141,7 @@ TdbVectorMapError TdbVectorMap_size_string(TdbVectorMap * map, const char * key,
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
 
-TdbVectorMapError TdbVectorMap_at_string(TdbVectorMap * map, const char * key, const uint64_t n, TdbString * str) {
+TdbVectorMapError TdbVectorMap_at_string(TdbVectorMap * map, const char * key, const uint64_t n, TdbString ** str) {
     assert(map);
     assert(map->internal);
     assert(key);
@@ -149,7 +149,7 @@ TdbVectorMapError TdbVectorMap_at_string(TdbVectorMap * map, const char * key, c
 
     sharemind::TdbVectorMap * m = static_cast<sharemind::TdbVectorMap *>(map->internal);
     try {
-        str = &m->at<TdbString>(key, n);
+        *str = &m->at<TdbString>(key, n);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -241,7 +241,7 @@ TdbVectorMapError TdbVectorMap_size_type(TdbVectorMap * map, const char * key, s
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
 
-TdbVectorMapError TdbVectorMap_at_type(TdbVectorMap * map, const char * key, const uint64_t n, TdbType * type) {
+TdbVectorMapError TdbVectorMap_at_type(TdbVectorMap * map, const char * key, const uint64_t n, TdbType ** type) {
     assert(map);
     assert(map->internal);
     assert(key);
@@ -249,7 +249,7 @@ TdbVectorMapError TdbVectorMap_at_type(TdbVectorMap * map, const char * key, con
 
     sharemind::TdbVectorMap * m = static_cast<sharemind::TdbVectorMap *>(map->internal);
     try {
-        type = &m->at<TdbType>(key, n);
+        *type = &m->at<TdbType>(key, n);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -341,7 +341,7 @@ TdbVectorMapError TdbVectorMap_size_value(TdbVectorMap * map, const char * key, 
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
 
-TdbVectorMapError TdbVectorMap_at_value(TdbVectorMap * map, const char * key, const uint64_t n, TdbValue * val) {
+TdbVectorMapError TdbVectorMap_at_value(TdbVectorMap * map, const char * key, const uint64_t n, TdbValue ** val) {
     assert(map);
     assert(map->internal);
     assert(key);
@@ -349,7 +349,7 @@ TdbVectorMapError TdbVectorMap_at_value(TdbVectorMap * map, const char * key, co
 
     sharemind::TdbVectorMap * m = static_cast<sharemind::TdbVectorMap *>(map->internal);
     try {
-        val = &m->at<TdbValue>(key, n);
+        *val = &m->at<TdbValue>(key, n);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }

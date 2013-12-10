@@ -79,7 +79,7 @@ struct TdbVectorMap_ {
     SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
 
     TdbVectorMapError (* size_index)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_index)(TdbVectorMap * map, const char * key, const uint64_t n, TdbIndex * idx);
+    TdbVectorMapError (* at_index)(TdbVectorMap * map, const char * key, const uint64_t n, TdbIndex ** idx);
     TdbVectorMapError (* push_back_index)(TdbVectorMap * map, const char * key, TdbIndex * idx);
     TdbVectorMapError (* pop_back_index)(TdbVectorMap * map, const char * key);
     TdbVectorMapError (* clear_index)(TdbVectorMap * map, const char * key);
@@ -88,7 +88,7 @@ struct TdbVectorMap_ {
     TdbVectorMapError (* is_index_vector)(TdbVectorMap * map, const char * key, bool * rv);
 
     TdbVectorMapError (* size_string)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_string)(TdbVectorMap * map, const char * key, const uint64_t n, TdbString * str);
+    TdbVectorMapError (* at_string)(TdbVectorMap * map, const char * key, const uint64_t n, TdbString ** str);
     TdbVectorMapError (* push_back_string)(TdbVectorMap * map, const char * key, TdbString * str);
     TdbVectorMapError (* pop_back_string)(TdbVectorMap * map, const char * key);
     TdbVectorMapError (* clear_string)(TdbVectorMap * map, const char * key);
@@ -97,7 +97,7 @@ struct TdbVectorMap_ {
     TdbVectorMapError (* is_string_vector)(TdbVectorMap * map, const char * key, bool * rv);
 
     TdbVectorMapError (* size_type)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_type)(TdbVectorMap * map, const char * key, const uint64_t n, TdbType * type);
+    TdbVectorMapError (* at_type)(TdbVectorMap * map, const char * key, const uint64_t n, TdbType ** type);
     TdbVectorMapError (* push_back_type)(TdbVectorMap * map, const char * key, TdbType * type);
     TdbVectorMapError (* pop_back_type)(TdbVectorMap * map, const char * key);
     TdbVectorMapError (* clear_type)(TdbVectorMap * map, const char * key);
@@ -106,7 +106,7 @@ struct TdbVectorMap_ {
     TdbVectorMapError (* is_type_vector)(TdbVectorMap * map, const char * key, bool * rv);
 
     TdbVectorMapError (* size_value)(TdbVectorMap * map, const char * key, size_t * size);
-    TdbVectorMapError (* at_value)(TdbVectorMap * map, const char * key, const uint64_t n, TdbValue * val);
+    TdbVectorMapError (* at_value)(TdbVectorMap * map, const char * key, const uint64_t n, TdbValue ** val);
     TdbVectorMapError (* push_back_value)(TdbVectorMap * map, const char * key, TdbValue * val);
     TdbVectorMapError (* pop_back_value)(TdbVectorMap * map, const char * key);
     TdbVectorMapError (* clear_value)(TdbVectorMap * map, const char * key);

@@ -8,9 +8,9 @@
  */
 
 #include <cassert>
-#include <sharemind/common/Logger/ILogger.h>
 #include <sharemind/common/Logger/Debug.h>
-#include <sharemind/common/Random/Random.h>
+#include <sharemind/common/Logger/ILogger.h>
+#include <sharemind/common/Random/IRandom.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
 #include "TdbModule.h"

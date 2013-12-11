@@ -1646,9 +1646,15 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     if (!fdsm || !fdsm->facility)
         return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
 
+    const SharemindModuleApi0x1Facility * fconsensus = c->getModuleFacility(c, "ConsensusService");
+    if (!fconsensus || !fconsensus->facility)
+        return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
+
     sharemind::ILogger * logger = static_cast<sharemind::ILogger *>(flog->facility);
     sharemind::IRandom * random = static_cast<sharemind::IRandom *>(frng->facility);
     SharemindDataStoreManager * dsm = static_cast<SharemindDataStoreManager *>(fdsm->facility);
+    SharemindConsensusFacility * consensusService =
+        static_cast<SharemindConsensusFacility *>(fconsensus->facility);
 
     /*
      * Check for the module configuration
@@ -1682,7 +1688,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
      * Initialize the module handle
      */
     try {
-        c->moduleHandle = new sharemind::TdbModule(*logger, *random, *dsm, c->conf, signatures);
+        c->moduleHandle = new sharemind::TdbModule(*logger, *random, *dsm, *consensusService, c->conf, signatures);
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const TdbModule::InitializationException & e) {

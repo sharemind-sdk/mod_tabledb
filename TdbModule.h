@@ -17,6 +17,7 @@
 #include <sharemind/common/Logger/ILogger.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
+#include <sharemind/miner/Facilities/libconsensusservice.h>
 #include "TdbConfiguration.h"
 
 
@@ -66,7 +67,7 @@ public: /* Types: */
 
 public: /* Methods: */
 
-    TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager & dataStoreManager, const std::string & config, const std::set<std::string> & signatures);
+    TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager & dataStoreManager, SharemindConsensusFacility & consensusService, const std::string & config, const std::set<std::string> & signatures);
     ~TdbModule();
 
     SharemindModuleApi0x1Error doSyscall(const std::string & dsName,

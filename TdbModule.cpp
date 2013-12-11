@@ -11,7 +11,6 @@
 
 #include <sstream>
 #include <boost/foreach.hpp>
-#include <sharemind/common/Logger/Debug.h>
 #include <sharemind/dbcommon/ModuleLoader/ModuleLoader.h>
 
 #define SHAREMIND_INTERNAL__
@@ -22,8 +21,6 @@
 #include "TdbVectorMapUtil.h"
 
 
-namespace { SHAREMIND_DEFINE_PREFIXED_LOGS("[TdbModule] "); }
-
 namespace {
 
 template <class T> void destroy(void * ptr) throw() { delete static_cast<T *>(ptr); }
@@ -33,7 +30,7 @@ template <class T> void destroy(void * ptr) throw() { delete static_cast<T *>(pt
 namespace sharemind {
 
 TdbModule::TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager & dataStoreManager, const std::string & config, const std::set<std::string> & signatures)
-    : m_logger(logger)
+    : m_logger(logger.wrap("[TdbModule] "))
     , m_dataStoreManager(dataStoreManager)
     , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures))
     , m_dataSourceManager(new DataSourceManager)
@@ -45,7 +42,7 @@ TdbModule::TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager 
                                      m_configuration.getLastErrorMessage());
 
     // Set database module facilities
-    if (!m_dbModuleLoader->setModuleFacility("Logger", &m_logger))
+    if (!m_dbModuleLoader->setModuleFacility("Logger", &logger))
         throw InitializationException("Failed setting module facility 'Logger'.");
 
     if (!m_dbModuleLoader->setModuleFacility("DataStoreManager", &m_dataStoreManager))
@@ -66,7 +63,7 @@ TdbModule::TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager 
                 << m_dbModuleLoader->lastError();
             throw InitializationException(oss.str());
         }
-        LogNormal(m_logger)
+        m_logger.info()
             << "Loaded database module \"" << SharemindModule_get_name(m)
             << "\" (" << SharemindModule_get_num_syscalls(m)
             << " syscalls) from \"" << cfgDbMod.filename << "\" using API version "
@@ -107,14 +104,14 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
     // Get the data source object
     DataSource * src = m_dataSourceManager->getDataSource(dsName);
     if (!src) {
-        LogError(m_logger) << "Data source \"" << dsName << "\" is not defined.";
+        m_logger.error() << "Data source \"" << dsName << "\" is not defined.";
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     }
 
     // Get the system call object
     const SharemindSyscallBinding * sb = m_dbModuleLoader->getSyscall(src->module(), signature);
     if (!sb) {
-        LogError(m_logger)
+        m_logger.error()
             << "Data source \"" << dsName << "\" database module \""
             << src->module() << "\" has no system call with signature \""
             << signature << "\".";
@@ -133,7 +130,7 @@ bool TdbModule::newVectorMap(const void * process, uint64_t & stmtId) {
                                                         process,
                                                         "mod_tabledb/vector_maps");
     if (!maps) {
-        LogError(m_logger) << "Failed to get process data store.";
+        m_logger.error() << "Failed to get process data store.";
         return false;
     }
 
@@ -151,7 +148,7 @@ bool TdbModule::deleteVectorMap(const void * process, const uint64_t stmtId) {
                                                         process,
                                                         "mod_tabledb/vector_maps");
     if (!maps) {
-        LogError(m_logger) << "Failed to get process data store.";
+        m_logger.error() << "Failed to get process data store.";
         return false;
     }
 
@@ -163,7 +160,7 @@ TdbVectorMap * TdbModule::getVectorMap(const void * process, const uint64_t stmt
                                                         process,
                                                         "mod_tabledb/vector_maps");
     if (!maps) {
-        LogError(m_logger) << "Failed to get process data store.";
+        m_logger.error() << "Failed to get process data store.";
         return NULL;
     }
 

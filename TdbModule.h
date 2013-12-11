@@ -13,6 +13,8 @@
 #include <set>
 #include <stdexcept>
 #include <boost/scoped_ptr.hpp>
+#include <sharemind/common/Logger/Debug.h>
+#include <sharemind/common/Logger/ILogger.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
 #include "TdbConfiguration.h"
@@ -21,7 +23,6 @@
 namespace sharemind  {
 
 class DataSourceManager;
-class ILogger;
 class IRandom;
 class TdbVectorMap;
 class TdbVectorMapUtil;
@@ -81,16 +82,17 @@ public: /* Methods: */
     bool deleteVectorMap(const void * process, const uint64_t vmapId);
     TdbVectorMap * getVectorMap(const void * process, const uint64_t vmapId) const;
 
-    inline ILogger & logger() { return m_logger; }
-    inline const ILogger & logger() const { return m_logger; }
+    inline ILogger::Wrapped & logger() { return m_logger; }
+    inline const ILogger::Wrapped & logger() const { return m_logger; }
 
     inline SharemindDataStoreManager & dataStoreManager() { return m_dataStoreManager; }
     inline const SharemindDataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
 
 private: /* Fields: */
 
+    mutable ILogger::Wrapped m_logger;
+
     /* Cached references: */
-    ILogger & m_logger;
     SharemindDataStoreManager & m_dataStoreManager;
 
     TdbConfiguration m_configuration;

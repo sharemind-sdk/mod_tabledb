@@ -8,8 +8,6 @@
  */
 
 #include <cassert>
-#include <sharemind/common/Logger/Debug.h>
-#include <sharemind/common/Logger/ILogger.h>
 #include <sharemind/common/Random/IRandom.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
@@ -19,7 +17,6 @@
 #define SHAREMIND_INTERNAL__
 #include "TdbVectorMap.h"
 
-namespace { SHAREMIND_DEFINE_PREFIXED_LOGS("[TdbModule] "); }
 
 namespace {
 
@@ -266,7 +263,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_index,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -303,7 +300,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_index,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -344,7 +341,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_index,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -378,7 +375,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_index,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -412,7 +409,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_index,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -446,7 +443,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_index_vector,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -480,7 +477,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_string,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -521,7 +518,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_string,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -564,7 +561,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_string,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -598,7 +595,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_string,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -632,7 +629,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_string,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -666,7 +663,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_string_vector,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -700,7 +697,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_type,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -742,7 +739,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_domain,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -784,7 +781,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_name,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -820,7 +817,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_size,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -867,7 +864,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_type,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -901,7 +898,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_type,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -935,7 +932,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_type,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -969,7 +966,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_type_vector,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1003,7 +1000,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_value,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1045,7 +1042,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_domain,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1087,7 +1084,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_name,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1123,7 +1120,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_size,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1176,7 +1173,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1230,7 +1227,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1264,7 +1261,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_value,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1298,7 +1295,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_value,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1332,7 +1329,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_value_vector,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1366,7 +1363,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_count,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1409,7 +1406,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_erase,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1438,7 +1435,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1467,7 +1464,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_reset,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1497,7 +1494,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_set_batch,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1526,7 +1523,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_next_batch,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1555,7 +1552,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_prev_batch,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1584,7 +1581,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_add_batch,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1613,7 +1610,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_batch_count,
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const sharemind::TdbVectorMap::Exception & e) {
-        LogError(m->logger()) << e.what();
+        m->logger().error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1657,7 +1654,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
      * Check for the module configuration
      */
     if (!c->conf) {
-        LogError(*logger) << "No module configuration given.";
+        logger->error() << "No module configuration given.";
         return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
     }
 
@@ -1689,10 +1686,10 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
 
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const TdbModule::InitializationException & e) {
-        LogError(*logger) << e.what();
+        logger->error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const TdbModule::ConfigurationException & e) {
-        LogError(*logger) << e.what();
+        logger->error() << e.what();
         return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1712,7 +1709,7 @@ SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
         const SharemindModuleApi0x1Facility * flog = c->getModuleFacility(c, "Logger");
         if (flog && flog->facility) {
             sharemind::ILogger * logger = static_cast<sharemind::ILogger *>(flog->facility);
-            LogWarning(*logger) << "Exception was caught during module deinitialization";
+            logger->warning() << "Exception was caught during \"mod_tabledb\" module deinitialization";
         }
     }
 

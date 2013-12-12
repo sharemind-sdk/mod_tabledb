@@ -29,7 +29,13 @@ template <class T> void destroy(void * ptr) throw() { delete static_cast<T *>(pt
 
 namespace sharemind {
 
-TdbModule::TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager & dataStoreManager, SharemindConsensusFacility & consensusService, const std::string & config, const std::set<std::string> & signatures)
+TdbModule::TdbModule(ILogger & logger,
+                     IRandom & rng,
+                     SharemindDataStoreManager & dataStoreManager,
+                     SharemindConsensusFacility & consensusService,
+                     SharemindProcessFacility & processFacility,
+                     const std::string & config,
+                     const std::set<std::string> & signatures)
     : m_logger(logger.wrap("[TdbModule] "))
     , m_dataStoreManager(dataStoreManager)
     , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures))
@@ -56,6 +62,9 @@ TdbModule::TdbModule(ILogger & logger, IRandom & rng, SharemindDataStoreManager 
 
     if (!m_dbModuleLoader->setModuleFacility("ConsensusService", &consensusService))
         throw InitializationException("Failed setting module facility 'ConsensusService'.");
+
+    if (!m_dbModuleLoader->setModuleFacility("ProcessFacility", &processFacility))
+        throw InitializationException("Failed setting module facility 'ProcessFacility'.");
 
     // Load database modules
     BOOST_FOREACH (const TdbConfiguration::DbModuleEntry & cfgDbMod, m_configuration.getDbModuleList()) {
@@ -145,6 +154,7 @@ bool TdbModule::newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
         return false;
 
     stmtId = map->getId();
+
     return true;
 }
 

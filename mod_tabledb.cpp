@@ -202,7 +202,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
         sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
 
         uint64_t vmapId = 0;
-        if (!m->newVectorMap(c->process_internal, vmapId))
+        if (!m->newVectorMap(c, vmapId))
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
         returnValue->uint64[0] = vmapId;
@@ -227,7 +227,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_delete,
 
         sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
 
-        if (!m->deleteVectorMap(c->process_internal, vmapId))
+        if (!m->deleteVectorMap(c, vmapId))
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
         return SHAREMIND_MODULE_API_0x1_OK;
@@ -255,7 +255,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_index,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -290,7 +290,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_index,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -327,7 +327,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_index,
         const uint64_t val = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -367,7 +367,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_index,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -401,7 +401,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_index,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -435,7 +435,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_index_vector,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -469,7 +469,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_string,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -504,7 +504,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_string,
         const uint64_t num = args[1u].uint64[0u];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -547,7 +547,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_string,
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
         const std::string str(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -587,7 +587,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_string,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -621,7 +621,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_string,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -655,7 +655,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_string_vector,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -689,7 +689,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_type,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -724,7 +724,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_domain,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -766,7 +766,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_name,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -808,7 +808,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_type_size,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -850,7 +850,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_type,
         const std::string typeDomain(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
         const std::string typeName(static_cast<const char *>(crefs[2u].pData), crefs[2u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -890,7 +890,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_type,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -924,7 +924,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_type,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -958,7 +958,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_type_vector,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -992,7 +992,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_size_value,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1027,7 +1027,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_domain,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1069,7 +1069,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_name,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1111,7 +1111,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value_type_size,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1153,7 +1153,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
         const uint64_t num = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1209,7 +1209,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
         const std::string typeDomain(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
         const std::string typeName(static_cast<const char *>(crefs[2u].pData), crefs[2u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1253,7 +1253,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_pop_back_value,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1287,7 +1287,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear_value,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1321,7 +1321,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_is_value_vector,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1355,7 +1355,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_count,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1395,7 +1395,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_erase,
         const uint64_t vmapId = args[0].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1427,7 +1427,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_clear,
     try {
         const uint64_t vmapId = args[0].uint64[0];
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1456,7 +1456,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_reset,
     try {
         const uint64_t vmapId = args[0].uint64[0];
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1486,7 +1486,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_set_batch,
         const uint64_t vmapId = args[0].uint64[0];
         const uint64_t num = args[1].uint64[0];
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1515,7 +1515,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_next_batch,
     try {
         const uint64_t vmapId = args[0].uint64[0];
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1544,7 +1544,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_prev_batch,
     try {
         const uint64_t vmapId = args[0].uint64[0];
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1573,7 +1573,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_add_batch,
     try {
         const uint64_t vmapId = args[0].uint64[0];
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
@@ -1602,7 +1602,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_batch_count,
     try {
         const uint64_t vmapId = args[0].uint64[0];
 
-        sharemind::TdbVectorMap * map = m->getVectorMap(c->process_internal, vmapId);
+        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 

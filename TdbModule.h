@@ -78,9 +78,12 @@ public: /* Methods: */
                                          SharemindCodeBlock * returnValue,
                                          SharemindModuleApi0x1SyscallContext * c) const;
 
-    bool newVectorMap(const void * process, uint64_t & vmapId);
-    bool deleteVectorMap(const void * process, const uint64_t vmapId);
-    TdbVectorMap * getVectorMap(const void * process, const uint64_t vmapId) const;
+    bool newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
+                      uint64_t & vmapId);
+    bool deleteVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
+                         const uint64_t vmapId);
+    TdbVectorMap * getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
+                                const uint64_t vmapId) const;
 
     inline ILogger::Wrapped & logger() { return m_logger; }
     inline const ILogger::Wrapped & logger() const { return m_logger; }

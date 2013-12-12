@@ -125,28 +125,33 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
     return (*(sb->wrapper.callable))(args, num_args, refs, crefs, returnValue, &sc);
 }
 
-bool TdbModule::newVectorMap(const void * process, uint64_t & stmtId) {
-    SharemindDataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
-                                                        process,
-                                                        "mod_tabledb/vector_maps");
+bool TdbModule::newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
+                             uint64_t & stmtId)
+{
+    SharemindDataStore * const maps = m_dataStoreManager.get_datastore(
+                                          &m_dataStoreManager,
+                                          ctx,
+                                          "mod_tabledb/vector_maps");
     if (!maps) {
         m_logger.error() << "Failed to get process data store.";
         return false;
     }
 
-    TdbVectorMap * map = m_mapUtil->newVectorMap(maps);
+    TdbVectorMap * const map = m_mapUtil->newVectorMap(maps);
     if (!map)
         return false;
 
     stmtId = map->getId();
-
     return true;
 }
 
-bool TdbModule::deleteVectorMap(const void * process, const uint64_t stmtId) {
-    SharemindDataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
-                                                        process,
-                                                        "mod_tabledb/vector_maps");
+bool TdbModule::deleteVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
+                                const uint64_t stmtId)
+{
+    SharemindDataStore * const maps = m_dataStoreManager.get_datastore(
+                                          &m_dataStoreManager,
+                                          ctx,
+                                          "mod_tabledb/vector_maps");
     if (!maps) {
         m_logger.error() << "Failed to get process data store.";
         return false;
@@ -155,10 +160,13 @@ bool TdbModule::deleteVectorMap(const void * process, const uint64_t stmtId) {
     return m_mapUtil->deleteVectorMap(maps, stmtId);
 }
 
-TdbVectorMap * TdbModule::getVectorMap(const void * process, const uint64_t stmtId) const {
-    SharemindDataStore * maps = m_dataStoreManager.get_datastore(&m_dataStoreManager,
-                                                        process,
-                                                        "mod_tabledb/vector_maps");
+TdbVectorMap * TdbModule::getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
+                                       const uint64_t stmtId) const
+{
+    SharemindDataStore * const maps = m_dataStoreManager.get_datastore(
+                                          &m_dataStoreManager,
+                                          ctx,
+                                          "mod_tabledb/vector_maps");
     if (!maps) {
         m_logger.error() << "Failed to get process data store.";
         return NULL;

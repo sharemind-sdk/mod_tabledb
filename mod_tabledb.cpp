@@ -379,11 +379,11 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_index,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        SharemindTdbIndex * idx = sharemind::TdbIndex_new(val);
+        SharemindTdbIndex * idx = SharemindTdbIndex_new(val);
         try {
             map->push_back<SharemindTdbIndex>(name, idx);
         } catch (...) {
-            sharemind::TdbIndex_delete(idx);
+            SharemindTdbIndex_delete(idx);
             throw;
         }
 
@@ -599,11 +599,11 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_string,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        SharemindTdbString * s = sharemind::TdbString_new(str);
+        SharemindTdbString * s = SharemindTdbString_new(str);
         try {
             map->push_back<SharemindTdbString>(name, s);
         } catch (...) {
-            sharemind::TdbString_delete(s);
+            SharemindTdbString_delete(s);
             throw;
         }
 
@@ -902,11 +902,11 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_type,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        SharemindTdbType * t = sharemind::TdbType_new(typeDomain, typeName, typeSize);
+        SharemindTdbType * t = SharemindTdbType_new(typeDomain, typeName, typeSize);
         try {
             map->push_back<SharemindTdbType>(name, t);
         } catch (...) {
-            sharemind::TdbType_delete(t);
+            SharemindTdbType_delete(t);
             throw;
         }
 
@@ -1265,11 +1265,11 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
         // byte too much as VM does not allow us to allocate 0 sized memory block.
         const uint64_t bufSize = crefs[3u].size - 1;
 
-        SharemindTdbValue * v = sharemind::TdbValue_new(typeDomain, typeName, typeSize, crefs[3u].pData, bufSize);
+        SharemindTdbValue * v = SharemindTdbValue_new(typeDomain, typeName, typeSize, crefs[3u].pData, bufSize);
         try {
             map->push_back<SharemindTdbValue>(name, v);
         } catch (...) {
-            sharemind::TdbValue_delete(v);
+            SharemindTdbValue_delete(v);
             throw;
         }
 

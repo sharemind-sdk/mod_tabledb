@@ -36,7 +36,6 @@ ADD_DEFINITIONS(
 SET(TABLEDB_SOURCES
     TdbConfiguration.cpp
     TdbModule.cpp
-    TdbTypesUtil.cpp
     TdbVectorMap.cpp
     TdbVectorMapUtil.cpp
     mod_tabledb.cpp

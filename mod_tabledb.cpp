@@ -190,6 +190,54 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_exists,
     }
 }
 
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_col_count,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_tbl_col_count", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_row_count,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_tbl_row_count", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_insert_row,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
@@ -207,6 +255,30 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_insert_row,
 
         sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
         return m->doSyscall(dsName, "tdb_insert_row", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_read_col,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_read_col", args, num_args, refs, crefs, returnValue, c);
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
     } catch (...) {
@@ -1240,6 +1312,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
     if (crefs[0u].size == 0u
             || crefs[1u].size == 0u
             || crefs[2u].size == 0u
+            || crefs[3u].size == 0u
             || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0'
             || static_cast<const char *>(crefs[1u].pData)[crefs[1u].size - 1u] != '\0'
             || static_cast<const char *>(crefs[2u].pData)[crefs[2u].size - 1u] != '\0')
@@ -1257,13 +1330,21 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
         const std::string typeDomain(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
         const std::string typeName(static_cast<const char *>(crefs[2u].pData), crefs[2u].size - 1u);
 
+        uint64_t bufSize = 0;
+        if (typeDomain.compare("public") == 0 && typeName.compare("string") == 0) {
+            if (static_cast<const char *>(crefs[3u].pData)[crefs[3u].size - 1u] != '\0')
+                return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+            bufSize = crefs[3u].size;
+        } else {
+            // TODO: the following is a workaround! We are always allocating one
+            // byte too much as VM does not allow us to allocate 0 sized memory block.
+            bufSize = crefs[3u].size - 1;
+        }
+
         sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
-
-        // TODO: the following is a workaround! We are always allocating one
-        // byte too much as VM does not allow us to allocate 0 sized memory block.
-        const uint64_t bufSize = crefs[3u].size - 1;
 
         SharemindTdbValue * v = SharemindTdbValue_new(typeDomain, typeName, typeSize, crefs[3u].pData, bufSize);
         try {
@@ -1724,15 +1805,16 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     std::set<std::string> signatures;
     signatures.insert("tdb_open");
     signatures.insert("tdb_close");
-    //signatures.insert("tdb_tbl_create");
+    signatures.insert("tdb_tbl_create");
     signatures.insert("tdb_tbl_delete");
     signatures.insert("tdb_tbl_exists");
-    //signatures.insert("tdb_tbl_size");
+    signatures.insert("tdb_tbl_col_count");
+    signatures.insert("tdb_tbl_row_count");
     //signatures.insert("tdb_delete_col");
     //signatures.insert("tdb_delete_row");
     //signatures.insert("tdb_insert_col");
-    //signatures.insert("tdb_insert_row");
-    //signatures.insert("tdb_read_col");
+    signatures.insert("tdb_insert_row");
+    signatures.insert("tdb_read_col");
     //signatures.insert("tdb_read_row");
     //signatures.insert("tdb_update_col");
     //signatures.insert("tdb_update_row");
@@ -1781,19 +1863,20 @@ SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
 SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
 
     /* High level database operations */
-    { "tdb_open",                           &tdb_open }
+      { "tdb_open",                         &tdb_open }
     , { "tdb_close",                        &tdb_close }
 
     /* Table database API */
-    //, { "tdb_tbl_create",                   &tdb_tbl_create }
+    , { "tdb_tbl_create",                   &tdb_tbl_create }
     , { "tdb_tbl_delete",                   &tdb_tbl_delete }
     , { "tdb_tbl_exists",                   &tdb_tbl_exists }
-    //, { "tdb_tbl_size",   &tdb_tbl_size }
+    , { "tdb_tbl_col_count",                &tdb_tbl_col_count }
+    , { "tdb_tbl_row_count",                &tdb_tbl_row_count }
     //, { "tdb_delete_col", &tdb_delete_col }
     //, { "tdb_delete_row", &tdb_delete_row }
     //, { "tdb_insert_col", &tdb_insert_col }
     , { "tdb_insert_row",                   &tdb_insert_row }
-    //, { "tdb_read_col",   &tdb_read_col }
+    , { "tdb_read_col",                     &tdb_read_col }
     //, { "tdb_read_row",   &tdb_read_row }
     //, { "tdb_update_col", &tdb_update_col }
     //, { "tdb_update_row", &tdb_update_row }

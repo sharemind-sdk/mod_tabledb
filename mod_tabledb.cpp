@@ -1280,10 +1280,21 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
         const SharemindTdbValue & v = map->at<SharemindTdbValue>(name, num);
 
         if (refs) {
-            // TODO: the following is a workaround! We are always allocating one
-            // byte too much as VM does not allow us to allocate 0 sized memory block.
-            if (v.size != refs[0u].size - 1)
-                return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+            if (strcmp(v.type->domain, "public") == 0 && strcmp(v.type->name, "string") == 0) {
+                if (v.size != refs[0u].size)
+                    return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+                if (static_cast<const char *>(v.buffer)[v.size - 1u] != '\0')
+                    return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+            } else {
+                // TODO: the following is a workaround! We are always allocating one
+                // byte too much as VM does not allow us to allocate 0 sized memory block.
+
+                // If the buffer size equal the type size, we assume it is a scalar
+                // value and the workaround does not apply to it.
+                if (refs[0u].size != v.type->size && refs[0u].size - 1 != v.size)
+                    return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+            }
 
             memcpy(refs[0u].pData, v.buffer, v.size);
         }
@@ -1337,9 +1348,15 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
 
             bufSize = crefs[3u].size;
         } else {
-            // TODO: the following is a workaround! We are always allocating one
-            // byte too much as VM does not allow us to allocate 0 sized memory block.
-            bufSize = crefs[3u].size - 1;
+            // If the buffer size equal the type size, we assume it is a scalar
+            // value and the workaround does not apply to it.
+            if (crefs[3u].size == typeSize) {
+                bufSize = crefs[3u].size;
+            } else {
+                // TODO: the following is a workaround! We are always allocating one
+                // byte too much as VM does not allow us to allocate 0 sized memory block.
+                bufSize = crefs[3u].size - 1;
+            }
         }
 
         sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);

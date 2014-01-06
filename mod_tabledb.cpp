@@ -1281,7 +1281,9 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
 
         if (refs) {
             if (strcmp(v.type->domain, "public") == 0 && strcmp(v.type->name, "string") == 0) {
-                if (v.size != refs[0u].size)
+                // TODO: the following is a workaround! We are always allocating one
+                // byte too much as VM does not allow us to allocate 0 sized memory block.
+                if (v.size != refs[0u].size - 1)
                     return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
                 if (static_cast<const char *>(v.buffer)[v.size - 1u] != '\0')

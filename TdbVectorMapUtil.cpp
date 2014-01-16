@@ -95,7 +95,7 @@ TdbVectorMap * TdbVectorMapUtil::newVectorMap(SharemindDataStore * dataStore) co
 
     // Generate an identifier
     do {
-        oss.str(""); oss.clear(); oss << vmapId++;
+        oss.str(""); oss.clear(); oss << ++vmapId;
     } while (!!dataStore->get(dataStore, oss.str().c_str()));
 
     // Store the map

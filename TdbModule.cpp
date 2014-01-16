@@ -30,7 +30,6 @@ template <class T> void destroy(void * ptr) throw() { delete static_cast<T *>(pt
 namespace sharemind {
 
 TdbModule::TdbModule(ILogger & logger,
-                     IRandom & rng,
                      SharemindDataStoreManager & dataStoreManager,
                      SharemindConsensusFacility & consensusService,
                      SharemindProcessFacility & processFacility,
@@ -40,7 +39,7 @@ TdbModule::TdbModule(ILogger & logger,
     , m_dataStoreManager(dataStoreManager)
     , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures))
     , m_dataSourceManager(new DataSourceManager)
-    , m_mapUtil(new TdbVectorMapUtil(rng))
+    , m_mapUtil(new TdbVectorMapUtil())
 {
     // Load module configuration
     if (!m_configuration.load(config))

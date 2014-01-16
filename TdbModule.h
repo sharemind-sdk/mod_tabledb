@@ -25,7 +25,6 @@
 namespace sharemind  {
 
 class DataSourceManager;
-class IRandom;
 class TdbVectorMap;
 class TdbVectorMapUtil;
 
@@ -69,7 +68,6 @@ public: /* Types: */
 public: /* Methods: */
 
     TdbModule(ILogger & logger,
-              IRandom & rng,
               SharemindDataStoreManager & dataStoreManager,
               SharemindConsensusFacility & consensusService,
               SharemindProcessFacility & processFacility,

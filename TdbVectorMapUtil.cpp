@@ -79,8 +79,7 @@ void destroy(void * ptr) throw() { delete static_cast<T *>(ptr); }
 
 namespace sharemind {
 
-TdbVectorMapUtil::TdbVectorMapUtil(IRandom & rng)
-    : m_rng(rng)
+TdbVectorMapUtil::TdbVectorMapUtil()
 {
     m_wrapper.internal = this;
     m_wrapper.new_map = &SharemindTdbVectorMapUtil_new_map;
@@ -94,10 +93,9 @@ TdbVectorMap * TdbVectorMapUtil::newVectorMap(SharemindDataStore * dataStore) co
     uint64_t vmapId = 0;
     std::ostringstream oss; // TODO for C++11 replace with std::to_string()
 
-    // Generate a random identifier
+    // Generate an identifier
     do {
-        m_rng.fillBytes(&vmapId, sizeof(uint64_t));
-        oss.str(""); oss.clear(); oss << vmapId;
+        oss.str(""); oss.clear(); oss << vmapId++;
     } while (!!dataStore->get(dataStore, oss.str().c_str()));
 
     // Store the map

@@ -29,7 +29,7 @@ private: /* Types: */
 
 public: /* Methods: */
 
-    TdbVectorMapUtil(IRandom & rng);
+    TdbVectorMapUtil();
 
     TdbVectorMap * newVectorMap(SharemindDataStore * dataStore) const;
     bool deleteVectorMap(SharemindDataStore * dataStore, const uint64_t vmapid) const;
@@ -41,7 +41,6 @@ public: /* Methods: */
 private: /* Fields: */
 
     TdbVectorMapUtilWrapper m_wrapper;
-    IRandom & m_rng;
 
 }; /* class TdbVectorMapUtil { */
 

@@ -11,7 +11,6 @@
 
 #include <sstream>
 #include <boost/foreach.hpp>
-#include <sharemind/dbcommon/ModuleLoader/ModuleLoader.h>
 
 #define SHAREMIND_INTERNAL__
 #include <sharemind/dbcommon/DataSource.h>
@@ -37,14 +36,16 @@ TdbModule::TdbModule(ILogger & logger,
                      const std::set<std::string> & signatures)
     : m_logger(logger.wrap("[TdbModule] "))
     , m_dataStoreManager(dataStoreManager)
-    , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures))
+    , m_dbModuleLoader(new moduleLoader::ModuleLoader<Logger>(signatures, m_logger))
     , m_dataSourceManager(new DataSourceManager)
     , m_mapUtil(new TdbVectorMapUtil())
 {
     // Load module configuration
-    if (!m_configuration.load(config))
-        throw ConfigurationException("Failed to process given module configuration: " +
-                                     m_configuration.getLastErrorMessage());
+    if (!m_configuration.load(config)) {
+        m_logger.error() << "Failed to process given module configuration: "
+                         << m_configuration.getLastErrorMessage();
+        throw ConfigurationException("Failed to parse configuration!");
+    }
 
     // Set database module facilities
     if (!m_dbModuleLoader->setModuleFacility("Logger", &logger))
@@ -67,13 +68,12 @@ TdbModule::TdbModule(ILogger & logger,
 
     // Load database modules
     BOOST_FOREACH (const TdbConfiguration::DbModuleEntry & cfgDbMod, m_configuration.getDbModuleList()) {
-        SharemindModule * m = m_dbModuleLoader->addModule(cfgDbMod.filename, cfgDbMod.configurationFile);
-        if (!m) {
-            std::ostringstream oss;
-            oss << "Failed loading database module '" << cfgDbMod.filename << "': "
-                << m_dbModuleLoader->lastError();
-            throw InitializationException(oss.str());
-        }
+        SharemindModule * const m = m_dbModuleLoader->addModule(
+                                            cfgDbMod.filename,
+                                            cfgDbMod.configurationFile);
+        if (!m)
+            throw InitializationException("Failed to load database modules!");
+
         m_logger.info()
             << "Loaded database module \"" << SharemindModule_get_name(m)
             << "\" (" << SharemindModule_get_num_syscalls(m)
@@ -84,18 +84,18 @@ TdbModule::TdbModule(ILogger & logger,
     // Load data sources
     BOOST_FOREACH (const TdbConfiguration::DataSourceEntry &cfgDs, m_configuration.getDataSourceList()) {
         if (!m_dbModuleLoader->hasModule(cfgDs.dbModule)) {
-            std::ostringstream oss;
-            oss << "Data source \"" << cfgDs.name
-                << "\" uses an unknown database module: \""
-                << cfgDs.dbModule << "\".";
-            throw ConfigurationException(oss.str());
+            m_logger.error() << "Data source \"" << cfgDs.name
+                             << "\" uses an unknown database module: \""
+                             << cfgDs.dbModule << "\".";
+            throw ConfigurationException("Configuration contained unknown "
+                                         "module references!");
         }
 
         if (!m_dataSourceManager->addDataSource(cfgDs.name, cfgDs.dbModule, cfgDs.configurationFile)) {
-            std::ostringstream oss;
-            oss << "Data source \"" << cfgDs.name
-                << "\" has duplicate configuration entries.";
-            throw InitializationException(oss.str());
+            m_logger.error() << "Data source \"" << cfgDs.name
+                             << "\" has duplicate configuration entries.";
+            throw ConfigurationException("Configuration contained duplicate "
+                                         "configuration entries!");
         }
     }
 

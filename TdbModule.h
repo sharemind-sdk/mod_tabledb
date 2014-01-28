@@ -15,6 +15,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <sharemind/common/Logger/Debug.h>
 #include <sharemind/common/Logger/ILogger.h>
+#include <sharemind/common/NoExcept.h>
+#include <sharemind/dbcommon/ModuleLoader/ModuleLoader.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
 #include <sharemind/miner/Facilities/libconsensusservice.h>
@@ -28,40 +30,35 @@ class DataSourceManager;
 class TdbVectorMap;
 class TdbVectorMapUtil;
 
-namespace moduleLoader {
-
-class ModuleLoader;
-
-} /* namespace moduleLoader { */
-
 class __attribute__ ((visibility("internal"))) TdbModule {
 
 public: /* Types: */
 
-    class Exception: public std::runtime_error {
+    typedef ILogger::Wrapped Logger;
 
-    public: /* Methods: */
-
-        inline Exception(const std::string & msg)
-            : std::runtime_error(msg) {}
-
-    };
-
-    class ConfigurationException: public Exception {
-
-    public: /* Methods: */
-
-        inline ConfigurationException(const std::string & msg)
-            : Exception(msg) {}
-
-    };
+    class Exception: public std::exception {};
 
     class InitializationException: public Exception {
 
     public: /* Methods: */
 
-        inline InitializationException(const std::string & msg)
-            : Exception(msg) {}
+        inline InitializationException(const char * const msg)
+            : m_errorStr(msg) {}
+
+        inline virtual const char * what() const SHAREMIND_COMMON_NOEXCEPT {
+            return m_errorStr;
+        }
+
+        const char * const m_errorStr;
+
+    };
+
+    class ConfigurationException: public InitializationException {
+
+    public: /* Methods: */
+
+        inline ConfigurationException(const char * const msg)
+            : InitializationException(msg) {}
 
     };
 
@@ -91,21 +88,21 @@ public: /* Methods: */
     TdbVectorMap * getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                                 const uint64_t vmapId) const;
 
-    inline ILogger::Wrapped & logger() { return m_logger; }
-    inline const ILogger::Wrapped & logger() const { return m_logger; }
+    inline Logger & logger() { return m_logger; }
+    inline const Logger & logger() const { return m_logger; }
 
     inline SharemindDataStoreManager & dataStoreManager() { return m_dataStoreManager; }
     inline const SharemindDataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
 
 private: /* Fields: */
 
-    mutable ILogger::Wrapped m_logger;
+    mutable Logger m_logger;
 
     /* Cached references: */
     SharemindDataStoreManager & m_dataStoreManager;
 
     TdbConfiguration m_configuration;
-    boost::scoped_ptr<moduleLoader::ModuleLoader> m_dbModuleLoader;
+    boost::scoped_ptr<moduleLoader::ModuleLoader<Logger> > m_dbModuleLoader;
     boost::scoped_ptr<DataSourceManager> m_dataSourceManager;
     boost::scoped_ptr<TdbVectorMapUtil> m_mapUtil;
 

@@ -1827,12 +1827,12 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
         c->moduleHandle = new sharemind::TdbModule(*logger, *dsm, *consensusService, *processFacility, c->conf, signatures);
 
         return SHAREMIND_MODULE_API_0x1_OK;
-    } catch (const TdbModule::InitializationException & e) {
-        logger->error() << e.what();
-        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const TdbModule::ConfigurationException & e) {
         logger->error() << e.what();
         return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
+    } catch (const TdbModule::InitializationException & e) {
+        logger->error() << e.what();
+        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
     } catch (...) {

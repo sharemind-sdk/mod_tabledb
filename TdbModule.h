@@ -16,7 +16,7 @@
 #include <sharemind/common/Logger/Debug.h>
 #include <sharemind/common/Logger/ILogger.h>
 #include <sharemind/common/NoExcept.h>
-#include <sharemind/dbcommon/ModuleLoader/ModuleLoader.h>
+#include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
 #include <sharemind/miner/Facilities/libconsensusservice.h>

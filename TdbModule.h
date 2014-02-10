@@ -15,7 +15,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <sharemind/common/Logger/Debug.h>
 #include <sharemind/common/Logger/ILogger.h>
-#include <sharemind/common/NoExcept.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
@@ -45,7 +44,7 @@ public: /* Types: */
         inline InitializationException(const char * const msg)
             : m_errorStr(msg) {}
 
-        inline virtual const char * what() const SHAREMIND_COMMON_NOEXCEPT {
+        inline virtual const char * what() const noexcept {
             return m_errorStr;
         }
 

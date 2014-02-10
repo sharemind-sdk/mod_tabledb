@@ -10,7 +10,12 @@
 #ifndef SHAREMIND_MOD_TABLEDB_TDBTYPES_H
 #define SHAREMIND_MOD_TABLEDB_TDBTYPES_H
 
+#ifdef __cplusplus
+#include <cstdint>
+#else
 #include <stdint.h>
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {

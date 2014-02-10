@@ -10,6 +10,18 @@
 #ifndef SHAREMIND_MOD_TABLEDB_TDBMAPAPI_H
 #define SHAREMIND_MOD_TABLEDB_TDBMAPAPI_H
 
+#include <cstddef>
+#ifdef __cplusplus
+#include <cstdint>
+#endif
+#include <sharemind/miner/Facilities/datastoreapi.h>
+#ifndef __cplusplus
+#include <stdbool.h>
+#include <stdint.h>
+#endif
+#include "tdbtypes.h"
+
+
 #ifndef SHAREMIND_ICONST
 #ifdef SHAREMIND_INTERNAL__
 #define SHAREMIND_ICONST
@@ -17,14 +29,6 @@
 #define SHAREMIND_ICONST const
 #endif
 #endif /* SHAREMIND_ICONST */
-
-#include <cstddef>
-#include <stdbool.h>
-#include <stdint.h>
-#include <sharemind/miner/Facilities/datastoreapi.h>
-
-#include "tdbtypes.h"
-
 
 #ifdef __cplusplus
 extern "C" {

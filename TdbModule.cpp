@@ -181,7 +181,7 @@ TdbVectorMap * TdbModule::getVectorMap(const SharemindModuleApi0x1SyscallContext
                                           "mod_tabledb/vector_maps");
     if (!maps) {
         m_logger.error() << "Failed to get process data store.";
-        return NULL;
+        return nullptr;
     }
 
     return m_mapUtil->getVectorMap(maps, stmtId);

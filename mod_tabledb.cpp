@@ -1256,13 +1256,13 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
     if (num_args != 2)
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
-    if (refs && refs[1u].pData != NULL)
+    if (refs && refs[1u].pData != nullptr)
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (refs && refs[0u].size == 0u)
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
-    if (!crefs || crefs[1u].pData != NULL)
+    if (!crefs || crefs[1u].pData != nullptr)
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1516,7 +1516,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_erase,
     if (refs)
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
-    if (!crefs || crefs[1].pData != NULL)
+    if (!crefs || crefs[1].pData != nullptr)
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u

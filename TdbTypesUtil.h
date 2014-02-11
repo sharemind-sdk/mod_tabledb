@@ -109,7 +109,7 @@ inline static SharemindTdbValue * SharemindTdbValue_new(const std::string & type
         memcpy(ptr->buffer, buffer, size);
     } else {
         assert(size == 0);
-        ptr->buffer = NULL;
+        ptr->buffer = nullptr;
     }
     ptr->size = size;
 
@@ -129,7 +129,7 @@ inline static SharemindTdbValue * SharemindTdbValue_new(const char * typeDomain,
         memcpy(ptr->buffer, buffer, size);
     } else {
         assert(size == 0);
-        ptr->buffer = NULL;
+        ptr->buffer = nullptr;
     }
     ptr->size = size;
 

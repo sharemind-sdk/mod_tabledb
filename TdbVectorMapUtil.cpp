@@ -28,11 +28,11 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(SharemindTdbVectorMapU
     try {
         sharemind::TdbVectorMap * map = u->newVectorMap(datastore);
         if (!map)
-            return NULL;
+            return nullptr;
 
         return map->getWrapper();
     } catch (...) {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -58,11 +58,11 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(SharemindTdbVectorMapU
     try {
         sharemind::TdbVectorMap * map = u->getVectorMap(datastore, vmapId);
         if (!map)
-            return NULL;
+            return nullptr;
 
         return map->getWrapper();
     } catch (...) {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -102,7 +102,7 @@ TdbVectorMap * TdbVectorMapUtil::newVectorMap(SharemindDataStore * dataStore) co
     TdbVectorMap * map = new TdbVectorMap(vmapId);
     if (!dataStore->set(dataStore, oss.str().c_str(), map, &destroy<TdbVectorMap>)) {
         delete map;
-        return NULL;
+        return nullptr;
     }
 
     return map;

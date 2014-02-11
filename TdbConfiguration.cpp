@@ -9,7 +9,6 @@
 
 #include "TdbConfiguration.h"
 
-#include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -32,7 +31,7 @@ bool TdbConfiguration::load(const std::string & filename) {
         m_dbModuleList.clear();
         m_dataSourceList.clear();
 
-        BOOST_FOREACH(const pt::ptree::value_type & v, config) {
+        for (const pt::ptree::value_type & v : config) {
 
             // Load the database module list
             std::string section(v.first);

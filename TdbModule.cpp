@@ -10,7 +10,6 @@
 #include "TdbModule.h"
 
 #include <sstream>
-#include <boost/foreach.hpp>
 
 #define SHAREMIND_INTERNAL__
 #include <sharemind/dbcommon/DataSource.h>
@@ -67,7 +66,9 @@ TdbModule::TdbModule(ILogger & logger,
         throw InitializationException("Failed setting module facility 'ProcessFacility'.");
 
     // Load database modules
-    BOOST_FOREACH (const TdbConfiguration::DbModuleEntry & cfgDbMod, m_configuration.getDbModuleList()) {
+    for (const TdbConfiguration::DbModuleEntry & cfgDbMod
+         : m_configuration.getDbModuleList())
+    {
         SharemindModule * const m = m_dbModuleLoader->addModule(
                                             cfgDbMod.filename,
                                             cfgDbMod.configurationFile);
@@ -82,7 +83,9 @@ TdbModule::TdbModule(ILogger & logger,
     }
 
     // Load data sources
-    BOOST_FOREACH (const TdbConfiguration::DataSourceEntry &cfgDs, m_configuration.getDataSourceList()) {
+    for (const TdbConfiguration::DataSourceEntry & cfgDs
+         : m_configuration.getDataSourceList())
+    {
         if (!m_dbModuleLoader->hasModule(cfgDs.dbModule)) {
             m_logger.error() << "Data source \"" << cfgDs.name
                              << "\" uses an unknown database module: \""

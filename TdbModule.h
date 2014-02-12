@@ -10,9 +10,10 @@
 #ifndef SHAREMIND_MOD_TDB_TDBMODULE_H
 #define SHAREMIND_MOD_TDB_TDBMODULE_H
 
+#include "TdbConfiguration.h"
+
+#include <memory>
 #include <set>
-#include <stdexcept>
-#include <boost/scoped_ptr.hpp>
 #include <sharemind/common/Logger/Debug.h>
 #include <sharemind/common/Logger/ILogger.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
@@ -20,7 +21,7 @@
 #include <sharemind/miner/Facilities/datastoreapi.h>
 #include <sharemind/miner/Facilities/libconsensusservice.h>
 #include <sharemind/miner/Facilities/libprocessfacility.h>
-#include "TdbConfiguration.h"
+#include <stdexcept>
 
 
 namespace sharemind  {
@@ -101,9 +102,9 @@ private: /* Fields: */
     SharemindDataStoreManager & m_dataStoreManager;
 
     TdbConfiguration m_configuration;
-    boost::scoped_ptr<moduleLoader::ModuleLoader<Logger> > m_dbModuleLoader;
-    boost::scoped_ptr<DataSourceManager> m_dataSourceManager;
-    boost::scoped_ptr<TdbVectorMapUtil> m_mapUtil;
+    std::unique_ptr<moduleLoader::ModuleLoader<Logger> > m_dbModuleLoader;
+    std::unique_ptr<DataSourceManager> m_dataSourceManager;
+    std::unique_ptr<TdbVectorMapUtil> m_mapUtil;
 
 }; /* class TdbModule { */
 

@@ -102,9 +102,9 @@ private: /* Fields: */
     SharemindDataStoreManager & m_dataStoreManager;
 
     TdbConfiguration m_configuration;
-    std::unique_ptr<moduleLoader::ModuleLoader<Logger> > m_dbModuleLoader;
-    std::unique_ptr<DataSourceManager> m_dataSourceManager;
-    std::unique_ptr<TdbVectorMapUtil> m_mapUtil;
+    const std::unique_ptr<moduleLoader::ModuleLoader<Logger> > m_dbModuleLoader;
+    const std::unique_ptr<DataSourceManager> m_dataSourceManager;
+    const std::unique_ptr<TdbVectorMapUtil> m_mapUtil;
 
 }; /* class TdbModule { */
 

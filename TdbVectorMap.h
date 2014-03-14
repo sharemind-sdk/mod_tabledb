@@ -320,20 +320,6 @@ public: /* Methods: */
         m_currentBatch = m_batches.begin() + n;
     }
 
-    inline bool previousBatch() {
-        if (m_currentBatch == m_batches.begin())
-            return false;
-        --m_currentBatch;
-        return true;
-    }
-
-    inline bool nextBatch() {
-        if (m_currentBatch + 1 == m_batches.end())
-            return false;
-        ++m_currentBatch;
-        return true;
-    }
-
     inline void addBatch() {
         m_batches.push_back(new AnyValueMap);
         m_currentBatch = m_batches.end() - 1;

@@ -1637,64 +1637,6 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_set_batch,
     }
 }
 
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_next_batch,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    if (!SyscallArgs<1u, true, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-
-    try {
-        const uint64_t vmapId = args[0].uint64[0];
-
-        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
-        if (!map)
-            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
-
-        returnValue->uint64[0] = map->nextBatch();
-
-        return SHAREMIND_MODULE_API_0x1_OK;
-    } catch (const sharemind::TdbVectorMap::Exception & e) {
-        m->logger().error() << e.what();
-        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_prev_batch,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    if (!SyscallArgs<1u, true, 0u, 0u>::check(args, num_args, refs, crefs, returnValue))
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-
-    try {
-        const uint64_t vmapId = args[0].uint64[0];
-
-        sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
-        if (!map)
-            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
-
-        returnValue->uint64[0] = map->previousBatch();
-
-        return SHAREMIND_MODULE_API_0x1_OK;
-    } catch (const sharemind::TdbVectorMap::Exception & e) {
-        m->logger().error() << e.what();
-        return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
-    }
-}
-
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_add_batch,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
@@ -1924,8 +1866,6 @@ SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
     /* Batch manipulation */
     , { "tdb_vmap_reset",                   &tdb_vmap_reset }
     , { "tdb_vmap_set_batch",               &tdb_vmap_set_batch }
-    , { "tdb_vmap_next_batch",              &tdb_vmap_next_batch }
-    , { "tdb_vmap_prev_batch",              &tdb_vmap_prev_batch }
     , { "tdb_vmap_add_batch",               &tdb_vmap_add_batch }
     , { "tdb_vmap_batch_count",             &tdb_vmap_batch_count }
 );

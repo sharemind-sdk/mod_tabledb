@@ -45,7 +45,7 @@ public: /* Types: */
         inline InitializationException(const char * const msg)
             : m_errorStr(msg) {}
 
-        inline virtual const char * what() const noexcept {
+        inline const char * what() const noexcept override {
             return m_errorStr;
         }
 

@@ -73,7 +73,7 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(SharemindTdbVectorMapU
 namespace {
 
 template <class T>
-void destroy(void * ptr) throw() { delete static_cast<T *>(ptr); }
+void destroy(void * ptr) noexcept { delete static_cast<T *>(ptr); }
 
 } /* namespace { */
 

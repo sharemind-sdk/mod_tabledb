@@ -21,7 +21,7 @@
 
 namespace {
 
-template <class T> void destroy(void * ptr) throw() { delete static_cast<T *>(ptr); }
+template <class T> void destroy(void * ptr) noexcept { delete static_cast<T *>(ptr); }
 
 } /* namespace { */
 

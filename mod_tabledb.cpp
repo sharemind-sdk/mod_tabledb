@@ -214,6 +214,54 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_col_count,
     }
 }
 
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_col_names,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_tbl_col_names", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_col_types,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_tbl_col_types", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_row_count,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
@@ -1751,6 +1799,8 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     signatures.insert("tdb_tbl_delete");
     signatures.insert("tdb_tbl_exists");
     signatures.insert("tdb_tbl_col_count");
+    signatures.insert("tdb_tbl_col_names");
+    signatures.insert("tdb_tbl_col_types");
     signatures.insert("tdb_tbl_row_count");
     //signatures.insert("tdb_delete_col");
     //signatures.insert("tdb_delete_row");
@@ -1811,6 +1861,8 @@ SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
     , { "tdb_tbl_delete",                   &tdb_tbl_delete }
     , { "tdb_tbl_exists",                   &tdb_tbl_exists }
     , { "tdb_tbl_col_count",                &tdb_tbl_col_count }
+    , { "tdb_tbl_col_names",                &tdb_tbl_col_names }
+    , { "tdb_tbl_col_types",                &tdb_tbl_col_types }
     , { "tdb_tbl_row_count",                &tdb_tbl_row_count }
     //, { "tdb_delete_col", &tdb_delete_col }
     //, { "tdb_delete_row", &tdb_delete_row }

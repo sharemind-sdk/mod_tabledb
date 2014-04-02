@@ -84,15 +84,19 @@ struct SharemindTdbVectorMap_ {
 
     SharemindTdbVectorMapError (* get_index_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbIndex *** vec, size_t * size);
     SharemindTdbVectorMapError (* set_index_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbIndex ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_index_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
     SharemindTdbVectorMapError (* get_string_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbString *** vec, size_t * size);
     SharemindTdbVectorMapError (* set_string_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbString ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_string_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
     SharemindTdbVectorMapError (* get_type_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbType *** vec, size_t * size);
     SharemindTdbVectorMapError (* set_type_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbType ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_type_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
     SharemindTdbVectorMapError (* get_value_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbValue *** vec, size_t * size);
     SharemindTdbVectorMapError (* set_value_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbValue ** vec, const size_t size);
+    SharemindTdbVectorMapError (* is_value_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);
 
     SharemindTdbVectorMapError (* count)(SharemindTdbVectorMap * map, const char * key, bool * rv);
     SharemindTdbVectorMapError (* erase)(SharemindTdbVectorMap * map, const char * key, bool * rv);

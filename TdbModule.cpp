@@ -42,7 +42,7 @@ TdbModule::TdbModule(ILogger & logger,
     // Load module configuration
     if (!m_configuration.load(config)) {
         m_logger.error() << "Failed to process given module configuration: "
-                         << m_configuration.getLastErrorMessage();
+                         << m_configuration.lastErrorMessage();
         throw ConfigurationException("Failed to parse configuration!");
     }
 
@@ -67,7 +67,7 @@ TdbModule::TdbModule(ILogger & logger,
 
     // Load database modules
     for (const TdbConfiguration::DbModuleEntry & cfgDbMod
-         : m_configuration.getDbModuleList())
+         : m_configuration.dbModuleList())
     {
         SharemindModule * const m = m_dbModuleLoader->addModule(
                                             cfgDbMod.filename,
@@ -84,7 +84,7 @@ TdbModule::TdbModule(ILogger & logger,
 
     // Load data sources
     for (const TdbConfiguration::DataSourceEntry & cfgDs
-         : m_configuration.getDataSourceList())
+         : m_configuration.dataSourceList())
     {
         if (!m_dbModuleLoader->hasModule(cfgDs.dbModule)) {
             m_logger.error() << "Data source \"" << cfgDs.name

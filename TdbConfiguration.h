@@ -18,6 +18,7 @@
 namespace sharemind {
 
 class __attribute__ ((visibility("internal"))) TdbConfiguration {
+
 public: /* Types: */
 
     struct DbModuleEntry {
@@ -40,10 +41,10 @@ public: /* Methods: */
     */
     bool load(const std::string & filename);
 
-    inline const std::vector<DbModuleEntry> & getDbModuleList() const { return m_dbModuleList; }
-    inline const std::vector<DataSourceEntry> getDataSourceList() const { return m_dataSourceList; }
+    inline const std::vector<DbModuleEntry> & dbModuleList() const { return m_dbModuleList; }
+    inline const std::vector<DataSourceEntry> & dataSourceList() const { return m_dataSourceList; }
 
-    inline const std::string& getLastErrorMessage() { return m_lastErrorMessage; }
+    inline const std::string & lastErrorMessage() { return m_lastErrorMessage; }
 
 private: /* Fields: */
 

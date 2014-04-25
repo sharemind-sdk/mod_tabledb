@@ -106,6 +106,26 @@ TdbModule::TdbModule(ILogger & logger,
 
 TdbModule::~TdbModule() { }
 
+bool TdbModule::getErrorCode(const SharemindModuleApi0x1SyscallContext * ctx,
+        const std::string & dsName,
+        SharemindTdbError & code) const
+{
+    // Get error store
+    SharemindDataStore * const errors = m_dataStoreManager.get_datastore(
+                                                 &m_dataStoreManager,
+                                                 ctx,
+                                                 "mod_tabledb/errors");
+    if (!errors) {
+        m_logger.error() << "Failed to get process data store.";
+        return false;
+    }
+
+    const SharemindTdbError * const err = static_cast<SharemindTdbError *>(errors->get(errors, dsName.c_str()));
+    code = err ? *err : SHAREMIND_TDB_OK;
+
+    return true;
+}
+
 SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
                                                 const std::string & signature,
                                                 SharemindCodeBlock * args,

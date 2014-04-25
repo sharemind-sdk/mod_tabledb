@@ -22,6 +22,7 @@
 #include <sharemind/miner/Facilities/libconsensusservice.h>
 #include <sharemind/miner/Facilities/libprocessfacility.h>
 #include <stdexcept>
+#include "tdberror.h"
 
 
 namespace sharemind  {
@@ -71,6 +72,10 @@ public: /* Methods: */
               const std::string & config,
               const std::set<std::string> & signatures);
     ~TdbModule();
+
+    bool getErrorCode(const SharemindModuleApi0x1SyscallContext * ctx,
+            const std::string & dsName,
+            SharemindTdbError & code) const;
 
     SharemindModuleApi0x1Error doSyscall(const std::string & dsName,
                                          const std::string & signature,

@@ -47,6 +47,7 @@ SET(TABLEDB_HEADERS
     TdbTypesUtil.h
     TdbVectorMap.h
     TdbVectorMapUtil.h
+    tdberror.h
     tdbtypes.h
     tdbvectormapapi.h
 )

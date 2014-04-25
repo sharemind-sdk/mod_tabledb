@@ -70,6 +70,40 @@ struct SyscallArgs {
     }
 };
 
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_error_code,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    if (!SyscallArgs<0u, true, 0u, 1u>::check(args, num_args, refs, crefs, returnValue)) {
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+    }
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+
+        SharemindTdbError err = SHAREMIND_TDB_OK;
+        if (!m->getErrorCode(c, dsName, err))
+            return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
+
+        returnValue->int64[0] = err;
+
+        return SHAREMIND_MODULE_API_0x1_OK;
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_SHAREMIND_ERROR;
+    }
+}
+
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_open,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
@@ -1852,8 +1886,11 @@ SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
 
 SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
 
+    /* Error handling */
+      { "tdb_error_code",                   &tdb_error_code }
+
     /* High level database operations */
-      { "tdb_open",                         &tdb_open }
+    , { "tdb_open",                         &tdb_open }
     , { "tdb_close",                        &tdb_close }
 
     /* Table database API */

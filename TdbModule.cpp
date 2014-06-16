@@ -33,7 +33,7 @@ TdbModule::TdbModule(ILogger & logger,
                      SharemindProcessFacility & processFacility,
                      const std::string & config,
                      const std::set<std::string> & signatures)
-    : m_logger(logger.wrap("[TdbModule] "))
+    : m_logger(logger, "[TdbModule]")
     , m_dataStoreManager(dataStoreManager)
     , m_dbModuleLoader(new moduleLoader::ModuleLoader<Logger>(signatures, m_logger))
     , m_dataSourceManager(new DataSourceManager)

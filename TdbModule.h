@@ -64,7 +64,7 @@ public: /* Types: */
 
 public: /* Methods: */
 
-    TdbModule(ILogger & logger,
+    TdbModule(Logger & logger,
               SharemindDataStoreManager & dataStoreManager,
               SharemindConsensusFacility & consensusService,
               SharemindProcessFacility & processFacility,

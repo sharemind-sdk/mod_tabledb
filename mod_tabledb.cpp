@@ -1808,7 +1808,8 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     if (!fprocess || !fprocess->facility)
         return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
 
-    sharemind::ILogger * logger = static_cast<sharemind::ILogger *>(flog->facility);
+    sharemind::ILogger::Wrapped * logger =
+            static_cast<sharemind::ILogger::Wrapped *>(flog->facility);
     SharemindDataStoreManager * dsm = static_cast<SharemindDataStoreManager *>(fdsm->facility);
     SharemindConsensusFacility * consensusService =
         static_cast<SharemindConsensusFacility *>(fconsensus->facility);

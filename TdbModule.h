@@ -14,7 +14,6 @@
 
 #include <memory>
 #include <set>
-#include <sharemind/common/Logger/Debug.h>
 #include <sharemind/common/Logger/ILogger.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libmodapi/api_0x1.h>

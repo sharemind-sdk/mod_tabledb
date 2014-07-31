@@ -27,7 +27,7 @@ template <class T> void destroy(void * ptr) noexcept { delete static_cast<T *>(p
 
 namespace sharemind {
 
-TdbModule::TdbModule(Logger & logger,
+TdbModule::TdbModule(const Logger & logger,
                      SharemindDataStoreManager & dataStoreManager,
                      SharemindConsensusFacility & consensusService,
                      SharemindProcessFacility & processFacility,
@@ -35,7 +35,7 @@ TdbModule::TdbModule(Logger & logger,
                      const std::set<std::string> & signatures)
     : m_logger(logger, "[TdbModule]")
     , m_dataStoreManager(dataStoreManager)
-    , m_dbModuleLoader(new moduleLoader::ModuleLoader<Logger>(signatures, m_logger))
+    , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures, m_logger))
     , m_dataSourceManager(new DataSourceManager)
     , m_mapUtil(new TdbVectorMapUtil())
 {
@@ -47,7 +47,8 @@ TdbModule::TdbModule(Logger & logger,
     }
 
     // Set database module facilities
-    if (!m_dbModuleLoader->setModuleFacility("Logger", &m_logger))
+    if (!m_dbModuleLoader->setModuleFacility("Logger",
+                                             &const_cast<Logger &>(m_logger)))
         throw InitializationException("Failed setting module facility 'Logger'.");
 
     if (!m_dbModuleLoader->setModuleFacility("DataStoreManager", &m_dataStoreManager))

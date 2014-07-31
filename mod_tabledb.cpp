@@ -1808,8 +1808,8 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     if (!fprocess || !fprocess->facility)
         return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
 
-    sharemind::ILogger::Wrapped * logger =
-            static_cast<sharemind::ILogger::Wrapped *>(flog->facility);
+    const sharemind::Logger & logger =
+            *static_cast<const sharemind::Logger *>(flog->facility);
     SharemindDataStoreManager * dsm = static_cast<SharemindDataStoreManager *>(fdsm->facility);
     SharemindConsensusFacility * consensusService =
         static_cast<SharemindConsensusFacility *>(fconsensus->facility);
@@ -1820,7 +1820,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
      * Check for the module configuration
      */
     if (!c->conf) {
-        logger->error() << "No module configuration given.";
+        logger.error() << "No module configuration given.";
         return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
     }
 
@@ -1851,14 +1851,18 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
      * Initialize the module handle
      */
     try {
-        c->moduleHandle = new sharemind::TdbModule(*logger, *dsm, *consensusService, *processFacility, c->conf, signatures);
-
+        c->moduleHandle = new sharemind::TdbModule(logger,
+                                                   *dsm,
+                                                   *consensusService,
+                                                   *processFacility,
+                                                   c->conf,
+                                                   signatures);
         return SHAREMIND_MODULE_API_0x1_OK;
     } catch (const TdbModule::ConfigurationException & e) {
-        logger->error() << e.what();
+        logger.error() << e.what();
         return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
     } catch (const TdbModule::InitializationException & e) {
-        logger->error() << e.what();
+        logger.error() << e.what();
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
@@ -1877,8 +1881,10 @@ SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
     } catch (...) {
         const SharemindModuleApi0x1Facility * flog = c->getModuleFacility(c, "Logger");
         if (flog && flog->facility) {
-            sharemind::ILogger * logger = static_cast<sharemind::ILogger *>(flog->facility);
-            logger->warning() << "Exception was caught during \"mod_tabledb\" module deinitialization";
+            const sharemind::Logger & logger =
+                    *static_cast<const sharemind::Logger *>(flog->facility);
+            logger.warning() << "Exception was caught during \"mod_tabledb\" "
+                                "module deinitialization";
         }
     }
 

@@ -14,7 +14,7 @@
 
 #include <memory>
 #include <set>
-#include <sharemind/common/Logger/ILogger.h>
+#include <sharemind/common/Logger/Logger.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
@@ -33,8 +33,6 @@ class TdbVectorMapUtil;
 class __attribute__ ((visibility("internal"))) TdbModule {
 
 public: /* Types: */
-
-    typedef ILogger::Wrapped Logger;
 
     class Exception: public std::exception {};
 
@@ -64,7 +62,7 @@ public: /* Types: */
 
 public: /* Methods: */
 
-    TdbModule(Logger & logger,
+    TdbModule(const Logger & logger,
               SharemindDataStoreManager & dataStoreManager,
               SharemindConsensusFacility & consensusService,
               SharemindProcessFacility & processFacility,
@@ -92,21 +90,20 @@ public: /* Methods: */
     TdbVectorMap * getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                                 const uint64_t vmapId) const;
 
-    inline Logger & logger() { return m_logger; }
-    inline const Logger & logger() const { return m_logger; }
+    inline const Logger & logger() const noexcept { return m_logger; }
 
     inline SharemindDataStoreManager & dataStoreManager() { return m_dataStoreManager; }
     inline const SharemindDataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
 
 private: /* Fields: */
 
-    mutable Logger m_logger;
+    const Logger m_logger;
 
     /* Cached references: */
     SharemindDataStoreManager & m_dataStoreManager;
 
     TdbConfiguration m_configuration;
-    const std::unique_ptr<moduleLoader::ModuleLoader<Logger> > m_dbModuleLoader;
+    const std::unique_ptr<moduleLoader::ModuleLoader> m_dbModuleLoader;
     const std::unique_ptr<DataSourceManager> m_dataSourceManager;
     const std::unique_ptr<TdbVectorMapUtil> m_mapUtil;
 

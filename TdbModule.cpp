@@ -30,7 +30,6 @@ namespace sharemind {
 TdbModule::TdbModule(const Logger & logger,
                      SharemindDataStoreManager & dataStoreManager,
                      SharemindConsensusFacility & consensusService,
-                     SharemindProcessFacility & processFacility,
                      const std::string & config,
                      const std::set<std::string> & signatures)
     : m_logger(logger, "[TdbModule]")
@@ -62,9 +61,6 @@ TdbModule::TdbModule(const Logger & logger,
 
     if (!m_dbModuleLoader->setModuleFacility("ConsensusService", &consensusService))
         throw InitializationException("Failed setting module facility 'ConsensusService'.");
-
-    if (!m_dbModuleLoader->setModuleFacility("ProcessFacility", &processFacility))
-        throw InitializationException("Failed setting module facility 'ProcessFacility'.");
 
     // Load database modules
     for (const TdbConfiguration::DbModuleEntry & cfgDbMod

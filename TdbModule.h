@@ -19,7 +19,6 @@
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
 #include <sharemind/miner/Facilities/libconsensusservice.h>
-#include <sharemind/miner/Facilities/libprocessfacility.h>
 #include <stdexcept>
 #include "tdberror.h"
 
@@ -65,7 +64,6 @@ public: /* Methods: */
     TdbModule(const Logger & logger,
               SharemindDataStoreManager & dataStoreManager,
               SharemindConsensusFacility & consensusService,
-              SharemindProcessFacility & processFacility,
               const std::string & config,
               const std::set<std::string> & signatures);
     ~TdbModule();

@@ -27,7 +27,7 @@ template <class T> void destroy(void * ptr) noexcept { delete static_cast<T *>(p
 
 namespace sharemind {
 
-TdbModule::TdbModule(const Logger & logger,
+TdbModule::TdbModule(const LogHard::Logger & logger,
                      SharemindDataStoreManager & dataStoreManager,
                      SharemindConsensusFacility & consensusService,
                      const std::string & config,
@@ -47,7 +47,7 @@ TdbModule::TdbModule(const Logger & logger,
 
     // Set database module facilities
     if (!m_dbModuleLoader->setModuleFacility("Logger",
-                                             &const_cast<Logger &>(m_logger)))
+                                             &const_cast<LogHard::Logger &>(m_logger)))
         throw InitializationException("Failed setting module facility 'Logger'.");
 
     if (!m_dbModuleLoader->setModuleFacility("DataStoreManager", &m_dataStoreManager))

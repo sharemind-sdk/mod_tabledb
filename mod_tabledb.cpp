@@ -8,6 +8,7 @@
  */
 
 #include <cassert>
+#include <LogHard/Logger.h>
 #include <sharemind/common/Random/IRandom.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
@@ -1804,8 +1805,8 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     if (!fconsensus || !fconsensus->facility)
         return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
 
-    const sharemind::Logger & logger =
-            *static_cast<const sharemind::Logger *>(flog->facility);
+    const LogHard::Logger & logger =
+            *static_cast<const LogHard::Logger *>(flog->facility);
     SharemindDataStoreManager * dsm = static_cast<SharemindDataStoreManager *>(fdsm->facility);
     SharemindConsensusFacility * consensusService =
         static_cast<SharemindConsensusFacility *>(fconsensus->facility);
@@ -1874,8 +1875,8 @@ SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
     } catch (...) {
         const SharemindModuleApi0x1Facility * flog = c->getModuleFacility(c, "Logger");
         if (flog && flog->facility) {
-            const sharemind::Logger & logger =
-                    *static_cast<const sharemind::Logger *>(flog->facility);
+            const LogHard::Logger & logger =
+                    *static_cast<const LogHard::Logger *>(flog->facility);
             logger.warning() << "Exception was caught during \"mod_tabledb\" "
                                 "module deinitialization";
         }

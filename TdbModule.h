@@ -12,9 +12,9 @@
 
 #include "TdbConfiguration.h"
 
+#include <LogHard/Logger.h>
 #include <memory>
 #include <set>
-#include <sharemind/common/Logger/Logger.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <sharemind/miner/Facilities/datastoreapi.h>
@@ -61,7 +61,7 @@ public: /* Types: */
 
 public: /* Methods: */
 
-    TdbModule(const Logger & logger,
+    TdbModule(const LogHard::Logger & logger,
               SharemindDataStoreManager & dataStoreManager,
               SharemindConsensusFacility & consensusService,
               const std::string & config,
@@ -88,14 +88,14 @@ public: /* Methods: */
     TdbVectorMap * getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                                 const uint64_t vmapId) const;
 
-    inline const Logger & logger() const noexcept { return m_logger; }
+    inline const LogHard::Logger & logger() const noexcept { return m_logger; }
 
     inline SharemindDataStoreManager & dataStoreManager() { return m_dataStoreManager; }
     inline const SharemindDataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
 
 private: /* Fields: */
 
-    const Logger m_logger;
+    const LogHard::Logger m_logger;
 
     /* Cached references: */
     SharemindDataStoreManager & m_dataStoreManager;

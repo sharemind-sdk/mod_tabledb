@@ -10,7 +10,7 @@
 #define SHAREMIND_INTERNAL__
 #include "TdbVectorMapUtil.h"
 
-#include <sharemind/common/Random/IRandom.h>
+#include <sharemind/Random/IRandom.h>
 #include <sstream>
 #include "TdbVectorMap.h"
 

@@ -20,10 +20,12 @@ ADD_COMPILE_OPTIONS(
 FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(LogHard REQUIRED)
 FIND_PACKAGE(SharemindLibmodapi REQUIRED)
+FIND_PACKAGE(SharemindLibRandom REQUIRED)
 INCLUDE_DIRECTORIES(
     ${Boost_INCLUDE_DIRS}
     ${LogHard_INCLUDE_DIRS}
     ${SharemindLibmodapi_INCLUDE_DIRS}
+    ${SharemindLibRandom_INCLUDE_DIRS}
 )
 INCLUDE_DIRECTORIES(BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/../../")
 
@@ -34,6 +36,7 @@ ADD_DEFINITIONS(
     "-D__STDC_FORMAT_MACROS"
     ${LogHard_DEFINITIONS}
     ${SharemindLibmodapi_DEFINITIONS}
+    ${SharemindLibRandom_DEFINITIONS}
 )
 
 SET(TABLEDB_SOURCES
@@ -58,12 +61,7 @@ SET(TABLEDB_HEADERS
 ADD_LIBRARY(sharemind_mod_tabledb MODULE ${TABLEDB_SOURCES} ${TABLEDB_HEADERS})
 TARGET_LINK_LIBRARIES(sharemind_mod_tabledb
     ${LogHard_LIBRARIES}
-################################################################################
-##  THE FOLLOWING LIBRARIES ARE CURRENTLY PROVIDED HERE ONLY BECAUSE OUR      ##
-##  INTERFACES ARE EPICALLY BROKEN. THIS LINK-LEVEL DEPENDENCY HACK MUST BE   ##
-##  REMOVED, BECAUSE IT MAY CAUSE RUNTIME DYNAMIC LINKER ERRORS.              ##
-################################################################################
-    sharemind_dbcommon
+    ${SharemindLibRandom_LIBRARIES}
 )
 
 INSTALL(TARGETS sharemind_mod_tabledb LIBRARY DESTINATION "lib")

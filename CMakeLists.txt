@@ -62,6 +62,7 @@ ADD_LIBRARY(sharemind_mod_tabledb MODULE ${TABLEDB_SOURCES} ${TABLEDB_HEADERS})
 TARGET_LINK_LIBRARIES(sharemind_mod_tabledb
     ${LogHard_LIBRARIES}
     ${SharemindLibRandom_LIBRARIES}
+    sharemind_dbcommon
 )
 
 INSTALL(TARGETS sharemind_mod_tabledb LIBRARY DESTINATION "lib")

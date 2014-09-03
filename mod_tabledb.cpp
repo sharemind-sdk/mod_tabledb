@@ -10,7 +10,7 @@
 #include <cassert>
 #include <LogHard/Logger.h>
 #include <sharemind/libmodapi/api_0x1.h>
-#include <sharemind/miner/Facilities/datastoreapi.h>
+#include <sharemind/miner/datastoreapi.h>
 #include <sharemind/Random/IRandom.h>
 #include "TdbModule.h"
 #include "TdbTypesUtil.h"

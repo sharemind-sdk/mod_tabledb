@@ -19,12 +19,6 @@
 #include "TdbVectorMapUtil.h"
 
 
-namespace {
-
-template <class T> void destroy(void * ptr) noexcept { delete static_cast<T *>(ptr); }
-
-} /* namespace { */
-
 namespace sharemind {
 
 TdbModule::TdbModule(const LogHard::Logger & logger,
@@ -46,21 +40,20 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     }
 
     // Set database module facilities
-    if (!m_dbModuleLoader->setModuleFacility("Logger",
-                                             &const_cast<LogHard::Logger &>(m_logger)))
-        throw InitializationException("Failed setting module facility 'Logger'.");
-
-    if (!m_dbModuleLoader->setModuleFacility("DataStoreManager", &m_dataStoreManager))
-        throw InitializationException("Failed setting module facility 'DataStoreManager'.");
-
-    if (!m_dbModuleLoader->setModuleFacility("DataSourceManager", m_dataSourceManager->getWrapper()))
-        throw InitializationException("Failed setting module facility 'DataSourceManager'.");
-
-    if (!m_dbModuleLoader->setModuleFacility("TdbVectorMapUtil", m_mapUtil->getWrapper()))
-        throw InitializationException("Failed setting module facility 'TdbVectorMapUtil'.");
-
-    if (!m_dbModuleLoader->setModuleFacility("ConsensusService", &consensusService))
-        throw InitializationException("Failed setting module facility 'ConsensusService'.");
+    #define SET_FACILITY(n,w) \
+        try { \
+            m_dbModuleLoader->setModuleFacility((n), (w)); \
+        } catch (...) { \
+            std::throw_with_nested( \
+                InitializationException( \
+                    "Failed setting module facility \"" n "\"!")); \
+        }
+    SET_FACILITY("Logger", &const_cast<LogHard::Logger &>(m_logger));
+    SET_FACILITY("DataStoreManager", &m_dataStoreManager);
+    SET_FACILITY("DataSourceManager", m_dataSourceManager->getWrapper());
+    SET_FACILITY("TdbVectorMapUtil", m_mapUtil->getWrapper());
+    SET_FACILITY("ConsensusService", &consensusService);
+    #undef SET_FACILITY
 
     // Load database modules
     for (const TdbConfiguration::DbModuleEntry & cfgDbMod
@@ -73,10 +66,11 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
             throw InitializationException("Failed to load database modules!");
 
         m_logger.info()
-            << "Loaded database module \"" << SharemindModule_get_name(m)
-            << "\" (" << SharemindModule_get_num_syscalls(m)
-            << " syscalls) from \"" << cfgDbMod.filename << "\" using API version "
-            << SharemindModule_get_api_version_in_use(m) << '.';
+            << "Loaded database module \"" << SharemindModule_name(m)
+            << "\" (" << SharemindModule_numSyscalls(m)
+            << " syscalls) from \"" << cfgDbMod.filename
+            << "\" using API version " << SharemindModule_apiVersionInUse(m)
+            << '.';
     }
 
     // Load data sources

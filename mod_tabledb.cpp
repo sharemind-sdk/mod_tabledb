@@ -1374,7 +1374,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_at_value,
             if (refs[0u].size != v.type->size && refs[0u].size - 1 != v.size)
                 return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
-            memcpy(refs[0u].pData, v.buffer, v.size);
+            if (v.buffer) memcpy(refs[0u].pData, v.buffer, v.size);
         }
 
         if (returnValue)
@@ -1434,7 +1434,10 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        SharemindTdbValue * v = SharemindTdbValue_new(typeDomain, typeName, typeSize, crefs[3u].pData, bufSize);
+        SharemindTdbValue * v = SharemindTdbValue_new(typeDomain,
+                typeName, typeSize, bufSize ? crefs[3u].pData : nullptr,
+                bufSize);
+
         try {
             map->push_back<SharemindTdbValue>(name, v);
         } catch (...) {

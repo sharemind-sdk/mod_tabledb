@@ -134,8 +134,9 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
     }
 
     // Get the system call object
-    const SharemindSyscallBinding * sb = m_dbModuleLoader->getSyscall(src->module(), signature);
-    if (!sb) {
+    const SharemindSyscallWrapper sw =
+            m_dbModuleLoader->getSyscall(src->module(), signature);
+    if (!sw.callable) {
         m_logger.error()
             << "Data source \"" << dsName << "\" database module \""
             << src->module() << "\" has no system call with signature \""
@@ -145,9 +146,9 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
 
     // Do the system call
     SharemindSyscallContext sc = *c;
-    sc.moduleHandle = sb->moduleHandle;
+    sc.moduleHandle = sw.internal;
 
-    return (*(sb->wrapper.callable))(args, num_args, refs, crefs, returnValue, &sc);
+    return (*(sw.callable))(args, num_args, refs, crefs, returnValue, &sc);
 }
 
 bool TdbModule::newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,

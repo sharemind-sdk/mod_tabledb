@@ -25,12 +25,14 @@ public: /* Types: */
         std::string filename;
         std::string configurationFile;
     };
+    using DbModuleList = std::vector<DbModuleEntry>;
 
     struct DataSourceEntry {
         std::string name;
         std::string dbModule;
         std::string configurationFile;
     };
+    using DataSourceList = std::vector<DataSourceEntry>;
 
 public: /* Methods: */
 
@@ -39,17 +41,20 @@ public: /* Methods: */
       \param[in] filename the file that contains the configuration.
       \returns whether the configuration was successfully loaded.
     */
-    bool load(const std::string & filename);
+    bool load(std::string const & filename);
 
-    inline const std::vector<DbModuleEntry> & dbModuleList() const { return m_dbModuleList; }
-    inline const std::vector<DataSourceEntry> & dataSourceList() const { return m_dataSourceList; }
+    inline DbModuleList const & dbModuleList() const
+    { return m_dbModuleList; }
+
+    inline DataSourceList const & dataSourceList() const
+    { return m_dataSourceList; }
 
     inline const std::string & lastErrorMessage() { return m_lastErrorMessage; }
 
 private: /* Fields: */
 
-    std::vector<DbModuleEntry> m_dbModuleList;
-    std::vector<DataSourceEntry> m_dataSourceList;
+    DbModuleList m_dbModuleList;
+    DataSourceList m_dataSourceList;
 
     std::string m_lastErrorMessage;
 

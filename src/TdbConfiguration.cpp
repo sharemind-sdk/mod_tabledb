@@ -22,40 +22,27 @@ bool TdbConfiguration::load(const std::string & filename) {
 
     // Define the configuration property tree:
     pt::ptree config;
+    DbModuleList newDbModuleList;
+    DataSourceList newDataSourceList;
 
     // Parse the configuration file into the property tree:
     try {
         pt::read_ini(filename, config);
-
-        // Clear existing configuration
-        m_dbModuleList.clear();
-        m_dataSourceList.clear();
-
         for (const pt::ptree::value_type & v : config) {
-
-            // Load the database module list
-            std::string section(v.first);
+            std::string const & section{v.first};
             if (section.find("DBModule") == 0u) {
-                DbModuleEntry newDbModule;
-                newDbModule.filename = v.second.get<std::string>("File");
-                newDbModule.configurationFile = v.second.get<std::string>("Configuration", "");
-                m_dbModuleList.push_back(newDbModule);
-
-                continue;
-            }
-
-            // Load the data source list
-            if (section.find("DataSource") == 0u) {
-                DataSourceEntry newDataSource;
-                newDataSource.name = v.second.get<std::string>("Name");
-                newDataSource.dbModule = v.second.get<std::string>("DBModule");
-                newDataSource.configurationFile = v.second.get<std::string>("Configuration");
-                m_dataSourceList.push_back(newDataSource);
-
-                continue;
+                newDbModuleList.emplace_back(
+                        DbModuleEntry{
+                            v.second.get<std::string>("File"),
+                            v.second.get<std::string>("Configuration", "")});
+            } else if (section.find("DataSource") == 0u) {
+                newDataSourceList.emplace_back(
+                        DataSourceEntry{
+                            v.second.get<std::string>("Name"),
+                            v.second.get<std::string>("DBModule"),
+                            v.second.get<std::string>("Configuration")});
             }
         }
-
     } catch (const pt::ini_parser_error & error) {
 #if BOOST_VERSION <= 104200
         m_lastErrorMessage = error.what();
@@ -76,6 +63,9 @@ bool TdbConfiguration::load(const std::string & filename) {
         m_lastErrorMessage = o.str();
         return false;
     }
+
+    m_dbModuleList = std::move(newDbModuleList);
+    m_dataSourceList = std::move(newDataSourceList);
 
     return true;
 }

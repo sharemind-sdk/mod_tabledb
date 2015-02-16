@@ -19,29 +19,34 @@
 extern "C" {
 #endif
 
-SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore) {
+SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(
+        SharemindTdbVectorMapUtil * util,
+        SharemindDataStore * datastore)
+{
     assert(util);
     assert(util->internal);
     assert(datastore);
 
-    sharemind::TdbVectorMapUtil * u = static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
+    sharemind::TdbVectorMapUtil * const u =
+            static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
     try {
-        sharemind::TdbVectorMap * map = u->newVectorMap(datastore);
-        if (!map)
-            return nullptr;
-
-        return map->getWrapper();
+        sharemind::TdbVectorMap * const map = u->newVectorMap(datastore);
+        return map ? map->getWrapper() : nullptr;
     } catch (...) {
         return nullptr;
     }
 }
 
-bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId) {
+bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util,
+                                          SharemindDataStore * datastore,
+                                          const uint64_t vmapId)
+{
     assert(util);
     assert(util->internal);
     assert(datastore);
 
-    sharemind::TdbVectorMapUtil * u = static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
+    sharemind::TdbVectorMapUtil * const u =
+            static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
     try {
         return u->deleteVectorMap(datastore, vmapId);
     } catch (...) {
@@ -49,18 +54,21 @@ bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util, Shar
     }
 }
 
-SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId) {
+SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(
+        SharemindTdbVectorMapUtil * util,
+        SharemindDataStore * datastore,
+        const uint64_t vmapId)
+{
     assert(util);
     assert(util->internal);
     assert(datastore);
 
-    sharemind::TdbVectorMapUtil * u = static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
+    sharemind::TdbVectorMapUtil * const u =
+            static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
     try {
-        sharemind::TdbVectorMap * map = u->getVectorMap(datastore, vmapId);
-        if (!map)
-            return nullptr;
-
-        return map->getWrapper();
+        sharemind::TdbVectorMap * const map =
+                u->getVectorMap(datastore, vmapId);
+        return map ? map->getWrapper() : nullptr;
     } catch (...) {
         return nullptr;
     }

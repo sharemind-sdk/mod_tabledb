@@ -19,10 +19,10 @@
 
 namespace sharemind {
 
-class IRandom;
 class TdbVectorMap;
 
 class __attribute__ ((visibility("internal"))) TdbVectorMapUtil {
+
 private: /* Types: */
 
     typedef SharemindTdbVectorMapUtil TdbVectorMapUtilWrapper;
@@ -32,11 +32,17 @@ public: /* Methods: */
     TdbVectorMapUtil();
 
     TdbVectorMap * newVectorMap(SharemindDataStore * dataStore) const;
-    bool deleteVectorMap(SharemindDataStore * dataStore, const uint64_t vmapid) const;
-    TdbVectorMap * getVectorMap(SharemindDataStore * dataStore, const uint64_t vmapId) const;
+
+    bool deleteVectorMap(SharemindDataStore * dataStore,
+                         const uint64_t vmapid) const;
+
+    TdbVectorMap * getVectorMap(SharemindDataStore * dataStore,
+                                const uint64_t vmapId) const;
 
     inline TdbVectorMapUtilWrapper * getWrapper() { return &m_wrapper; }
-    inline const TdbVectorMapUtilWrapper * getWrapper() const { return &m_wrapper; }
+
+    inline const TdbVectorMapUtilWrapper * getWrapper() const
+    { return &m_wrapper; }
 
 private: /* Fields: */
 

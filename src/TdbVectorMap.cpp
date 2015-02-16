@@ -14,9 +14,8 @@
 #include <cassert>
 
 
-#ifdef __cplusplus
+namespace {
 extern "C" {
-#endif
 
 #define TDB_VECTOR_MAP_CATCH_ALL \
     catch (const sharemind::TdbVectorMap::NotFoundException &) { \
@@ -301,9 +300,8 @@ uint64_t SharemindTdbVectorMap_get_id(SharemindTdbVectorMap * map) {
     return static_cast<sharemind::TdbVectorMap *>(map->internal)->getId();
 }
 
-#ifdef __cplusplus
-} /* extern "C" { */
-#endif
+} // extern "C" {
+} // anonymous namespace
 
 namespace sharemind {
 

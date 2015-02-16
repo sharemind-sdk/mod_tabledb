@@ -10,6 +10,7 @@
 #define SHAREMIND_INTERNAL__
 #include "TdbVectorMap.h"
 
+#include <boost/assign/ptr_list_of.hpp>
 #include <cassert>
 
 
@@ -270,38 +271,30 @@ uint64_t SharemindTdbVectorMap_get_id(SharemindTdbVectorMap * map) {
 namespace sharemind {
 
 TdbVectorMap::TdbVectorMap(const uint64_t id)
-    : m_id(id)
-{
-    m_batches.push_back(new AnyValueMap);
-    m_currentBatch = m_batches.begin();
-
-    m_wrapper.internal = this;
-
-    m_wrapper.get_index_vector = &SharemindTdbVectorMap_get_index_vector;
-    m_wrapper.set_index_vector = &SharemindTdbVectorMap_set_index_vector;
-    m_wrapper.is_index_vector = &SharemindTdbVectorMap_is_index_vector;
-
-    m_wrapper.get_string_vector = &SharemindTdbVectorMap_get_string_vector;
-    m_wrapper.set_string_vector = &SharemindTdbVectorMap_set_string_vector;
-    m_wrapper.is_string_vector = &SharemindTdbVectorMap_is_string_vector;
-
-    m_wrapper.get_type_vector = &SharemindTdbVectorMap_get_type_vector;
-    m_wrapper.set_type_vector = &SharemindTdbVectorMap_set_type_vector;
-    m_wrapper.is_type_vector = &SharemindTdbVectorMap_is_type_vector;
-
-    m_wrapper.get_value_vector = &SharemindTdbVectorMap_get_value_vector;
-    m_wrapper.set_value_vector = &SharemindTdbVectorMap_set_value_vector;
-    m_wrapper.is_value_vector = &SharemindTdbVectorMap_is_value_vector;
-
-    m_wrapper.count = &SharemindTdbVectorMap_count;
-    m_wrapper.erase = &SharemindTdbVectorMap_erase;
-    m_wrapper.clear = &SharemindTdbVectorMap_clear;
-    m_wrapper.get_id = &SharemindTdbVectorMap_get_id;
-
-    m_wrapper.set_batch = &SharemindTdbVectorMap_set_batch;
-    m_wrapper.add_batch = &SharemindTdbVectorMap_add_batch;
-    m_wrapper.batch_count = &SharemindTdbVectorMap_batch_count;
-    m_wrapper.reset = &SharemindTdbVectorMap_reset;
-}
+    : m_wrapper{this,
+                &SharemindTdbVectorMap_get_index_vector,
+                &SharemindTdbVectorMap_set_index_vector,
+                &SharemindTdbVectorMap_is_index_vector,
+                &SharemindTdbVectorMap_get_string_vector,
+                &SharemindTdbVectorMap_set_string_vector,
+                &SharemindTdbVectorMap_is_string_vector,
+                &SharemindTdbVectorMap_get_type_vector,
+                &SharemindTdbVectorMap_set_type_vector,
+                &SharemindTdbVectorMap_is_type_vector,
+                &SharemindTdbVectorMap_get_value_vector,
+                &SharemindTdbVectorMap_set_value_vector,
+                &SharemindTdbVectorMap_is_value_vector,
+                &SharemindTdbVectorMap_count,
+                &SharemindTdbVectorMap_erase,
+                &SharemindTdbVectorMap_clear,
+                &SharemindTdbVectorMap_set_batch,
+                &SharemindTdbVectorMap_add_batch,
+                &SharemindTdbVectorMap_batch_count,
+                &SharemindTdbVectorMap_reset,
+                &SharemindTdbVectorMap_get_id}
+    , m_id{id}
+    , m_batches{boost::assign::ptr_list_of<AnyValueMap>()}
+    , m_currentBatch{m_batches.begin()}
+{}
 
 } /* namespace sharemind { */

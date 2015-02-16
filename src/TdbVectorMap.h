@@ -334,10 +334,12 @@ public: /* Methods: */
         addBatch();
     }
 
-    inline uint64_t getId() const { return m_id; }
+    inline uint64_t getId() const noexcept { return m_id; }
 
-    inline TdbVectorMapWrapper * getWrapper() { return &m_wrapper; }
-    inline const TdbVectorMapWrapper * getWrapper() const { return &m_wrapper; }
+    inline TdbVectorMapWrapper * getWrapper() noexcept { return &m_wrapper; }
+
+    inline const TdbVectorMapWrapper * getWrapper() const noexcept
+    { return &m_wrapper; }
 
 private: /* Fields: */
 

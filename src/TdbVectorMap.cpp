@@ -7,10 +7,11 @@
  * code is subject to the appropriate license agreement.
  */
 
-#include <cassert>
-
 #define SHAREMIND_INTERNAL__
 #include "TdbVectorMap.h"
+
+#include <cassert>
+
 
 #ifdef __cplusplus
 extern "C" {

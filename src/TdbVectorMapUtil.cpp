@@ -74,15 +74,11 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(
 }
 
 } // extern "C" {
-} // anonymous namespace
-
-
-namespace {
 
 template <class T>
 void destroy(void * ptr) noexcept { delete static_cast<T *>(ptr); }
 
-} /* namespace { */
+} // anonymous namespace
 
 namespace sharemind {
 

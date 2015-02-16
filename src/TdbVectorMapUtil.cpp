@@ -15,9 +15,8 @@
 #include "TdbVectorMap.h"
 
 
-#ifdef __cplusplus
+namespace {
 extern "C" {
-#endif
 
 SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(
         SharemindTdbVectorMapUtil * util,
@@ -74,9 +73,9 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(
     }
 }
 
-#ifdef __cplusplus
-} /* extern "C" { */
-#endif
+} // extern "C" {
+} // anonymous namespace
+
 
 namespace {
 

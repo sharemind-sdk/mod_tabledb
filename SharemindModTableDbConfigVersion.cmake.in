@@ -8,7 +8,7 @@
 
 SET(PACKAGE_VERSION "@SHAREMIND_MOD_TABLEDB_VERSION@")
 IF(NOT SharemindModTableDb_QUIET)
-    MESSAGE(STATUS "Sharemind mod_tabledb version: ${PACKAGE_VERSION}")
+    MESSAGE(STATUS "Sharemind mod_tabledb_asd version: ${PACKAGE_VERSION}")
 ENDIF()
 
 IF("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}")

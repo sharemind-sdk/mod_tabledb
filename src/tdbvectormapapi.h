@@ -14,7 +14,7 @@
 #ifdef __cplusplus
 #include <cstdint>
 #endif
-#include <sharemind/miner/datastoreapi.h>
+#include <sharemind/datastoreapi.h>
 #ifndef __cplusplus
 #include <stdbool.h>
 #include <stdint.h>

@@ -15,9 +15,9 @@
 #include <LogHard/Logger.h>
 #include <memory>
 #include <set>
+#include <sharemind/datastoreapi.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libmodapi/api_0x1.h>
-#include <sharemind/miner/datastoreapi.h>
 #include <sharemind/miner/libconsensusservice.h>
 #include <stdexcept>
 #include "tdberror.h"

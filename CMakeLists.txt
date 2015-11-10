@@ -28,6 +28,7 @@ FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon REQUIRED)
 FIND_PACKAGE(SharemindLibmodapi REQUIRED)
 FIND_PACKAGE(SharemindLibRandom REQUIRED)
+FIND_PACKAGE(SharemindMiner REQUIRED)
 INCLUDE_DIRECTORIES(
     ${Boost_INCLUDE_DIRS}
     ${LogHard_INCLUDE_DIRS}
@@ -35,6 +36,7 @@ INCLUDE_DIRECTORIES(
     ${SharemindLibDbCommon_INCLUDE_DIRS}
     ${SharemindLibmodapi_INCLUDE_DIRS}
     ${SharemindLibRandom_INCLUDE_DIRS}
+    ${SharemindMiner_LibConsensusService_INCLUDE_DIRS}
 )
 
 ADD_DEFINITIONS(
@@ -46,6 +48,7 @@ ADD_DEFINITIONS(
     ${SharemindLibDbCommon_DEFINITIONS}
     ${SharemindLibmodapi_DEFINITIONS}
     ${SharemindLibRandom_DEFINITIONS}
+    ${SharemindMiner_LibConsensusService_DEFINITIONS}
 )
 
 FILE(GLOB_RECURSE TABLEDB_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
@@ -64,6 +67,7 @@ TARGET_LINK_LIBRARIES(sharemind_mod_tabledb
     ${LogHard_LIBRARIES}
     ${SharemindLibDbCommon_LIBRARIES}
     ${SharemindLibRandom_LIBRARIES}
+    ${SharemindMiner_LibConsensusService_LIBRARIES}
 )
 
 INSTALL(TARGETS sharemind_mod_tabledb LIBRARY DESTINATION "lib")

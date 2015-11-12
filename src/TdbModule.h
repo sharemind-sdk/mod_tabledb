@@ -17,8 +17,8 @@
 #include <set>
 #include <sharemind/datastoreapi.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
+#include <sharemind/libconsensusservice.h>
 #include <sharemind/libmodapi/api_0x1.h>
-#include <sharemind/miner/libconsensusservice.h>
 #include <stdexcept>
 #include "tdberror.h"
 

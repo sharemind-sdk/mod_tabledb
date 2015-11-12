@@ -24,19 +24,19 @@ ADD_COMPILE_OPTIONS(
 
 FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(LogHard REQUIRED)
+FIND_PACKAGE(SharemindLibConsensusService REQUIRED)
 FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon REQUIRED)
 FIND_PACKAGE(SharemindLibmodapi REQUIRED)
 FIND_PACKAGE(SharemindLibRandom REQUIRED)
-FIND_PACKAGE(SharemindMiner REQUIRED)
 INCLUDE_DIRECTORIES(
     ${Boost_INCLUDE_DIRS}
     ${LogHard_INCLUDE_DIRS}
+    ${SharemindLibConsensusService_INCLUDE_DIRS}
     ${SharemindLibDataStoreManager_INCLUDE_DIRS}
     ${SharemindLibDbCommon_INCLUDE_DIRS}
     ${SharemindLibmodapi_INCLUDE_DIRS}
     ${SharemindLibRandom_INCLUDE_DIRS}
-    ${SharemindMiner_LibConsensusService_INCLUDE_DIRS}
 )
 
 ADD_DEFINITIONS(
@@ -44,11 +44,11 @@ ADD_DEFINITIONS(
     "-D__STDC_CONSTANT_MACROS"
     "-D__STDC_FORMAT_MACROS"
     ${LogHard_DEFINITIONS}
+    ${SharemindLibConsensusService_DEFINITIONS}
     ${SharemindLibDataStoreManager_DEFINITIONS}
     ${SharemindLibDbCommon_DEFINITIONS}
     ${SharemindLibmodapi_DEFINITIONS}
     ${SharemindLibRandom_DEFINITIONS}
-    ${SharemindMiner_LibConsensusService_DEFINITIONS}
 )
 
 FILE(GLOB_RECURSE TABLEDB_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
@@ -65,9 +65,9 @@ ADD_LIBRARY(sharemind_mod_tabledb MODULE
             ${TABLEDB_SOURCES} ${TABLEDB_HEADERS} ${TABLEDB_HEADERS_P})
 TARGET_LINK_LIBRARIES(sharemind_mod_tabledb
     ${LogHard_LIBRARIES}
+    ${SharemindLibConsensusService_LIBRARIES}
     ${SharemindLibDbCommon_LIBRARIES}
     ${SharemindLibRandom_LIBRARIES}
-    ${SharemindMiner_LibConsensusService_LIBRARIES}
 )
 
 INSTALL(TARGETS sharemind_mod_tabledb LIBRARY DESTINATION "lib")

@@ -63,7 +63,7 @@ public: /* Methods: */
 
     TdbModule(const LogHard::Logger & logger,
               SharemindDataStoreManager & dataStoreManager,
-              SharemindConsensusFacility & consensusService,
+              SharemindConsensusFacility * consensusService,
               const std::string & config,
               const std::set<std::string> & signatures);
     ~TdbModule();

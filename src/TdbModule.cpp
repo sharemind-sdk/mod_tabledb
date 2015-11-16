@@ -23,7 +23,7 @@ namespace sharemind {
 
 TdbModule::TdbModule(const LogHard::Logger & logger,
                      SharemindDataStoreManager & dataStoreManager,
-                     SharemindConsensusFacility & consensusService,
+                     SharemindConsensusFacility * consensusService,
                      const std::string & config,
                      const std::set<std::string> & signatures)
     : m_logger(logger, "[TdbModule]")
@@ -52,7 +52,9 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     SET_FACILITY("DataStoreManager", &m_dataStoreManager);
     SET_FACILITY("DataSourceManager", m_dataSourceManager->getWrapper());
     SET_FACILITY("TdbVectorMapUtil", m_mapUtil->getWrapper());
-    SET_FACILITY("ConsensusService", &consensusService);
+    if (consensusService) {
+        SET_FACILITY("ConsensusService", consensusService);
+    }
     #undef SET_FACILITY
 
     // Load database modules

@@ -1804,14 +1804,16 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
         return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
 
     const SharemindModuleApi0x1Facility * fconsensus = c->getModuleFacility(c, "ConsensusService");
-    if (!fconsensus || !fconsensus->facility)
-        return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
+    SharemindConsensusFacility * consensusService;
+    if (!fconsensus || !fconsensus->facility) {
+        consensusService = nullptr;
+    } else {
+        consensusService = static_cast<SharemindConsensusFacility *>(fconsensus->facility);
+    }
 
     const LogHard::Logger & logger =
             *static_cast<const LogHard::Logger *>(flog->facility);
     SharemindDataStoreManager * dsm = static_cast<SharemindDataStoreManager *>(fdsm->facility);
-    SharemindConsensusFacility * consensusService =
-        static_cast<SharemindConsensusFacility *>(fconsensus->facility);
 
     /*
      * Check for the module configuration
@@ -1850,7 +1852,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     try {
         c->moduleHandle = new sharemind::TdbModule(logger,
                                                    *dsm,
-                                                   *consensusService,
+                                                   consensusService,
                                                    c->conf,
                                                    signatures);
         return SHAREMIND_MODULE_API_0x1_OK;

@@ -20,8 +20,8 @@
 #ifndef SHAREMIND_MOD_TABLEDB_TDBVECTORMAP_H
 #define SHAREMIND_MOD_TABLEDB_TDBVECTORMAP_H
 
-#ifndef SHAREMIND_INTERNAL__
-#error SHAREMIND_INTERNAL__ not defined
+#ifndef SHAREMIND_INTERNAL_
+#error SHAREMIND_INTERNAL_ not defined
 #endif
 
 #include <stdexcept>

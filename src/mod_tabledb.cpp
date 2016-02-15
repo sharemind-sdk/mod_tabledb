@@ -24,7 +24,7 @@
 #include "TdbModule.h"
 #include "TdbTypesUtil.h"
 
-#define SHAREMIND_INTERNAL__
+#define SHAREMIND_INTERNAL_
 #include "TdbVectorMap.h"
 
 

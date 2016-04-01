@@ -113,11 +113,18 @@ bool TdbModule::getErrorCode(const SharemindModuleApi0x1SyscallContext * ctx,
         const std::string & dsName,
         SharemindTdbError & code) const
 {
+    // Get factory:
+    SharemindDataStoreFactory * const factory =
+            static_cast<SharemindDataStoreFactory *>(
+                ctx->processFacility(ctx, "DataStoreFactory"));
+    if (!factory) {
+        m_logger.error() << "Failed to get process data store factory!";
+        return false;
+    }
+
     // Get error store
-    SharemindDataStore * const errors = m_dataStoreManager.get_datastore(
-                                                 &m_dataStoreManager,
-                                                 ctx,
-                                                 "mod_tabledb/errors");
+    SharemindDataStore * const errors =
+            factory->get_datastore(factory, "mod_tabledb/errors");
     if (!errors) {
         m_logger.error() << "Failed to get process data store.";
         return false;
@@ -166,52 +173,38 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
 bool TdbModule::newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                              uint64_t & stmtId)
 {
-    SharemindDataStore * const maps = m_dataStoreManager.get_datastore(
-                                          &m_dataStoreManager,
-                                          ctx,
-                                          "mod_tabledb/vector_maps");
-    if (!maps) {
-        m_logger.error() << "Failed to get process data store.";
-        return false;
-    }
-
-    TdbVectorMap * const map = m_mapUtil->newVectorMap(maps);
-    if (!map)
-        return false;
-
-    stmtId = map->getId();
-
-    return true;
+    return dataStoreAction(ctx,
+                           "mod_tabledb/vector_maps",
+                           [this, &stmtId](SharemindDataStore * const maps)
+                           {
+                               if (TdbVectorMap * const map =
+                                       m_mapUtil->newVectorMap(maps)) {
+                                   stmtId = map->getId();
+                                   return true;
+                               }
+                               return false;
+                           },
+                           false);
 }
 
 bool TdbModule::deleteVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                                 const uint64_t stmtId)
 {
-    SharemindDataStore * const maps = m_dataStoreManager.get_datastore(
-                                          &m_dataStoreManager,
-                                          ctx,
-                                          "mod_tabledb/vector_maps");
-    if (!maps) {
-        m_logger.error() << "Failed to get process data store.";
-        return false;
-    }
-
-    return m_mapUtil->deleteVectorMap(maps, stmtId);
+    return dataStoreAction(ctx,
+                           "mod_tabledb/vector_maps",
+                           [this, stmtId](SharemindDataStore * const maps)
+                           { return m_mapUtil->deleteVectorMap(maps, stmtId); },
+                           nullptr);
 }
 
 TdbVectorMap * TdbModule::getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                                        const uint64_t stmtId) const
 {
-    SharemindDataStore * const maps = m_dataStoreManager.get_datastore(
-                                          &m_dataStoreManager,
-                                          ctx,
-                                          "mod_tabledb/vector_maps");
-    if (!maps) {
-        m_logger.error() << "Failed to get process data store.";
-        return nullptr;
-    }
-
-    return m_mapUtil->getVectorMap(maps, stmtId);
+    return dataStoreAction(ctx,
+                           "mod_tabledb/vector_maps",
+                           [this, stmtId](SharemindDataStore * const maps)
+                           { return m_mapUtil->getVectorMap(maps, stmtId); },
+                           nullptr);
 }
 
 } /* namespace sharemind { */

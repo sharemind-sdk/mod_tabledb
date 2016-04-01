@@ -103,6 +103,39 @@ public: /* Methods: */
     inline SharemindDataStoreManager & dataStoreManager() { return m_dataStoreManager; }
     inline const SharemindDataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
 
+private: /* Methods: */
+
+    template <typename F, typename R, typename ... Args>
+    inline auto dataStoreAction(
+                SharemindModuleApi0x1SyscallContext const * const ctx,
+                char const * const dsName,
+                F action,
+                R errorValue,
+                Args && ... args) const
+            noexcept(noexcept(action(std::declval<SharemindDataStore *>(),
+                                     std::forward<Args>(args)...)))
+            -> decltype(action(std::declval<SharemindDataStore *>(),
+                               std::forward<Args>(args)...))
+    {
+        // Get factory:
+        SharemindDataStoreFactory * const factory =
+                static_cast<SharemindDataStoreFactory *>(
+                    ctx->processFacility(ctx, "DataStoreFactory"));
+        if (!factory) {
+            m_logger.error() << "Failed to get process data store factory!";
+            return errorValue;
+        }
+
+        // Get store
+        if (SharemindDataStore * const ds =
+                factory->get_datastore(factory, dsName))
+            return action(ds, std::forward<Args>(args)...);
+
+        m_logger.error() << "Failed to get process data store: " << dsName
+                         << '!';
+        return errorValue;
+    }
+
 private: /* Fields: */
 
     const LogHard::Logger m_logger;

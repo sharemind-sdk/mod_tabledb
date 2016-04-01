@@ -80,7 +80,7 @@ public: /* Methods: */
 
     bool getErrorCode(const SharemindModuleApi0x1SyscallContext * ctx,
             const std::string & dsName,
-            SharemindTdbError & code) const;
+            SharemindTdbError & code) const noexcept;
 
     SharemindModuleApi0x1Error doSyscall(const std::string & dsName,
                                          const std::string & signature,
@@ -94,9 +94,9 @@ public: /* Methods: */
     bool newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                       uint64_t & vmapId);
     bool deleteVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
-                         const uint64_t vmapId);
+                         const uint64_t vmapId) noexcept;
     TdbVectorMap * getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
-                                const uint64_t vmapId) const;
+                                const uint64_t vmapId) const noexcept;
 
     inline const LogHard::Logger & logger() const noexcept { return m_logger; }
 

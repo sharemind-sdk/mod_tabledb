@@ -109,31 +109,24 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
 
 TdbModule::~TdbModule() { }
 
-bool TdbModule::getErrorCode(const SharemindModuleApi0x1SyscallContext * ctx,
+bool TdbModule::getErrorCode(
+        const SharemindModuleApi0x1SyscallContext * ctx,
         const std::string & dsName,
-        SharemindTdbError & code) const
+        SharemindTdbError & code) const noexcept
 {
-    // Get factory:
-    SharemindDataStoreFactory * const factory =
-            static_cast<SharemindDataStoreFactory *>(
-                ctx->processFacility(ctx, "DataStoreFactory"));
-    if (!factory) {
-        m_logger.error() << "Failed to get process data store factory!";
-        return false;
-    }
-
-    // Get error store
-    SharemindDataStore * const errors =
-            factory->get_datastore(factory, "mod_tabledb/errors");
-    if (!errors) {
-        m_logger.error() << "Failed to get process data store.";
-        return false;
-    }
-
-    const SharemindTdbError * const err = static_cast<SharemindTdbError *>(errors->get(errors, dsName.c_str()));
-    code = err ? *err : SHAREMIND_TDB_OK;
-
-    return true;
+    return dataStoreAction(
+                ctx,
+                "mod_tabledb/errors",
+                [this, &dsName, &code](SharemindDataStore * const errors)
+                        noexcept
+                {
+                    SharemindTdbError const * const e =
+                            static_cast<SharemindTdbError *>(
+                                errors->get(errors, dsName.c_str()));
+                    code = e ? *e : SHAREMIND_TDB_OK;
+                    return true;
+                },
+                false);
 }
 
 SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
@@ -175,8 +168,7 @@ bool TdbModule::newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
 {
     return dataStoreAction(ctx,
                            "mod_tabledb/vector_maps",
-                           [this, &stmtId](SharemindDataStore * const maps)
-                           {
+                           [this, &stmtId](SharemindDataStore * const maps) {
                                if (TdbVectorMap * const map =
                                        m_mapUtil->newVectorMap(maps)) {
                                    stmtId = map->getId();
@@ -188,23 +180,25 @@ bool TdbModule::newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
 }
 
 bool TdbModule::deleteVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
-                                const uint64_t stmtId)
+                                const uint64_t stmtId) noexcept
 {
-    return dataStoreAction(ctx,
-                           "mod_tabledb/vector_maps",
-                           [this, stmtId](SharemindDataStore * const maps)
-                           { return m_mapUtil->deleteVectorMap(maps, stmtId); },
-                           nullptr);
+    return dataStoreAction(
+                ctx,
+                "mod_tabledb/vector_maps",
+                [this, stmtId](SharemindDataStore * const maps) noexcept
+                { return m_mapUtil->deleteVectorMap(maps, stmtId); },
+                nullptr);
 }
 
 TdbVectorMap * TdbModule::getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
-                                       const uint64_t stmtId) const
+                                       const uint64_t stmtId) const noexcept
 {
-    return dataStoreAction(ctx,
-                           "mod_tabledb/vector_maps",
-                           [this, stmtId](SharemindDataStore * const maps)
-                           { return m_mapUtil->getVectorMap(maps, stmtId); },
-                           nullptr);
+    return dataStoreAction(
+                ctx,
+                "mod_tabledb/vector_maps",
+                [this, stmtId](SharemindDataStore * const maps) noexcept
+                { return m_mapUtil->getVectorMap(maps, stmtId); },
+                nullptr);
 }
 
 } /* namespace sharemind { */

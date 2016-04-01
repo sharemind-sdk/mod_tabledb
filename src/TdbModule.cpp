@@ -32,12 +32,10 @@
 namespace sharemind {
 
 TdbModule::TdbModule(const LogHard::Logger & logger,
-                     SharemindDataStoreManager & dataStoreManager,
                      SharemindConsensusFacility * consensusService,
                      const std::string & config,
                      const std::set<std::string> & signatures)
     : m_logger(logger, "[TdbModule]")
-    , m_dataStoreManager(dataStoreManager)
     , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures, m_logger))
     , m_dataSourceManager(new DataSourceManager)
     , m_mapUtil(new TdbVectorMapUtil())
@@ -59,7 +57,6 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
                     "Failed setting module facility \"" n "\"!")); \
         }
     SET_FACILITY("Logger", &const_cast<LogHard::Logger &>(m_logger));
-    SET_FACILITY("DataStoreManager", &m_dataStoreManager);
     SET_FACILITY("DataSourceManager", m_dataSourceManager->getWrapper());
     SET_FACILITY("TdbVectorMapUtil", m_mapUtil->getWrapper());
     if (consensusService) {

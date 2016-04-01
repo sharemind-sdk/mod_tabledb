@@ -72,7 +72,6 @@ public: /* Types: */
 public: /* Methods: */
 
     TdbModule(const LogHard::Logger & logger,
-              SharemindDataStoreManager & dataStoreManager,
               SharemindConsensusFacility * consensusService,
               const std::string & config,
               const std::set<std::string> & signatures);
@@ -99,9 +98,6 @@ public: /* Methods: */
                                 const uint64_t vmapId) const noexcept;
 
     inline const LogHard::Logger & logger() const noexcept { return m_logger; }
-
-    inline SharemindDataStoreManager & dataStoreManager() { return m_dataStoreManager; }
-    inline const SharemindDataStoreManager & dataStoreManager() const { return m_dataStoreManager; }
 
 private: /* Methods: */
 
@@ -139,9 +135,6 @@ private: /* Methods: */
 private: /* Fields: */
 
     const LogHard::Logger m_logger;
-
-    /* Cached references: */
-    SharemindDataStoreManager & m_dataStoreManager;
 
     TdbConfiguration m_configuration;
     const std::unique_ptr<moduleLoader::ModuleLoader> m_dbModuleLoader;

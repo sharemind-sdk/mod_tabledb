@@ -44,10 +44,10 @@ public: /* Methods: */
     TdbVectorMap * newVectorMap(SharemindDataStore * dataStore) const;
 
     bool deleteVectorMap(SharemindDataStore * dataStore,
-                         const uint64_t vmapid) const;
+                         const uint64_t vmapid) const noexcept;
 
     TdbVectorMap * getVectorMap(SharemindDataStore * dataStore,
-                                const uint64_t vmapId) const;
+                                const uint64_t vmapId) const noexcept;
 
     inline TdbVectorMapUtilWrapper * getWrapper() { return &m_wrapper; }
 

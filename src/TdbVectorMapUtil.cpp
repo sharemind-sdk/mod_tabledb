@@ -121,14 +121,15 @@ TdbVectorMap * TdbVectorMapUtil::newVectorMap(SharemindDataStore * dataStore)
 }
 
 bool TdbVectorMapUtil::deleteVectorMap(SharemindDataStore * dataStore,
-                                       const uint64_t vmapId) const
+                                       const uint64_t vmapId) const noexcept
 {
     assert(dataStore);
     return dataStore->remove(dataStore, std::to_string(vmapId).c_str());
 }
 
-TdbVectorMap * TdbVectorMapUtil::getVectorMap(SharemindDataStore * dataStore,
-                                              const uint64_t vmapId) const
+TdbVectorMap * TdbVectorMapUtil::getVectorMap(
+        SharemindDataStore * dataStore,
+        const uint64_t vmapId) const noexcept
 {
     assert(dataStore);
     return static_cast<TdbVectorMap *>(

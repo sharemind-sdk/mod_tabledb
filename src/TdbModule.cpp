@@ -184,7 +184,7 @@ bool TdbModule::deleteVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                 "mod_tabledb/vector_maps",
                 [this, stmtId](SharemindDataStore * const maps) noexcept
                 { return m_mapUtil->deleteVectorMap(maps, stmtId); },
-                nullptr);
+                false);
 }
 
 TdbVectorMap * TdbModule::getVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,

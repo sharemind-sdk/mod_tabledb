@@ -19,11 +19,13 @@
 
 #include "TdbConfiguration.h"
 
+#include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 
+namespace fs = boost::filesystem;
 namespace pt = boost::property_tree;
 
 namespace sharemind {
@@ -34,6 +36,7 @@ bool TdbConfiguration::load(const std::string & filename) {
     pt::ptree config;
     DbModuleList newDbModuleList;
     DataSourceList newDataSourceList;
+    const fs::path parentDir(fs::path(filename).parent_path());
 
     // Parse the configuration file into the property tree:
     try {
@@ -41,16 +44,24 @@ bool TdbConfiguration::load(const std::string & filename) {
         for (const pt::ptree::value_type & v : config) {
             std::string const & section{v.first};
             if (section.find("DBModule") == 0u) {
+                std::string confPath = v.second.get<std::string>("Configuration", "");
+                if (!confPath.empty()) {
+                    confPath = fs::absolute(confPath, parentDir).string();
+                }
                 newDbModuleList.emplace_back(
                         DbModuleEntry{
                             v.second.get<std::string>("File"),
-                            v.second.get<std::string>("Configuration", "")});
+                            confPath});
             } else if (section.find("DataSource") == 0u) {
+                const std::string confPath =
+                    fs::absolute(
+                        v.second.get<std::string>("Configuration"),
+                        parentDir).string();
                 newDataSourceList.emplace_back(
                         DataSourceEntry{
                             v.second.get<std::string>("Name"),
                             v.second.get<std::string>("DBModule"),
-                            v.second.get<std::string>("Configuration")});
+                            confPath});
             }
         }
     } catch (const pt::ini_parser_error & error) {

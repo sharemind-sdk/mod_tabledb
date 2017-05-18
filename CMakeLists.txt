@@ -22,7 +22,7 @@ ADD_COMPILE_OPTIONS(
   "$<$<STREQUAL:$<CONFIGURATION>,Release>:-fomit-frame-pointer>"
 )
 
-FIND_PACKAGE(Boost REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS filesystem REQUIRED)
 FIND_PACKAGE(LogHard REQUIRED)
 FIND_PACKAGE(SharemindLibConsensusService REQUIRED)
 FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
@@ -61,6 +61,7 @@ LIST(REMOVE_ITEM TABLEDB_HEADERS_P ${TABLEDB_HEADERS})
 ADD_LIBRARY(sharemind_mod_tabledb MODULE
             ${TABLEDB_SOURCES} ${TABLEDB_HEADERS} ${TABLEDB_HEADERS_P})
 TARGET_LINK_LIBRARIES(sharemind_mod_tabledb
+    ${Boost_LIBRARIES}
     ${LogHard_LIBRARIES}
     ${SharemindLibConsensusService_LIBRARIES}
     ${SharemindLibDbCommon_LIBRARIES}

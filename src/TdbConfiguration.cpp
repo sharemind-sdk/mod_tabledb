@@ -25,6 +25,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 
+namespace fs = boost::filesystem;
 namespace pt = boost::property_tree;
 
 namespace sharemind {
@@ -37,7 +38,7 @@ bool TdbConfiguration::load(const std::string & filename) {
     DataSourceList newDataSourceList;
     std::string const parentDir();
     m_interpolate.addVar("CurrentFileDirectory",
-                         boost::filesystem::path(filename).parent_path().string());
+                         fs::canonical(fs::path(filename)).parent_path().string());
 
     // Parse the configuration file into the property tree:
     try {

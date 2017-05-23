@@ -25,7 +25,6 @@
 #include <boost/property_tree/ptree.hpp>
 
 
-namespace fs = boost::filesystem;
 namespace pt = boost::property_tree;
 
 namespace sharemind {
@@ -36,7 +35,9 @@ bool TdbConfiguration::load(const std::string & filename) {
     pt::ptree config;
     DbModuleList newDbModuleList;
     DataSourceList newDataSourceList;
-    const fs::path parentDir(fs::path(filename).parent_path());
+    std::string const parentDir();
+    m_interpolate.addVar("CurrentFileDirectory",
+                         boost::filesystem::path(filename).parent_path().string());
 
     // Parse the configuration file into the property tree:
     try {
@@ -44,19 +45,15 @@ bool TdbConfiguration::load(const std::string & filename) {
         for (const pt::ptree::value_type & v : config) {
             std::string const & section{v.first};
             if (section.find("DBModule") == 0u) {
-                std::string confPath = v.second.get<std::string>("Configuration", "");
-                if (!confPath.empty()) {
-                    confPath = fs::absolute(confPath, parentDir).string();
-                }
+                std::string confPath =
+                    m_interpolate(v.second.get<std::string>("Configuration", ""));
                 newDbModuleList.emplace_back(
                         DbModuleEntry{
                             v.second.get<std::string>("File"),
                             confPath});
             } else if (section.find("DataSource") == 0u) {
                 const std::string confPath =
-                    fs::absolute(
-                        v.second.get<std::string>("Configuration"),
-                        parentDir).string();
+                    m_interpolate(v.second.get<std::string>("Configuration"));
                 newDataSourceList.emplace_back(
                         DataSourceEntry{
                             v.second.get<std::string>("Name"),

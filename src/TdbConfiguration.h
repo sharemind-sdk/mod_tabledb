@@ -21,6 +21,7 @@
 #define SHAREMIND_MOD_TABLEDB_TDBCONFIGURATION_H
 
 #include <map>
+#include <sharemind/ConfigurationInterpolation.h>
 #include <string>
 #include <vector>
 
@@ -63,6 +64,7 @@ public: /* Methods: */
 
 private: /* Fields: */
 
+    ConfigurationInterpolation m_interpolate;
     DbModuleList m_dbModuleList;
     DataSourceList m_dataSourceList;
 

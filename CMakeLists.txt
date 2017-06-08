@@ -22,8 +22,9 @@ ADD_COMPILE_OPTIONS(
   "$<$<STREQUAL:$<CONFIGURATION>,Release>:-fomit-frame-pointer>"
 )
 
-FIND_PACKAGE(Boost COMPONENTS filesystem REQUIRED)
+FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(LogHard REQUIRED)
+FIND_PACKAGE(SharemindLibConfiguration REQUIRED)
 FIND_PACKAGE(SharemindLibConsensusService REQUIRED)
 FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon REQUIRED)
@@ -31,6 +32,7 @@ FIND_PACKAGE(SharemindLibmodapi REQUIRED)
 INCLUDE_DIRECTORIES(
     ${Boost_INCLUDE_DIRS}
     ${LogHard_INCLUDE_DIRS}
+    ${SharemindLibConfiguration_INCLUDE_DIRS}
     ${SharemindLibConsensusService_INCLUDE_DIRS}
     ${SharemindLibDataStoreManager_INCLUDE_DIRS}
     ${SharemindLibDbCommon_INCLUDE_DIRS}
@@ -42,6 +44,7 @@ ADD_DEFINITIONS(
     "-D__STDC_CONSTANT_MACROS"
     "-D__STDC_FORMAT_MACROS"
     ${LogHard_DEFINITIONS}
+    ${SharemindLibConfiguration_DEFINITIONS}
     ${SharemindLibConsensusService_DEFINITIONS}
     ${SharemindLibDataStoreManager_DEFINITIONS}
     ${SharemindLibDbCommon_DEFINITIONS}
@@ -63,6 +66,7 @@ ADD_LIBRARY(sharemind_mod_tabledb MODULE
 TARGET_LINK_LIBRARIES(sharemind_mod_tabledb
     ${Boost_LIBRARIES}
     ${LogHard_LIBRARIES}
+    ${SharemindLibConfiguration_LIBRARIES}
     ${SharemindLibConsensusService_LIBRARIES}
     ${SharemindLibDbCommon_LIBRARIES}
 )

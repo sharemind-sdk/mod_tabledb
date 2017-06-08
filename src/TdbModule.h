@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Cybernetica
+ * Copyright (C) 2015-2017 Cybernetica
  *
  * Research/Commercial License Usage
  * Licensees holding a valid Research License or Commercial License
@@ -19,8 +19,6 @@
 
 #ifndef SHAREMIND_MOD_TDB_TDBMODULE_H
 #define SHAREMIND_MOD_TDB_TDBMODULE_H
-
-#include "TdbConfiguration.h"
 
 #include <LogHard/Logger.h>
 #include <memory>
@@ -135,8 +133,6 @@ private: /* Methods: */
 private: /* Fields: */
 
     const LogHard::Logger m_logger;
-
-    TdbConfiguration m_configuration;
     const std::unique_ptr<moduleLoader::ModuleLoader> m_dbModuleLoader;
     const std::unique_ptr<DataSourceManager> m_dataSourceManager;
     const std::unique_ptr<TdbVectorMapUtil> m_mapUtil;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Cybernetica
+ * Copyright (C) 2015-2017 Cybernetica
  *
  * Research/Commercial License Usage
  * Licensees holding a valid Research License or Commercial License
@@ -19,12 +19,11 @@
 
 #include "TdbModule.h"
 
-#include <sstream>
-
 #define SHAREMIND_INTERNAL_
 #include <sharemind/dbcommon/DataSource.h>
 #include <sharemind/dbcommon/DataSourceManager.h>
-
+#include <sstream>
+#include "TdbConfiguration.h"
 #include "TdbVectorMap.h"
 #include "TdbVectorMapUtil.h"
 
@@ -41,10 +40,12 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     , m_mapUtil(new TdbVectorMapUtil())
 {
     // Load module configuration
-    if (!m_configuration.load(config)) {
-        m_logger.error() << "Failed to process given module configuration: "
-                         << m_configuration.lastErrorMessage();
-        throw ConfigurationException("Failed to parse configuration!");
+    std::unique_ptr<TdbConfiguration> configuration;
+    try {
+        configuration = makeUnique<TdbConfiguration>(config);
+    } catch (...) {
+        std::throw_with_nested(
+                    ConfigurationException("Failed to parse configuration!"));
     }
 
     // Set database module facilities
@@ -65,9 +66,7 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     #undef SET_FACILITY
 
     // Load database modules
-    for (const TdbConfiguration::DbModuleEntry & cfgDbMod
-         : m_configuration.dbModuleList())
-    {
+    for (auto const & cfgDbMod : configuration->dbModuleList()) {
         SharemindModule * const m = m_dbModuleLoader->addModule(
                                             cfgDbMod.filename,
                                             cfgDbMod.configurationFile);
@@ -83,9 +82,7 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     }
 
     // Load data sources
-    for (const TdbConfiguration::DataSourceEntry & cfgDs
-         : m_configuration.dataSourceList())
-    {
+    for (auto const & cfgDs : configuration->dataSourceList()) {
         if (!m_dbModuleLoader->hasModule(cfgDs.dbModule)) {
             m_logger.error() << "Data source \"" << cfgDs.name
                              << "\" uses an unknown database module: \""

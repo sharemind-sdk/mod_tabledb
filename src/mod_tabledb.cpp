@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Cybernetica
+ * Copyright (C) 2015-2017 Cybernetica
  *
  * Research/Commercial License Usage
  * Licensees holding a valid Research License or Commercial License
@@ -1855,16 +1855,19 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
      * Initialize the module handle
      */
     try {
-        c->moduleHandle = new sharemind::TdbModule(logger,
-                                                   consensusService,
-                                                   c->conf,
-                                                   signatures);
+        try {
+            c->moduleHandle = new sharemind::TdbModule(logger,
+                                                       consensusService,
+                                                       c->conf,
+                                                       signatures);
+        } catch (...) {
+            logger.printCurrentException();
+            throw;
+        }
         return SHAREMIND_MODULE_API_0x1_OK;
-    } catch (const TdbModule::ConfigurationException & e) {
-        logger.error() << e.what();
+    } catch (TdbModule::ConfigurationException const &) {
         return SHAREMIND_MODULE_API_0x1_INVALID_MODULE_CONFIGURATION;
-    } catch (const TdbModule::InitializationException & e) {
-        logger.error() << e.what();
+    } catch (TdbModule::InitializationException const &) {
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
     } catch (const std::bad_alloc &) {
         return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;

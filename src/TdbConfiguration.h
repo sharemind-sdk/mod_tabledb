@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Cybernetica
+ * Copyright (C) 2015-2017 Cybernetica
  *
  * Research/Commercial License Usage
  * Licensees holding a valid Research License or Commercial License
@@ -21,7 +21,6 @@
 #define SHAREMIND_MOD_TABLEDB_TDBCONFIGURATION_H
 
 #include <map>
-#include <sharemind/ConfigurationInterpolation.h>
 #include <string>
 #include <vector>
 
@@ -50,9 +49,8 @@ public: /* Methods: */
     /**
       Loads the configuration from the given file.
       \param[in] filename the file that contains the configuration.
-      \returns whether the configuration was successfully loaded.
     */
-    bool load(std::string const & filename);
+    TdbConfiguration(std::string const & filename);
 
     inline DbModuleList const & dbModuleList() const
     { return m_dbModuleList; }
@@ -60,15 +58,10 @@ public: /* Methods: */
     inline DataSourceList const & dataSourceList() const
     { return m_dataSourceList; }
 
-    inline const std::string & lastErrorMessage() { return m_lastErrorMessage; }
-
 private: /* Fields: */
 
-    ConfigurationInterpolation m_interpolate;
     DbModuleList m_dbModuleList;
     DataSourceList m_dataSourceList;
-
-    std::string m_lastErrorMessage;
 
 }; /* class TdbConfiguration { */
 

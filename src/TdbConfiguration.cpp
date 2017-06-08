@@ -36,7 +36,6 @@ bool TdbConfiguration::load(const std::string & filename) {
     pt::ptree config;
     DbModuleList newDbModuleList;
     DataSourceList newDataSourceList;
-    std::string const parentDir();
     m_interpolate.addVar("CurrentFileDirectory",
                          fs::canonical(fs::path(filename)).parent_path().string());
 

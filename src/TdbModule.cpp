@@ -19,7 +19,6 @@
 
 #include "TdbModule.h"
 
-#define SHAREMIND_INTERNAL_
 #include <sharemind/dbcommon/DataSource.h>
 #include <sharemind/dbcommon/DataSourceManager.h>
 #include <sstream>

@@ -20,11 +20,9 @@
 #include "TdbModule.h"
 
 #include <sharemind/dbcommon/DataSource.h>
-#include <sharemind/dbcommon/DataSourceManager.h>
 #include <sstream>
 #include "TdbConfiguration.h"
 #include "TdbVectorMap.h"
-#include "TdbVectorMapUtil.h"
 
 
 namespace sharemind {
@@ -34,9 +32,7 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
                      const std::string & config,
                      const std::set<std::string> & signatures)
     : m_logger(logger, "[TdbModule]")
-    , m_dbModuleLoader(new moduleLoader::ModuleLoader(signatures, m_logger))
-    , m_dataSourceManager(new DataSourceManager)
-    , m_mapUtil(new TdbVectorMapUtil())
+    , m_dbModuleLoader(signatures, m_logger)
 {
     // Load module configuration
     std::unique_ptr<TdbConfiguration> configuration;
@@ -50,15 +46,15 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     // Set database module facilities
     #define SET_FACILITY(n,w) \
         try { \
-            m_dbModuleLoader->setModuleFacility((n), (w)); \
+            m_dbModuleLoader.setModuleFacility((n), (w)); \
         } catch (...) { \
             std::throw_with_nested( \
                 InitializationException( \
                     "Failed setting module facility \"" n "\"!")); \
         }
     SET_FACILITY("Logger", &const_cast<LogHard::Logger &>(m_logger));
-    SET_FACILITY("DataSourceManager", m_dataSourceManager->getWrapper());
-    SET_FACILITY("TdbVectorMapUtil", m_mapUtil->getWrapper());
+    SET_FACILITY("DataSourceManager", m_dataSourceManager.getWrapper());
+    SET_FACILITY("TdbVectorMapUtil", m_mapUtil.getWrapper());
     if (consensusService) {
         SET_FACILITY("ConsensusService", consensusService);
     }
@@ -66,7 +62,7 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
 
     // Load database modules
     for (auto const & cfgDbMod : configuration->dbModuleList()) {
-        SharemindModule * const m = m_dbModuleLoader->addModule(
+        SharemindModule * const m = m_dbModuleLoader.addModule(
                                             cfgDbMod.filename,
                                             cfgDbMod.configurationFile);
         if (!m)
@@ -82,7 +78,7 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
 
     // Load data sources
     for (auto const & cfgDs : configuration->dataSourceList()) {
-        if (!m_dbModuleLoader->hasModule(cfgDs.dbModule)) {
+        if (!m_dbModuleLoader.hasModule(cfgDs.dbModule)) {
             m_logger.error() << "Data source \"" << cfgDs.name
                              << "\" uses an unknown database module: \""
                              << cfgDs.dbModule << "\".";
@@ -90,7 +86,10 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
                                          "module references!");
         }
 
-        if (!m_dataSourceManager->addDataSource(cfgDs.name, cfgDs.dbModule, cfgDs.configurationFile)) {
+        if (!m_dataSourceManager.addDataSource(cfgDs.name,
+                                               cfgDs.dbModule,
+                                               cfgDs.configurationFile))
+        {
             m_logger.error() << "Data source \"" << cfgDs.name
                              << "\" has duplicate configuration entries.";
             throw ConfigurationException("Configuration contained duplicate "
@@ -132,7 +131,7 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
                                                 SharemindModuleApi0x1SyscallContext * c) const
 {
     // Get the data source object
-    DataSource * src = m_dataSourceManager->getDataSource(dsName);
+    DataSource * src = m_dataSourceManager.getDataSource(dsName);
     if (!src) {
         m_logger.error() << "Data source \"" << dsName << "\" is not defined.";
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
@@ -140,7 +139,7 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
 
     // Get the system call object
     const SharemindSyscallWrapper sw =
-            m_dbModuleLoader->getSyscall(src->module(), signature);
+            m_dbModuleLoader.getSyscall(src->module(), signature);
     if (!sw.callable) {
         m_logger.error()
             << "Data source \"" << dsName << "\" database module \""
@@ -163,7 +162,8 @@ bool TdbModule::newVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                            "mod_tabledb/vector_maps",
                            [this, &stmtId](SharemindDataStore * const maps) {
                                if (TdbVectorMap * const map =
-                                       m_mapUtil->newVectorMap(maps)) {
+                                       m_mapUtil.newVectorMap(maps))
+                               {
                                    stmtId = map->getId();
                                    return true;
                                }
@@ -179,7 +179,7 @@ bool TdbModule::deleteVectorMap(const SharemindModuleApi0x1SyscallContext * ctx,
                 ctx,
                 "mod_tabledb/vector_maps",
                 [this, stmtId](SharemindDataStore * const maps) noexcept
-                { return m_mapUtil->deleteVectorMap(maps, stmtId); },
+                { return m_mapUtil.deleteVectorMap(maps, stmtId); },
                 false);
 }
 
@@ -190,7 +190,7 @@ TdbVectorMap * TdbModule::getVectorMap(const SharemindModuleApi0x1SyscallContext
                 ctx,
                 "mod_tabledb/vector_maps",
                 [this, stmtId](SharemindDataStore * const maps) noexcept
-                { return m_mapUtil->getVectorMap(maps, stmtId); },
+                { return m_mapUtil.getVectorMap(maps, stmtId); },
                 nullptr);
 }
 

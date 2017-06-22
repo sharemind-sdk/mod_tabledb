@@ -20,22 +20,23 @@
 #ifndef SHAREMIND_MOD_TDB_TDBMODULE_H
 #define SHAREMIND_MOD_TDB_TDBMODULE_H
 
+#include <exception>
 #include <LogHard/Logger.h>
-#include <memory>
 #include <set>
 #include <sharemind/datastoreapi.h>
+#include <sharemind/dbcommon/DataSourceManager.h>
 #include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libconsensusservice.h>
 #include <sharemind/libmodapi/api_0x1.h>
-#include <stdexcept>
+#include <string>
+#include <utility>
+#include "TdbVectorMapUtil.h"
 #include "tdberror.h"
 
 
 namespace sharemind  {
 
-class DataSourceManager;
 class TdbVectorMap;
-class TdbVectorMapUtil;
 
 class __attribute__ ((visibility("internal"))) TdbModule {
 
@@ -133,9 +134,9 @@ private: /* Methods: */
 private: /* Fields: */
 
     const LogHard::Logger m_logger;
-    const std::unique_ptr<moduleLoader::ModuleLoader> m_dbModuleLoader;
-    const std::unique_ptr<DataSourceManager> m_dataSourceManager;
-    const std::unique_ptr<TdbVectorMapUtil> m_mapUtil;
+    moduleLoader::ModuleLoader m_dbModuleLoader;
+    DataSourceManager m_dataSourceManager;
+    TdbVectorMapUtil m_mapUtil;
 
 }; /* class TdbModule { */
 

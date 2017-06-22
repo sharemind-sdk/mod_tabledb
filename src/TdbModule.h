@@ -24,12 +24,12 @@
 #include <LogHard/Logger.h>
 #include <set>
 #include <sharemind/datastoreapi.h>
-#include <sharemind/dbcommon/DataSourceManager.h>
-#include <sharemind/dbcommon/ModuleLoader.h>
 #include <sharemind/libconsensusservice.h>
 #include <sharemind/libmodapi/api_0x1.h>
 #include <string>
 #include <utility>
+#include "DataSourceManager.h"
+#include "ModuleLoader.h"
 #include "TdbVectorMapUtil.h"
 #include "tdberror.h"
 
@@ -134,7 +134,7 @@ private: /* Methods: */
 private: /* Fields: */
 
     const LogHard::Logger m_logger;
-    moduleLoader::ModuleLoader m_dbModuleLoader;
+    ModuleLoader m_dbModuleLoader;
     DataSourceManager m_dataSourceManager;
     TdbVectorMapUtil m_mapUtil;
 

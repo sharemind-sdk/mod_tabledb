@@ -19,8 +19,8 @@
 
 #include "TdbModule.h"
 
-#include <sharemind/dbcommon/DataSource.h>
 #include <sstream>
+#include "DataSource.h"
 #include "TdbConfiguration.h"
 #include "TdbVectorMap.h"
 

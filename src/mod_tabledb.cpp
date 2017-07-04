@@ -401,6 +401,30 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_stmt_exec,
     }
 }
 
+SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_table_names,
+                                 args, num_args, refs, crefs,
+                                 returnValue, c)
+{
+    /* The other arguments will be checked by the submodules */
+    if (!crefs || !crefs[0].pData)
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    if (crefs[0u].size == 0u
+            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
+        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
+
+    try {
+        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
+
+        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
+        return m->doSyscall(dsName, "tdb_table_names", args, num_args, refs, crefs, returnValue, c);
+    } catch (const std::bad_alloc &) {
+        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
+    } catch (...) {
+        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
+    }
+}
+
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
@@ -1833,6 +1857,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     std::set<std::string> signatures;
     signatures.insert("tdb_open");
     signatures.insert("tdb_close");
+    signatures.insert("tdb_table_names");
     signatures.insert("tdb_tbl_create");
     signatures.insert("tdb_tbl_delete");
     signatures.insert("tdb_tbl_exists");
@@ -1903,6 +1928,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
     /* High level database operations */
     , { "tdb_open",                         &tdb_open }
     , { "tdb_close",                        &tdb_close }
+    , { "tdb_table_names",                  &tdb_table_names }
 
     /* Table database API */
     , { "tdb_tbl_create",                   &tdb_tbl_create }

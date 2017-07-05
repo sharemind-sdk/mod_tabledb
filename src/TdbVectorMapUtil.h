@@ -29,10 +29,6 @@ class TdbVectorMap;
 
 class __attribute__ ((visibility("internal"))) TdbVectorMapUtil {
 
-private: /* Types: */
-
-    typedef SharemindTdbVectorMapUtil TdbVectorMapUtilWrapper;
-
 public: /* Methods: */
 
     TdbVectorMapUtil();
@@ -45,14 +41,14 @@ public: /* Methods: */
     TdbVectorMap * getVectorMap(SharemindDataStore * dataStore,
                                 const uint64_t vmapId) const noexcept;
 
-    inline TdbVectorMapUtilWrapper * getWrapper() { return &m_wrapper; }
+    inline SharemindTdbVectorMapUtil * getWrapper() { return &m_wrapper; }
 
-    inline const TdbVectorMapUtilWrapper * getWrapper() const
+    inline const SharemindTdbVectorMapUtil * getWrapper() const
     { return &m_wrapper; }
 
 private: /* Fields: */
 
-    TdbVectorMapUtilWrapper m_wrapper;
+    SharemindTdbVectorMapUtil m_wrapper;
 
 }; /* class TdbVectorMapUtil { */
 

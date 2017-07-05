@@ -21,6 +21,7 @@
 #define SHAREMIND_MOD_TABLEDB_TDBTYPESUTIL_H
 
 #include <cassert>
+#include <cstdint>
 #include <cstring>
 #include <new>
 #include <string>
@@ -28,7 +29,7 @@
 #include "tdbtypes.h"
 
 
-inline static SharemindTdbIndex * SharemindTdbIndex_new(const uint64_t idx) {
+inline SharemindTdbIndex * SharemindTdbIndex_new(std::uint64_t const idx) {
     SharemindTdbIndex * ptr = new SharemindTdbIndex;
 
     ptr->idx = idx;
@@ -36,13 +37,13 @@ inline static SharemindTdbIndex * SharemindTdbIndex_new(const uint64_t idx) {
     return ptr;
 }
 
-inline static void SharemindTdbIndex_delete(const SharemindTdbIndex * ptr) {
+inline void SharemindTdbIndex_delete(SharemindTdbIndex const * ptr) {
     assert(ptr);
 
     delete ptr;
 }
 
-inline static SharemindTdbString * SharemindTdbString_new(const std::string & str) {
+inline SharemindTdbString * SharemindTdbString_new(std::string const & str) {
     SharemindTdbString * ptr = new SharemindTdbString;
 
     ptr->str = new char[str.size() + 1];
@@ -51,7 +52,7 @@ inline static SharemindTdbString * SharemindTdbString_new(const std::string & st
     return ptr;
 }
 
-inline static SharemindTdbString * SharemindTdbString_new(const char * str) {
+inline SharemindTdbString * SharemindTdbString_new(char const * str) {
     assert(str);
 
     SharemindTdbString * ptr = new SharemindTdbString;
@@ -63,14 +64,17 @@ inline static SharemindTdbString * SharemindTdbString_new(const char * str) {
     return ptr;
 }
 
-inline static void SharemindTdbString_delete(const SharemindTdbString * ptr) {
+inline void SharemindTdbString_delete(SharemindTdbString const * ptr) {
     assert(ptr);
 
     delete[] ptr->str;
     delete ptr;
 }
 
-inline static SharemindTdbType * SharemindTdbType_new(const std::string & domain, const std::string & name, const uint64_t size) {
+inline SharemindTdbType * SharemindTdbType_new(std::string const & domain,
+                                               std::string const & name,
+                                               std::uint64_t const size)
+{
     SharemindTdbType * ptr = new SharemindTdbType;
 
     ptr->domain = new char[domain.size() + 1];
@@ -82,7 +86,10 @@ inline static SharemindTdbType * SharemindTdbType_new(const std::string & domain
     return ptr;
 }
 
-inline static SharemindTdbType * SharemindTdbType_new(const char * domain, const char * name, const uint64_t size) {
+inline SharemindTdbType * SharemindTdbType_new(char const * domain,
+                                               char const * name,
+                                               std::uint64_t const size)
+{
     assert(domain);
     assert(name);
 
@@ -101,7 +108,7 @@ inline static SharemindTdbType * SharemindTdbType_new(const char * domain, const
     return ptr;
 }
 
-inline static void SharemindTdbType_delete(const SharemindTdbType * ptr) {
+inline void SharemindTdbType_delete(SharemindTdbType const * ptr) {
     assert(ptr);
 
     delete[] ptr->name;
@@ -109,7 +116,12 @@ inline static void SharemindTdbType_delete(const SharemindTdbType * ptr) {
     delete ptr;
 }
 
-inline static SharemindTdbValue * SharemindTdbValue_new(const std::string & typeDomain, const std::string & typeName, const uint64_t typeSize, const void * buffer, const uint64_t size) {
+inline SharemindTdbValue * SharemindTdbValue_new(std::string const & typeDomain,
+                                                 std::string const & typeName,
+                                                 std::uint64_t const typeSize,
+                                                 void const * buffer,
+                                                 std::uint64_t const size)
+{
     SharemindTdbValue * ptr = new SharemindTdbValue;
 
     ptr->type = SharemindTdbType_new(typeDomain, typeName, typeSize);
@@ -126,7 +138,12 @@ inline static SharemindTdbValue * SharemindTdbValue_new(const std::string & type
     return ptr;
 }
 
-inline static SharemindTdbValue * SharemindTdbValue_new(const char * typeDomain, const char * typeName, const uint64_t typeSize, const void * buffer, const uint64_t size) {
+inline SharemindTdbValue * SharemindTdbValue_new(char const * typeDomain,
+                                                 char const * typeName,
+                                                 std::uint64_t const typeSize,
+                                                 void const * buffer,
+                                                 std::uint64_t const size)
+{
     assert(typeDomain);
     assert(typeName);
 
@@ -146,7 +163,7 @@ inline static SharemindTdbValue * SharemindTdbValue_new(const char * typeDomain,
     return ptr;
 }
 
-inline static void SharemindTdbValue_delete(const SharemindTdbValue * ptr) {
+inline void SharemindTdbValue_delete(SharemindTdbValue const * ptr) {
     assert(ptr);
 
     ::operator delete(ptr->buffer);

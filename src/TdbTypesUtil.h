@@ -45,9 +45,9 @@ namespace mod_tabledb {
 struct TdbString: SharemindTdbString {
 
     TdbString(std::string const & s) {
-        auto const size = s.size() + 1u;
-        str = new char[size];
-        std::memcpy(str, s.c_str(), size);
+        auto const allocSize = s.size() + 1u;
+        str = new char[allocSize];
+        std::memcpy(str, s.c_str(), allocSize);
     }
 
     TdbString(char const * const s) {
@@ -68,15 +68,15 @@ struct TdbType: SharemindTdbType {
             std::uint64_t const size_)
     {
         {
-            auto const domainSize = domain_.size() + 1u;
-            domain = new char[domainSize];
-            std::memcpy(domain, domain_.c_str(), domainSize);
+            auto const allocSize = domain_.size() + 1u;
+            domain = new char[allocSize];
+            std::memcpy(domain, domain_.c_str(), allocSize);
         }
         try {
             {
-                auto const nameSize = name_.size() + 1u;
-                name = new char[nameSize];
-                std::memcpy(name, name_.c_str(), nameSize);
+                auto const allocSize = name_.size() + 1u;
+                name = new char[allocSize];
+                std::memcpy(name, name_.c_str(), allocSize);
             }
             size = size_;
         } catch (...) {

@@ -47,7 +47,7 @@ struct TdbString: SharemindTdbString {
     TdbString(std::string const & s) {
         auto const size = s.size() + 1u;
         str = new char[size];
-        std::strncpy(str, s.c_str(), size);
+        std::memcpy(str, s.c_str(), size);
     }
 
     TdbString(char const * const s) {
@@ -70,13 +70,13 @@ struct TdbType: SharemindTdbType {
         {
             auto const domainSize = domain_.size() + 1u;
             domain = new char[domainSize];
-            std::strncpy(domain, domain_.c_str(), domainSize);
+            std::memcpy(domain, domain_.c_str(), domainSize);
         }
         try {
             {
                 auto const nameSize = name_.size() + 1u;
                 name = new char[nameSize];
-                std::strncpy(name, name_.c_str(), nameSize);
+                std::memcpy(name, name_.c_str(), nameSize);
             }
             size = size_;
         } catch (...) {

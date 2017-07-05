@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Cybernetica
+ * Copyright (C) 2017 Cybernetica
  *
  * Research/Commercial License Usage
  * Licensees holding a valid Research License or Commercial License
@@ -20,265 +20,60 @@
 #ifndef SHAREMIND_MOD_TABLEDB_TDBTYPESUTIL_H
 #define SHAREMIND_MOD_TABLEDB_TDBTYPESUTIL_H
 
-#include <cassert>
+#ifdef __cplusplus
+#include <cstddef>
 #include <cstdint>
-#include <cstring>
-#include <new>
-
+#else
+#include <stddef.h>
+#include <stdint.h>
+#endif
 #include "tdbtypes.h"
 
 
-inline SharemindTdbType * SharemindTdbType_new2(char const * domain,
-                                                std::size_t domainSize,
-                                                char const * name,
-                                                std::size_t nameSize,
-                                                std::uint64_t const size);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-inline SharemindTdbType * SharemindTdbType_new(char const * domain,
-                                               char const * name,
-                                               std::uint64_t const size);
+SharemindTdbIndex * SharemindTdbIndex_new(uint64_t const idx);
 
-inline void SharemindTdbType_delete(SharemindTdbType * ptr);
+void SharemindTdbIndex_delete(SharemindTdbIndex const * ptr);
 
-namespace sharemind {
-namespace mod_tabledb {
+SharemindTdbString * SharemindTdbString_new(char const * str);
 
-struct TdbString: SharemindTdbString {
+SharemindTdbString * SharemindTdbString_new2(char const * str, size_t strSize);
 
-    TdbString(char const * const s, std::size_t const size) {
-        str = new char[size + 1u];
-        std::memcpy(str, s, size);
-        str[size] = '\0';
-    }
+void SharemindTdbString_delete(SharemindTdbString * ptr);
 
-    TdbString(char const * const s) {
-        assert(str);
-        auto const allocSize = std::strlen(s) + 1u;
-        str = new char[allocSize];
-        std::memcpy(str, s, allocSize);
-    }
+SharemindTdbType * SharemindTdbType_new(char const * domain,
+                                        char const * name,
+                                        uint64_t const size);
 
-    ~TdbString() noexcept { delete[] str; }
+SharemindTdbType * SharemindTdbType_new2(char const * domain,
+                                         size_t domainSize,
+                                         char const * name,
+                                         size_t nameSize,
+                                         uint64_t const size);
 
-}; /* struct TdbString */
+void SharemindTdbType_delete(SharemindTdbType * ptr);
 
-struct TdbType: SharemindTdbType {
+SharemindTdbValue * SharemindTdbValue_new(char const * typeDomain,
+                                          char const * typeName,
+                                          uint64_t const typeSize,
+                                          void const * buffer,
+                                          uint64_t const size);
 
-    TdbType(char const * const domain_,
-            std::size_t domainSize,
-            char const * const name_,
-            std::size_t nameSize,
-            std::uint64_t const size_)
-    {
-        {
-            domain = new char[domainSize + 1u];
-            std::memcpy(domain, domain_, domainSize);
-            domain[domainSize] = '\0';
-        }
-        try {
-            {
-                name = new char[nameSize + 1u];
-                std::memcpy(name, name_, nameSize);
-                name[nameSize] = '\0';
-            }
-            size = size_;
-        } catch (...) {
-            delete[] domain;
-            throw;
-        }
-    }
+SharemindTdbValue * SharemindTdbValue_new2(char const * typeDomain,
+                                           size_t typeDomainSize,
+                                           char const * typeName,
+                                           size_t typeNameSize,
+                                           uint64_t const typeSize,
+                                           void const * buffer,
+                                           uint64_t const size);
 
-    TdbType(char const * const domain_,
-            char const * const name_,
-            std::uint64_t const size_)
-    {
-        assert(domain_);
-        assert(name_);
-        {
-            auto const allocSize = std::strlen(domain_) + 1u;
-            domain = new char[allocSize];
-            std::memcpy(domain, domain_, allocSize);
-        }
-        try {
-            {
-                auto const allocSize = std::strlen(name_) + 1u;
-                name = new char[allocSize];
-                std::memcpy(name, name_, allocSize);
-            }
-            size = size_;
-        } catch (...) {
-            delete[] domain;
-            throw;
-        }
-    }
+void SharemindTdbValue_delete(SharemindTdbValue * ptr);
 
-    ~TdbType() noexcept {
-        delete[] domain;
-        delete[] name;
-    }
-
-}; /* struct TdbType */
-
-struct TdbValue: SharemindTdbValue {
-
-    TdbValue(char const * const typeDomain,
-             std::size_t const typeDomainSize,
-             char const * const typeName,
-             std::size_t const typeNameSize,
-             std::uint64_t const typeSize,
-             void const * buffer_,
-             std::uint64_t const size_)
-    {
-        type = SharemindTdbType_new2(typeDomain,
-                                     typeDomainSize,
-                                     typeName,
-                                     typeNameSize,
-                                     typeSize);
-        try {
-            if (buffer_) {
-                assert(size_ > 0);
-                buffer = ::operator new(size_);
-                std::memcpy(buffer, buffer_, size_);
-            } else {
-                assert(size_ == 0);
-                buffer = nullptr;
-            }
-            size = size_;
-        } catch (...) {
-            SharemindTdbType_delete(type);
-            throw;
-        }
-    }
-
-    TdbValue(char const * typeDomain,
-             char const * typeName,
-             std::uint64_t const typeSize,
-             void const * buffer_,
-             std::uint64_t const size_)
-    {
-        assert(typeDomain);
-        assert(typeName);
-
-        type = SharemindTdbType_new(typeDomain, typeName, typeSize);
-        try {
-            if (buffer_) {
-                assert(size_ > 0);
-                buffer = ::operator new(size_);
-                std::memcpy(buffer, buffer_, size_);
-            } else {
-                assert(size_ == 0);
-                buffer = nullptr;
-            }
-            size = size_;
-        } catch (...) {
-            SharemindTdbType_delete(type);
-            throw;
-        }
-    }
-
-    ~TdbValue() noexcept {
-        ::operator delete(buffer);
-        SharemindTdbType_delete(type);
-    }
-
-}; /* struct TdbValue */
-
-} /* namespace mod_tabledb { */
-} /* namespace sharemind { */
-
-inline SharemindTdbIndex * SharemindTdbIndex_new(std::uint64_t const idx)
-{ return new (std::nothrow) SharemindTdbIndex{idx}; }
-
-inline void SharemindTdbIndex_delete(SharemindTdbIndex const * ptr) {
-    assert(ptr);
-    delete ptr;
-}
-
-inline SharemindTdbString * SharemindTdbString_new(char const * str) {
-    try {
-        return new (std::nothrow) sharemind::mod_tabledb::TdbString(str);
-    } catch (...) { return nullptr; }
-}
-
-inline SharemindTdbString * SharemindTdbString_new2(char const * str,
-                                                    std::size_t strSize)
-{
-    try {
-        return new (std::nothrow) sharemind::mod_tabledb::TdbString(str,
-                                                                    strSize);
-    } catch (...) { return nullptr; }
-}
-
-inline void SharemindTdbString_delete(SharemindTdbString * ptr) {
-    assert(ptr);
-    delete static_cast<sharemind::mod_tabledb::TdbString *>(ptr);
-}
-
-inline SharemindTdbType * SharemindTdbType_new(char const * domain,
-                                               char const * name,
-                                               std::uint64_t const size)
-{
-    try {
-        using Type = sharemind::mod_tabledb::TdbType;
-        return new (std::nothrow) Type(domain, name, size);
-    } catch (...) { return nullptr; }
-}
-
-inline SharemindTdbType * SharemindTdbType_new2(char const * domain,
-                                                std::size_t domainSize,
-                                                char const * name,
-                                                std::size_t nameSize,
-                                                std::uint64_t const size)
-{
-    try {
-        using T = sharemind::mod_tabledb::TdbType;
-        return new (std::nothrow) T(domain, domainSize, name, nameSize, size);
-    } catch (...) { return nullptr; }
-}
-
-inline void SharemindTdbType_delete(SharemindTdbType * ptr) {
-    assert(ptr);
-    delete static_cast<sharemind::mod_tabledb::TdbType *>(ptr);
-}
-
-inline SharemindTdbValue * SharemindTdbValue_new(char const * typeDomain,
-                                                 char const * typeName,
-                                                 std::uint64_t const typeSize,
-                                                 void const * buffer,
-                                                 std::uint64_t const size)
-{
-    try {
-        return new (std::nothrow) sharemind::mod_tabledb::TdbValue(typeDomain,
-                                                                   typeName,
-                                                                   typeSize,
-                                                                   buffer,
-                                                                   size);
-    } catch (...) { return nullptr; }
-}
-
-inline SharemindTdbValue * SharemindTdbValue_new2(char const * typeDomain,
-                                                  std::size_t typeDomainSize,
-                                                  char const * typeName,
-                                                  std::size_t typeNameSize,
-                                                  std::uint64_t const typeSize,
-                                                  void const * buffer,
-                                                  std::uint64_t const size)
-{
-    try {
-        using sharemind::mod_tabledb::TdbValue;
-        return new (std::nothrow) TdbValue(typeDomain,
-                                           typeDomainSize,
-                                           typeName,
-                                           typeNameSize,
-                                           typeSize,
-                                           buffer,
-                                           size);
-    } catch (...) { return nullptr; }
-}
-
-inline void SharemindTdbValue_delete(SharemindTdbValue * ptr) {
-    assert(ptr);
-    delete static_cast<sharemind::mod_tabledb::TdbValue *>(ptr);
-}
+#ifdef __cplusplus
+} /* extern "C" { */
+#endif
 
 #endif /* SHAREMIND_MOD_TABLEDB_TDBTYPESUTIL_H */

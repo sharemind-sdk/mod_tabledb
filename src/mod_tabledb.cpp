@@ -786,7 +786,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_string,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        SharemindTdbString * s = SharemindTdbString_new(str);
+        auto * const s = SharemindTdbString_new2(str.c_str(), str.size());
         try {
             map->push_back<SharemindTdbString>(name, s);
         } catch (...) {
@@ -1082,14 +1082,18 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_type,
         const uint64_t vmapId = args[0].uint64[0];
         const uint64_t typeSize = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-        const std::string typeDomain(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
-        const std::string typeName(static_cast<const char *>(crefs[2u].pData), crefs[2u].size - 1u);
 
         sharemind::TdbVectorMap * map = m->getVectorMap(c, vmapId);
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        SharemindTdbType * t = SharemindTdbType_new(typeDomain, typeName, typeSize);
+        auto * const t =
+                SharemindTdbType_new2(
+                    static_cast<const char *>(crefs[1u].pData),
+                    crefs[1u].size - 1u,
+                    static_cast<const char *>(crefs[2u].pData),
+                    crefs[2u].size - 1u,
+                    typeSize);
         try {
             map->push_back<SharemindTdbType>(name, t);
         } catch (...) {
@@ -1448,8 +1452,6 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
         const uint64_t vmapId = args[0].uint64[0];
         const uint64_t typeSize = args[1].uint64[0];
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-        const std::string typeDomain(static_cast<const char *>(crefs[1u].pData), crefs[1u].size - 1u);
-        const std::string typeName(static_cast<const char *>(crefs[2u].pData), crefs[2u].size - 1u);
 
         uint64_t bufSize = 0;
         // If the buffer size equal the type size, we assume it is a scalar
@@ -1466,9 +1468,15 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
         if (!map)
             return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;
 
-        SharemindTdbValue * v = SharemindTdbValue_new(typeDomain,
-                typeName, typeSize, bufSize ? crefs[3u].pData : nullptr,
-                bufSize);
+        auto * const v =
+                SharemindTdbValue_new2(
+                    static_cast<const char *>(crefs[1u].pData),
+                    crefs[1u].size - 1u,
+                    static_cast<const char *>(crefs[2u].pData),
+                    crefs[2u].size - 1u,
+                    typeSize,
+                    bufSize ? crefs[3u].pData : nullptr,
+                    bufSize);
 
         try {
             map->push_back<SharemindTdbValue>(name, v);

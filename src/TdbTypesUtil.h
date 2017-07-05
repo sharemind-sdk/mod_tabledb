@@ -52,9 +52,9 @@ struct TdbString: SharemindTdbString {
 
     TdbString(char const * const s) {
         assert(str);
-        auto const size = std::strlen(s);
-        str = new char[size];
-        std::strncpy(str, s, size);
+        auto const allocSize = std::strlen(s) + 1u;
+        str = new char[allocSize];
+        std::memcpy(str, s, allocSize);
     }
 
     ~TdbString() noexcept { delete[] str; }
@@ -92,15 +92,15 @@ struct TdbType: SharemindTdbType {
         assert(domain_);
         assert(name_);
         {
-            auto const domainSize = std::strlen(domain_);
-            domain = new char[domainSize];
-            strncpy(domain, domain_, domainSize);
+            auto const allocSize = std::strlen(domain_) + 1u;
+            domain = new char[allocSize];
+            std::memcpy(domain, domain_, allocSize);
         }
         try {
             {
-                auto const nameSize = std::strlen(name_);
-                name = new char[nameSize];
-                std::strncpy(name, name_, nameSize);
+                auto const allocSize = std::strlen(name_) + 1u;
+                name = new char[allocSize];
+                std::memcpy(name, name_, allocSize);
             }
             size = size_;
         } catch (...) {

@@ -158,8 +158,6 @@ public: /* Types: */
 
 private: /* Types: */
 
-    typedef SharemindTdbVectorMap TdbVectorMapWrapper;
-
     typedef std::map<std::string, boost::any> AnyValueMap;
 
     typedef tdb_heap_clone_allocator CA;
@@ -342,14 +340,14 @@ public: /* Methods: */
 
     inline uint64_t getId() const noexcept { return m_id; }
 
-    inline TdbVectorMapWrapper * getWrapper() noexcept { return &m_wrapper; }
+    inline SharemindTdbVectorMap * getWrapper() noexcept { return &m_wrapper; }
 
-    inline const TdbVectorMapWrapper * getWrapper() const noexcept
+    inline const SharemindTdbVectorMap * getWrapper() const noexcept
     { return &m_wrapper; }
 
 private: /* Fields: */
 
-    TdbVectorMapWrapper m_wrapper;
+    SharemindTdbVectorMap m_wrapper;
 
     uint64_t m_id;
     boost::ptr_vector<AnyValueMap> m_batches;

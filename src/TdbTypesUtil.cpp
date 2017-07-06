@@ -37,7 +37,7 @@ struct TdbString: SharemindTdbString {
     }
 
     TdbString(char const * const s) {
-        assert(str);
+        assert(s);
         auto const allocSize = std::strlen(s) + 1u;
         str = new char[allocSize];
         std::memcpy(str, s, allocSize);

@@ -19,7 +19,7 @@
 
 #include "TdbConfiguration.h"
 
-#include <sharemind/Configuration.h>
+#include <sharemind/libconfiguration/Configuration.h>
 #include <type_traits>
 
 

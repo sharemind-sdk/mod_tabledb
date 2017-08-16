@@ -132,5 +132,4 @@ SET(CPACK_DEBIAN_LIB_PACKAGE_DEPENDS
     "libsharemind-modapi (>= 0.3.0), libsharemind-configuration (>= 0.1.0), libloghard (>= 0.1.0), libstdc++6 (>= 4.8.0), libc6 (>= 2.19)")
 SET(CPACK_DEBIAN_DEV_PACKAGE_SECTION "libdevel")
 SET(CPACK_DEBIAN_LIB_PACKAGE_SECTION "libs")
-SET(CPACK_DEBIAN_DEV_PACKAGE_ARCHITECTURE "any")
 INCLUDE(CPack)

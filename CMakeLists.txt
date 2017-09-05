@@ -28,6 +28,7 @@ FIND_PACKAGE(SharemindLibConsensusService REQUIRED)
 FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon REQUIRED)
 FIND_PACKAGE(SharemindLibModapi REQUIRED)
+FIND_PACKAGE(SharemindModuleApis REQUIRED)
 
 
 # Headers:
@@ -65,6 +66,7 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
         ${SharemindLibDataStoreManager_INCLUDE_DIRS}
         ${SharemindLibDbCommon_INCLUDE_DIRS}
         ${SharemindLibModapi_INCLUDE_DIRS}
+        ${SharemindModuleApis_INCLUDE_DIRS}
     COMPILE_DEFINITIONS
         "SHAREMIND_INTERNAL_"
     LEGACY_DEFINITIONS

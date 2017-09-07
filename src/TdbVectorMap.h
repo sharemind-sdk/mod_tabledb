@@ -126,7 +126,10 @@ private: /* Methods: */
 
 };
 
-class __attribute__ ((visibility("internal"))) TdbVectorMap {
+class __attribute__ ((visibility("internal"))) TdbVectorMap
+    : private ::SharemindTdbVectorMap
+{
+
 public: /* Types: */
 
     class __attribute__ ((visibility("internal"))) Exception: public std::runtime_error {
@@ -340,14 +343,14 @@ public: /* Methods: */
 
     inline uint64_t getId() const noexcept { return m_id; }
 
-    inline SharemindTdbVectorMap * getWrapper() noexcept { return &m_wrapper; }
+    static TdbVectorMap & fromWrapper(::SharemindTdbVectorMap & wrapper)
+            noexcept
+    { return static_cast<TdbVectorMap &>(wrapper); }
 
-    inline const SharemindTdbVectorMap * getWrapper() const noexcept
-    { return &m_wrapper; }
+    SharemindTdbVectorMap * getWrapper() noexcept { return this; }
+    SharemindTdbVectorMap const * getWrapper() const noexcept { return this; }
 
 private: /* Fields: */
-
-    SharemindTdbVectorMap m_wrapper;
 
     uint64_t m_id;
     boost::ptr_vector<AnyValueMap> m_batches;

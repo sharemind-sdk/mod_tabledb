@@ -55,8 +55,6 @@ typedef SharemindTdbVectorMap_ SharemindTdbVectorMap;
 *******************************************************************************/
 
 struct SharemindTdbVectorMapUtil_ {
-    SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
-
     SharemindTdbVectorMap * (* new_map)(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore);
     bool (* delete_map)(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId);
     SharemindTdbVectorMap * (* get_map)(SharemindTdbVectorMapUtil * util, SharemindDataStore * datastore, const uint64_t vmapId);
@@ -90,8 +88,6 @@ enum SharemindTdbVectorMapError_ {
 typedef enum SharemindTdbVectorMapError_ SharemindTdbVectorMapError;
 
 struct SharemindTdbVectorMap_ {
-    SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
-
     SharemindTdbVectorMapError (* get_index_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbIndex *** vec, size_t * size);
     SharemindTdbVectorMapError (* set_index_vector)(SharemindTdbVectorMap * map, const char * key, SharemindTdbIndex ** vec, const size_t size);
     SharemindTdbVectorMapError (* is_index_vector)(SharemindTdbVectorMap * map, const char * key, bool * rv);

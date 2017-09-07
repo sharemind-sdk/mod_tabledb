@@ -46,10 +46,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_get_index_vector(
         size_t * size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->getCArray<SharemindTdbIndex>(key, *vec, *size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.getCArray<SharemindTdbIndex>(key, *vec, *size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -61,10 +60,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_set_index_vector(
         const size_t size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->setCArray<SharemindTdbIndex>(key, vec, size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.setCArray<SharemindTdbIndex>(key, vec, size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -75,10 +73,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_is_index_vector(
         bool * rv)
 {
     assert(map);
-    assert(map->internal);
     try {
-        *rv = static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->count<SharemindTdbIndex>(key);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        *rv = m.count<SharemindTdbIndex>(key);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -90,10 +87,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_get_string_vector(
         size_t * size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->getCArray<SharemindTdbString>(key, *vec, *size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.getCArray<SharemindTdbString>(key, *vec, *size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -105,10 +101,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_set_string_vector(
         const size_t size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->setCArray<SharemindTdbString>(key, vec, size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.setCArray<SharemindTdbString>(key, vec, size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -119,10 +114,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_is_string_vector(
         bool * rv)
 {
     assert(map);
-    assert(map->internal);
     try {
-        *rv = static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->count<SharemindTdbString>(key);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        *rv = m.count<SharemindTdbString>(key);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -134,10 +128,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_get_type_vector(
         size_t * size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->getCArray<SharemindTdbType>(key, *vec, *size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.getCArray<SharemindTdbType>(key, *vec, *size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -149,10 +142,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_set_type_vector(
         const size_t size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->setCArray<SharemindTdbType>(key, vec, size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.setCArray<SharemindTdbType>(key, vec, size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -163,10 +155,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_is_type_vector(
         bool * rv)
 {
     assert(map);
-    assert(map->internal);
     try {
-        *rv = static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->count<SharemindTdbType>(key);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        *rv = m.count<SharemindTdbType>(key);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -178,10 +169,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_get_value_vector(
         size_t * size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->getCArray<SharemindTdbValue>(key, *vec, *size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.getCArray<SharemindTdbValue>(key, *vec, *size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -193,10 +183,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_set_value_vector(
         const size_t size)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->setCArray<SharemindTdbValue>(key, vec, size);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        m.setCArray<SharemindTdbValue>(key, vec, size);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -207,10 +196,9 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_is_value_vector(
         bool * rv)
 {
     assert(map);
-    assert(map->internal);
     try {
-        *rv = static_cast<sharemind::TdbVectorMap *>(map->internal)
-                ->count<SharemindTdbValue>(key);
+        auto & m = sharemind::TdbVectorMap::fromWrapper(*map);
+        *rv = m.count<SharemindTdbValue>(key);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -221,11 +209,10 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_count(
         bool * rv)
 {
     assert(map);
-    assert(map->internal);
     assert(key);
     assert(rv);
     try {
-        *rv = static_cast<sharemind::TdbVectorMap *>(map->internal)->count(key);
+        *rv = sharemind::TdbVectorMap::fromWrapper(*map).count(key);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -236,11 +223,10 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_erase(
         bool * rv)
 {
     assert(map);
-    assert(map->internal);
     assert(key);
     assert(rv);
     try {
-        *rv = static_cast<sharemind::TdbVectorMap *>(map->internal)->erase(key);
+        *rv = sharemind::TdbVectorMap::fromWrapper(*map).erase(key);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -249,9 +235,8 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_clear(
         SharemindTdbVectorMap * map)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)->clear();
+        sharemind::TdbVectorMap::fromWrapper(*map).clear();
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -261,9 +246,8 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_set_batch(
         const size_t n)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)->setBatch(n);
+        sharemind::TdbVectorMap::fromWrapper(*map).setBatch(n);
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -272,9 +256,8 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_add_batch(
         SharemindTdbVectorMap * map)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)->addBatch();
+        sharemind::TdbVectorMap::fromWrapper(*map).addBatch();
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -284,10 +267,8 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_batch_count(
         size_t * count)
 {
     assert(map);
-    assert(map->internal);
     try {
-        *count = static_cast<sharemind::TdbVectorMap *>(map->internal)
-                    ->batchCount();
+        *count = sharemind::TdbVectorMap::fromWrapper(*map).batchCount();
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
@@ -296,17 +277,15 @@ SharemindTdbVectorMapError SharemindTdbVectorMap_reset(
         SharemindTdbVectorMap * map)
 {
     assert(map);
-    assert(map->internal);
     try {
-        static_cast<sharemind::TdbVectorMap *>(map->internal)->reset();
+        sharemind::TdbVectorMap::fromWrapper(*map).reset();
         return TDB_VECTOR_MAP_OK;
     } TDB_VECTOR_MAP_CATCH_ALL;
 }
 
 uint64_t SharemindTdbVectorMap_get_id(SharemindTdbVectorMap * map) {
     assert(map);
-    assert(map->internal);
-    return static_cast<sharemind::TdbVectorMap *>(map->internal)->getId();
+    return sharemind::TdbVectorMap::fromWrapper(*map).getId();
 }
 
 } // extern "C" {
@@ -315,27 +294,26 @@ uint64_t SharemindTdbVectorMap_get_id(SharemindTdbVectorMap * map) {
 namespace sharemind {
 
 TdbVectorMap::TdbVectorMap(const uint64_t id)
-    : m_wrapper{this,
-                &SharemindTdbVectorMap_get_index_vector,
-                &SharemindTdbVectorMap_set_index_vector,
-                &SharemindTdbVectorMap_is_index_vector,
-                &SharemindTdbVectorMap_get_string_vector,
-                &SharemindTdbVectorMap_set_string_vector,
-                &SharemindTdbVectorMap_is_string_vector,
-                &SharemindTdbVectorMap_get_type_vector,
-                &SharemindTdbVectorMap_set_type_vector,
-                &SharemindTdbVectorMap_is_type_vector,
-                &SharemindTdbVectorMap_get_value_vector,
-                &SharemindTdbVectorMap_set_value_vector,
-                &SharemindTdbVectorMap_is_value_vector,
-                &SharemindTdbVectorMap_count,
-                &SharemindTdbVectorMap_erase,
-                &SharemindTdbVectorMap_clear,
-                &SharemindTdbVectorMap_set_batch,
-                &SharemindTdbVectorMap_add_batch,
-                &SharemindTdbVectorMap_batch_count,
-                &SharemindTdbVectorMap_reset,
-                &SharemindTdbVectorMap_get_id}
+    : ::SharemindTdbVectorMap{&SharemindTdbVectorMap_get_index_vector,
+                              &SharemindTdbVectorMap_set_index_vector,
+                              &SharemindTdbVectorMap_is_index_vector,
+                              &SharemindTdbVectorMap_get_string_vector,
+                              &SharemindTdbVectorMap_set_string_vector,
+                              &SharemindTdbVectorMap_is_string_vector,
+                              &SharemindTdbVectorMap_get_type_vector,
+                              &SharemindTdbVectorMap_set_type_vector,
+                              &SharemindTdbVectorMap_is_type_vector,
+                              &SharemindTdbVectorMap_get_value_vector,
+                              &SharemindTdbVectorMap_set_value_vector,
+                              &SharemindTdbVectorMap_is_value_vector,
+                              &SharemindTdbVectorMap_count,
+                              &SharemindTdbVectorMap_erase,
+                              &SharemindTdbVectorMap_clear,
+                              &SharemindTdbVectorMap_set_batch,
+                              &SharemindTdbVectorMap_add_batch,
+                              &SharemindTdbVectorMap_batch_count,
+                              &SharemindTdbVectorMap_reset,
+                              &SharemindTdbVectorMap_get_id}
     , m_id{id}
     , m_batches{boost::ptr_vector<AnyValueMap>(boost::assign::ptr_list_of<AnyValueMap>())}
     , m_currentBatch{m_batches.begin()}

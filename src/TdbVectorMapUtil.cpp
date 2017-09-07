@@ -31,13 +31,11 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(
         SharemindDataStore * datastore)
 {
     assert(util);
-    assert(util->internal);
     assert(datastore);
 
-    sharemind::TdbVectorMapUtil * const u =
-            static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
     try {
-        sharemind::TdbVectorMap * const map = u->newVectorMap(datastore);
+        auto & u = sharemind::TdbVectorMapUtil::fromWrapper(*util);
+        auto * const map = u.newVectorMap(datastore);
         return map ? map->getWrapper() : nullptr;
     } catch (...) {
         return nullptr;
@@ -49,13 +47,11 @@ bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util,
                                           const uint64_t vmapId)
 {
     assert(util);
-    assert(util->internal);
     assert(datastore);
 
-    sharemind::TdbVectorMapUtil * const u =
-            static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
     try {
-        return u->deleteVectorMap(datastore, vmapId);
+        auto & u = sharemind::TdbVectorMapUtil::fromWrapper(*util);
+        return u.deleteVectorMap(datastore, vmapId);
     } catch (...) {
         return false;
     }
@@ -67,14 +63,11 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(
         const uint64_t vmapId)
 {
     assert(util);
-    assert(util->internal);
     assert(datastore);
 
-    sharemind::TdbVectorMapUtil * const u =
-            static_cast<sharemind::TdbVectorMapUtil *>(util->internal);
     try {
-        sharemind::TdbVectorMap * const map =
-                u->getVectorMap(datastore, vmapId);
+        auto & u = sharemind::TdbVectorMapUtil::fromWrapper(*util);
+        auto * const map = u.getVectorMap(datastore, vmapId);
         return map ? map->getWrapper() : nullptr;
     } catch (...) {
         return nullptr;
@@ -91,10 +84,9 @@ void destroy(void * ptr) noexcept { delete static_cast<T *>(ptr); }
 namespace sharemind {
 
 TdbVectorMapUtil::TdbVectorMapUtil()
-    : m_wrapper{this,
-                &SharemindTdbVectorMapUtil_new_map,
-                &SharemindTdbVectorMapUtil_delete_map,
-                &SharemindTdbVectorMapUtil_get_map}
+    : ::SharemindTdbVectorMapUtil{&SharemindTdbVectorMapUtil_new_map,
+                                  &SharemindTdbVectorMapUtil_delete_map,
+                                  &SharemindTdbVectorMapUtil_get_map}
 {}
 
 TdbVectorMap * TdbVectorMapUtil::newVectorMap(SharemindDataStore * dataStore)

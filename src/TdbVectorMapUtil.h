@@ -27,7 +27,9 @@ namespace sharemind {
 
 class TdbVectorMap;
 
-class __attribute__ ((visibility("internal"))) TdbVectorMapUtil {
+class __attribute__ ((visibility("internal"))) TdbVectorMapUtil
+    : private ::SharemindTdbVectorMapUtil
+{
 
 public: /* Methods: */
 
@@ -41,14 +43,13 @@ public: /* Methods: */
     TdbVectorMap * getVectorMap(SharemindDataStore * dataStore,
                                 const uint64_t vmapId) const noexcept;
 
-    inline SharemindTdbVectorMapUtil * getWrapper() { return &m_wrapper; }
+    static TdbVectorMapUtil & fromWrapper(SharemindTdbVectorMapUtil & wrapper)
+            noexcept
+    { return static_cast<TdbVectorMapUtil &>(wrapper); }
 
-    inline const SharemindTdbVectorMapUtil * getWrapper() const
-    { return &m_wrapper; }
+    inline SharemindTdbVectorMapUtil * getWrapper() { return this; }
 
-private: /* Fields: */
-
-    SharemindTdbVectorMapUtil m_wrapper;
+    inline const SharemindTdbVectorMapUtil * getWrapper() const { return this; }
 
 }; /* class TdbVectorMapUtil { */
 

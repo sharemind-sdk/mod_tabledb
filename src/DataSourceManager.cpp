@@ -31,13 +31,10 @@ SharemindDataSource * SharemindDataSourceManager_get_source(
         const char * name)
 {
     assert(mgr);
-    assert(mgr->internal);
     assert(name);
-
     try {
-        sharemind::DataSourceManager & m =
-                *static_cast<sharemind::DataSourceManager *>(mgr->internal);
-        sharemind::DataSource * const src = m.getDataSource(name);
+        auto & m = sharemind::DataSourceManager::fromWrapper(*mgr);
+        auto * const src = m.getDataSource(name);
         return src ? src->getWrapper() : nullptr;
     } catch (...) {
         return nullptr;
@@ -50,7 +47,7 @@ SharemindDataSource * SharemindDataSourceManager_get_source(
 namespace sharemind  {
 
 DataSourceManager::DataSourceManager()
-    : m_wrapper{this,  &SharemindDataSourceManager_get_source}
+    : ::SharemindDataSourceManager{&SharemindDataSourceManager_get_source}
 {}
 
 bool DataSourceManager::addDataSource(const std::string & name,

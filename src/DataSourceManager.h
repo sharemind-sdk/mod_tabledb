@@ -29,11 +29,13 @@
 
 namespace sharemind  {
 
-class __attribute__ ((visibility("internal"))) DataSourceManager {
+class __attribute__ ((visibility("internal"))) DataSourceManager
+    : ::SharemindDataSourceManager
+{
 
 private: /* Types: */
 
-    typedef SharemindDataSourceManager DataSourceManagerWrapper;
+    using Wrapper = ::SharemindDataSourceManager;
 
 public: /* Methods: */
 
@@ -43,12 +45,13 @@ public: /* Methods: */
     DataSource * getDataSource(std::string const & name) const;
     bool hasDataSource(const std::string & name) const;
 
-    inline DataSourceManagerWrapper * getWrapper() { return &m_wrapper; }
-    inline const DataSourceManagerWrapper * getWrapper() const { return &m_wrapper; }
+    static DataSourceManager & fromWrapper(Wrapper & wrapper) noexcept
+    { return static_cast<DataSourceManager &>(wrapper); }
+
+    inline Wrapper * getWrapper() { return this; }
+    inline Wrapper const * getWrapper() const { return this; }
 
 private: /* Fields: */
-
-    DataSourceManagerWrapper m_wrapper;
 
     std::map<std::string, std::unique_ptr<DataSource> > m_dataSources;
 

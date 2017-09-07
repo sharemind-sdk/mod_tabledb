@@ -26,11 +26,13 @@
 
 namespace sharemind  {
 
-class __attribute__ ((visibility("internal"))) DataSource {
+class __attribute__ ((visibility("internal"))) DataSource
+    : private ::SharemindDataSource
+{
 
 private: /* Types: */
 
-    typedef SharemindDataSource DataSourceWrapper;
+    using Wrapper = ::SharemindDataSource;
 
 public: /* Methods: */
 
@@ -45,12 +47,13 @@ public: /* Methods: */
     inline std::string & conf() { return m_conf; }
     inline const std::string & conf() const { return m_conf; }
 
-    inline DataSourceWrapper * getWrapper() { return &m_wrapper; }
-    inline const DataSourceWrapper * getWrapper() const { return &m_wrapper; }
+    static DataSource & fromWrapper(Wrapper & wrapper) noexcept
+    { return static_cast<DataSource &>(wrapper); }
+
+    inline Wrapper * getWrapper() { return this; }
+    inline Wrapper const * getWrapper() const { return this; }
 
 private: /* Fields: */
-
-    DataSourceWrapper m_wrapper;
 
     std::string m_name;
     std::string m_module;

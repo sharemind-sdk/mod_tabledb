@@ -20,9 +20,12 @@
 #ifndef SHAREMIND_MOD_TABLEDB_TDBMAPAPI_H
 #define SHAREMIND_MOD_TABLEDB_TDBMAPAPI_H
 
-#include <cstddef>
 #ifdef __cplusplus
+#include <cstddef>
 #include <cstdint>
+#else
+#include <stddef.h>
+#include <stdint.h>
 #endif
 #include <sharemind/datastoreapi.h>
 #ifndef __cplusplus
@@ -46,9 +49,9 @@ extern "C" {
 
 /** Forward declarations: */
 struct SharemindTdbVectorMapUtil_;
-typedef SharemindTdbVectorMapUtil_ SharemindTdbVectorMapUtil;
+typedef struct SharemindTdbVectorMapUtil_ SharemindTdbVectorMapUtil;
 struct SharemindTdbVectorMap_;
-typedef SharemindTdbVectorMap_ SharemindTdbVectorMap;
+typedef struct SharemindTdbVectorMap_ SharemindTdbVectorMap;
 
 /*******************************************************************************
     SharemindTdbVectorMapUtil

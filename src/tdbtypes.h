@@ -32,13 +32,13 @@ extern "C" {
 #endif
 
 struct SharemindTdbIndex_;
-typedef SharemindTdbIndex_ SharemindTdbIndex;
+typedef struct SharemindTdbIndex_ SharemindTdbIndex;
 struct SharemindTdbString_;
-typedef SharemindTdbString_ SharemindTdbString;
+typedef struct SharemindTdbString_ SharemindTdbString;
 struct SharemindTdbValue_;
-typedef SharemindTdbValue_ SharemindTdbValue;
+typedef struct SharemindTdbValue_ SharemindTdbValue;
 struct SharemindTdbType_;
-typedef SharemindTdbType_ SharemindTdbType;
+typedef struct SharemindTdbType_ SharemindTdbType;
 
 struct SharemindTdbIndex_ {
     uint64_t idx;

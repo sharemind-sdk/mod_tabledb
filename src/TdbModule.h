@@ -24,7 +24,6 @@
 #include <LogHard/Logger.h>
 #include <set>
 #include <sharemind/datastoreapi.h>
-#include <sharemind/libaccesscontrolfacility.h>
 #include <sharemind/libconsensusservice.h>
 #include <sharemind/module-apis/api_0x1.h>
 #include <string>
@@ -73,7 +72,6 @@ public: /* Methods: */
 
     TdbModule(const LogHard::Logger & logger,
               SharemindConsensusFacility * consensusService,
-              SharemindAccessControlFacility * accessControlFacility,
               const std::string & config,
               const std::set<std::string> & signatures);
     ~TdbModule();

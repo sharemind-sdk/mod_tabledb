@@ -1840,13 +1840,6 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     if (!flog || !flog->facility)
         return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
 
-    const SharemindModuleApi0x1Facility * faccessControl = c->getModuleFacility(c, "AccessControlFacility");
-    if (!faccessControl || !faccessControl->facility)
-        return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY;
-
-    SharemindAccessControlFacility * accessControlFacility =
-            static_cast<SharemindAccessControlFacility *>(faccessControl->facility);
-
     const SharemindModuleApi0x1Facility * fconsensus = c->getModuleFacility(c, "ConsensusService");
     SharemindConsensusFacility * consensusService;
     if (!fconsensus || !fconsensus->facility) {
@@ -1897,7 +1890,6 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
         try {
             c->moduleHandle = new sharemind::TdbModule(logger,
                                                        consensusService,
-                                                       accessControlFacility,
                                                        c->conf,
                                                        signatures);
         } catch (...) {

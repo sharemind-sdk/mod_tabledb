@@ -113,317 +113,46 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_error_code,
     }
 }
 
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_open,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_open", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
+#define MOD_TABLEDB_FORWARD_SYSCALL(syscallName) \
+    SHAREMIND_MODULE_API_0x1_SYSCALL(syscallName, \
+                                     args, num_args, refs, crefs, \
+                                     returnValue, c) \
+    { \
+        /* The other arguments will be checked by the submodules */ \
+        if (!crefs || !crefs[0].pData) \
+            return SHAREMIND_MODULE_API_0x1_INVALID_CALL; \
+        if ((crefs[0u].size == 0u) \
+            || (static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u]\
+                != '\0')) \
+            return SHAREMIND_MODULE_API_0x1_INVALID_CALL; \
+        try { \
+            std::string const dsName( \
+                    static_cast<const char *>(crefs[0u].pData), \
+                    crefs[0u].size - 1u); \
+            sharemind::TdbModule & m = \
+                    *static_cast<sharemind::TdbModule *>(c->moduleHandle); \
+            return m.doSyscall(dsName, #syscallName, args, num_args, refs, \
+                               crefs, returnValue, c); \
+        } catch (const std::bad_alloc &) { \
+            return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY; \
+        } catch (...) { \
+            return SHAREMIND_MODULE_API_0x1_MODULE_ERROR; \
+        } \
     }
-}
 
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_close,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_close", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_create,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_tbl_create", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_delete,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_tbl_delete", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_exists,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_tbl_exists", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_col_count,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_tbl_col_count", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_col_names,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_tbl_col_names", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_col_types,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_tbl_col_types", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_tbl_row_count,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_tbl_row_count", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_insert_row,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_insert_row", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_read_col,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_read_col", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_stmt_exec,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_stmt_exec", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
-
-SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_table_names,
-                                 args, num_args, refs, crefs,
-                                 returnValue, c)
-{
-    /* The other arguments will be checked by the submodules */
-    if (!crefs || !crefs[0].pData)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    if (crefs[0u].size == 0u
-            || static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u] != '\0')
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
-    try {
-        const std::string dsName(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
-
-        sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
-        return m->doSyscall(dsName, "tdb_table_names", args, num_args, refs, crefs, returnValue, c);
-    } catch (const std::bad_alloc &) {
-        return SHAREMIND_MODULE_API_0x1_OUT_OF_MEMORY;
-    } catch (...) {
-        return SHAREMIND_MODULE_API_0x1_MODULE_ERROR;
-    }
-}
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_open)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_close)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_create)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_delete)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_exists)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_count)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_names)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_types)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_row_count)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_insert_row)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_read_col)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_stmt_exec)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_table_names)
 
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
                                  args, num_args, refs, crefs,

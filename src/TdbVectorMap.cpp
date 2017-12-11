@@ -316,7 +316,7 @@ TdbVectorMap::TdbVectorMap(const uint64_t id)
                               &SharemindTdbVectorMap_get_id}
     , m_id{id}
     , m_batches{boost::ptr_vector<AnyValueMap>(boost::assign::ptr_list_of<AnyValueMap>())}
-    , m_currentBatch{m_batches.begin()}
+    , m_currentBatchNumber{0u}
 {}
 
 } /* namespace sharemind { */

@@ -172,8 +172,9 @@ public: /* Methods: */
     template<typename V>
     typename boost::ptr_vector<V, CA>::size_type size(const std::string & key) const {
         // Check if the vector exists
-        AnyValueMap::const_iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end())
+        auto const & cb = currentBatch();
+        auto const it = cb.find(key);
+        if (it == cb.end())
             throw NotFoundException("Failed to get \"" + key + "\": vector not found.");
 
         // Check if the vector has the right type
@@ -186,8 +187,9 @@ public: /* Methods: */
     template<typename V>
     typename boost::ptr_vector<V, CA>::reference at(const std::string & key, typename boost::ptr_vector<V, CA>::size_type n) {
         // Check if the vector exists
-        AnyValueMap::iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end())
+        auto & cb = currentBatch();
+        auto const it = cb.find(key);
+        if (it == cb.end())
             throw NotFoundException("Failed to get \"" + key + "\": vector not found.");
 
         // Check if the vector has the right type
@@ -200,8 +202,9 @@ public: /* Methods: */
     template<typename V>
     typename boost::ptr_vector<V, CA>::const_reference at(const std::string & key, typename boost::ptr_vector<V, CA>::size_type n) const {
         // Check if the vector exists
-        AnyValueMap::const_iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end())
+        auto const & cb = currentBatch();
+        auto const it = cb.find(key);
+        if (it == cb.end())
             throw NotFoundException("Failed to get \"" + key + "\": vector not found.");
 
         // Check if the vector has the right type
@@ -214,10 +217,11 @@ public: /* Methods: */
     template<typename V>
     void push_back(const std::string & key, V * val) {
         // Check if the vector exists
-        AnyValueMap::iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end()) {
-            std::pair<AnyValueMap::iterator, bool> rv =
-                m_currentBatch->insert(AnyValueMap::value_type(key, boost::ptr_vector<V, CA>()));
+        auto & cb = currentBatch();
+        auto it = cb.find(key);
+        if (it == cb.end()) {
+            auto const rv =
+                    cb.insert(AnyValueMap::value_type(key, boost::ptr_vector<V, CA>()));
             if (!rv.second)
                 throw Exception("Failed to store vector \"" + key + "\".");
 
@@ -234,8 +238,9 @@ public: /* Methods: */
     template<typename V>
     void pop_back(const std::string & key) {
         // Check if the vector exists
-        AnyValueMap::iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end())
+        auto & cb = currentBatch();
+        auto const it = cb.find(key);
+        if (it == cb.end())
             throw NotFoundException("Failed to get \"" + key + "\": vector not found.");
 
         // Check if the vector has the right type
@@ -248,8 +253,9 @@ public: /* Methods: */
     template<typename V>
     void clear(const std::string & key) {
         // Check if the vector exists
-        AnyValueMap::iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end())
+        auto & cb = currentBatch();
+        auto const it = cb.find(key);
+        if (it == cb.end())
             throw NotFoundException("Failed to get \"" + key + "\": vector not found.");
 
         // Check if the vector has the right type
@@ -262,8 +268,9 @@ public: /* Methods: */
     template<typename V>
     bool count(const std::string & key) const {
         // Check if the vector exists
-        AnyValueMap::const_iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end())
+        auto const & cb = currentBatch();
+        auto const it = cb.find(key);
+        if (it == cb.end())
             return false;
 
         // Check if the vector has the right type
@@ -272,22 +279,20 @@ public: /* Methods: */
 
     bool count(const std::string & key) const {
         // Check if the vector exists
-        return m_currentBatch->find(key) != m_currentBatch->end();
+        auto const & cb = currentBatch();
+        return cb.find(key) != cb.end();
     }
 
-    bool erase(const std::string & key) {
-        return m_currentBatch->erase(key);
-    }
+    bool erase(const std::string & key) { return currentBatch().erase(key); }
 
-    void clear() {
-        m_currentBatch->clear();
-    }
+    void clear() { currentBatch().clear(); }
 
     template<typename V>
     void getCArray(const std::string & key, V **& array, typename boost::ptr_vector<V, CA>::size_type & size) {
         // Check if the vector exists
-        AnyValueMap::iterator it = m_currentBatch->find(key);
-        if (it == m_currentBatch->end())
+        auto & cb = currentBatch();
+        auto const it = cb.find(key);
+        if (it == cb.end())
             throw NotFoundException("Failed to get \"" + key + "\": vector not found.");
 
         // Check if the vector has the right type
@@ -302,12 +307,13 @@ public: /* Methods: */
     template<typename V>
     void setCArray(const std::string & key, V ** array, typename boost::ptr_vector<V, CA>::size_type size) {
         // Check if the vector exists
-        AnyValueMap::iterator it = m_currentBatch->find(key);
-        if (it != m_currentBatch->end())
+        auto & cb = currentBatch();
+        auto it = cb.find(key);
+        if (it != cb.end())
             throw Exception("Failed to store \"" + key + "\": vector already exists.");
 
         std::pair<AnyValueMap::iterator, bool> rv =
-            m_currentBatch->insert(AnyValueMap::value_type(key, boost::ptr_vector<V, CA>()));
+            cb.insert(AnyValueMap::value_type(key, boost::ptr_vector<V, CA>()));
         if (!rv.second)
             throw Exception("Failed to store vector \"" + key + "\".");
 
@@ -320,16 +326,26 @@ public: /* Methods: */
         vec->transfer(vec->begin(), array, size);
     }
 
+    std::vector<AnyValueMap>::size_type currentBatchNumber() const noexcept
+    { return m_currentBatchNumber; }
+
+    AnyValueMap & currentBatch() noexcept
+    { return m_batches[m_currentBatchNumber]; }
+
+    AnyValueMap const & currentBatch() const noexcept
+    { return m_batches[m_currentBatchNumber]; }
+
     inline void setBatch(const std::vector<AnyValueMap>::size_type n) {
         if (n >= m_batches.size())
             throw Exception("Failed to set batch: batch number out of range.");
 
-        m_currentBatch = m_batches.begin() + n;
+        m_currentBatchNumber = n;
     }
 
     inline void addBatch() {
+        auto const newCurrentBatchNumber = m_batches.size();
         m_batches.push_back(new AnyValueMap);
-        m_currentBatch = m_batches.end() - 1;
+        m_currentBatchNumber = newCurrentBatchNumber;
     }
 
     inline std::vector<AnyValueMap>::size_type batchCount() const {
@@ -354,7 +370,7 @@ private: /* Fields: */
 
     uint64_t m_id;
     boost::ptr_vector<AnyValueMap> m_batches;
-    boost::ptr_vector<AnyValueMap>::iterator m_currentBatch;
+    boost::ptr_vector<AnyValueMap>::size_type m_currentBatchNumber;
 
 }; /* class TdbVectorMap { */
 

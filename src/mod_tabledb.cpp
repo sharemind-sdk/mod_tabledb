@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <LogHard/Logger.h>
+#include <sharemind/compiler-support/GccIsNothrowDestructible.h>
 #include <sharemind/datastoreapi.h>
 #include <sharemind/module-apis/api_0x1.h>
 #include "TdbModule.h"
@@ -1641,19 +1642,8 @@ SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) __attribute__ ((visibility("default"))
 SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
     assert(c);
     assert(c->moduleHandle);
-
-    try {
-        delete static_cast<sharemind::TdbModule *>(c->moduleHandle);
-    } catch (...) {
-        const SharemindModuleApi0x1Facility * flog = c->getModuleFacility(c, "Logger");
-        if (flog && flog->facility) {
-            const LogHard::Logger & logger =
-                    *static_cast<const LogHard::Logger *>(flog->facility);
-            logger.warning() << "Exception was caught during \"mod_tabledb\" "
-                                "module deinitialization";
-        }
-    }
-
+    static_assert(is_nothrow_destructible<sharemind::TdbModule>::value, "");
+    delete static_cast<sharemind::TdbModule *>(c->moduleHandle);
     c->moduleHandle = nullptr;
 }
 

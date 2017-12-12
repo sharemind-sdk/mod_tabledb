@@ -97,51 +97,35 @@ public: /* Methods: */
                 throw GracefulException();
             }
 
-            /* Load system calls */
-            const size_t numSyscalls = SharemindModule_numSyscalls(m);
-            if (unlikely(numSyscalls != m_reqSignatures.size())) {
-                m_logger.error() << "Invalid number of system calls in module!";
-                throw GracefulException();
-            }
-            for (size_t i = 0u; i < numSyscalls; i++) {
-                const SharemindSyscall * const sc =
-                        SharemindModule_syscall(m, i);
-                assert(sc);
 
-                /* Check if system call signature is valid */
-                const char * const scName = SharemindSyscall_signature(sc);
-                assert(scName);
-                if (unlikely(!m_reqSignatures.count(scName))) {
-                    m_logger.error() << "The system call \"" << scName
-                                     << "\" is not allowed.";
+            /* Load system calls */
+            assert(!m_moduleSyscallMap.count(moduleName));
+            SyscallMap syscallMap;
+            for (auto const & required : m_reqSignatures) {
+                auto * const sc =
+                        SharemindModule_findSyscall(m, required.c_str());
+                if (!sc) {
+                    m_logger.fatal() << "Required system call \"" << required
+                                     << "\" not defined in module!";
                     throw GracefulException();
                 }
+                SHAREMIND_DEBUG_ONLY(auto const rv =)
+                        syscallMap.emplace(
+                            required,
+                            makeUnique<SharemindSyscallWrapper>(
+                                SharemindSyscall_wrapper(sc)));
+                assert(rv.second);
             }
-
-            assert(!m_moduleSyscallMap.count(moduleName));
-            SyscallMap & syscallMap = m_moduleSyscallMap[moduleName];
+            auto rv = m_moduleSyscallMap.emplace(moduleName,
+                                                 std::move(syscallMap));
+            assert(rv.second);
             try {
-                for (size_t i = 0u; i < numSyscalls; i++) {
-                    const SharemindSyscall * const sc =
-                            SharemindModule_syscall(m, i);
-                    assert(sc);
-                    const char * const scName =
-                            SharemindSyscall_signature(sc);
-                    assert(scName);
-
-                    SHAREMIND_DEBUG_ONLY(auto const rv =)
-                            syscallMap.emplace(
-                                scName,
-                                makeUnique<SharemindSyscallWrapper>(
-                                    SharemindSyscall_wrapper(sc)));
-                    assert(rv.second);
-                }
                 m_modules.push_back(m);
-                return m;
             } catch (...) {
-                m_moduleSyscallMap.erase(moduleName);
+                m_moduleSyscallMap.erase(std::move(rv.first));
                 throw;
             }
+            return m;
         } catch (const std::exception & e) {
             m_logger.error() << "Error loading database module " << filename
                              << ": " << e.what();

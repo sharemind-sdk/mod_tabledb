@@ -26,7 +26,6 @@
 #include <LogHard/Logger.h>
 #include <map>
 #include <memory>
-#include <set>
 #include <sharemind/DebugOnly.h>
 #include <sharemind/libmodapi/libmodapi.h>
 #include <sharemind/likely.h>
@@ -46,9 +45,9 @@ private: /* Types: */
 
 public: /* Methods: */
 
-    ModuleLoader(const std::set<std::string> & signatures,
+    ModuleLoader(std::vector<std::string> requiredSyscallSignatures,
                  const LogHard::Logger & logger)
-        : m_reqSignatures(signatures)
+        : m_reqSignatures(std::move(requiredSyscallSignatures))
         , m_logger(logger, "ModuleLoader:")
     {
         /// \todo Throw a better exception
@@ -181,7 +180,7 @@ private: /* Fields: */
     SharemindModuleApi * m_modApi;
     std::map<std::string, SyscallMap> m_moduleSyscallMap;
 
-    std::set<std::string> m_reqSignatures;
+    std::vector<std::string> m_reqSignatures;
 
     const LogHard::Logger m_logger;
 

@@ -22,6 +22,7 @@
 #include <sharemind/compiler-support/GccIsNothrowDestructible.h>
 #include <sharemind/datastoreapi.h>
 #include <sharemind/module-apis/api_0x1.h>
+#include <vector>
 #include "TdbModule.h"
 #include "TdbTypesUtil.h"
 
@@ -1595,37 +1596,36 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
      * Initialize the module handle
      */
     try {
-        /*
-         * Construct a list of syscalls that must be defined in the submodules
-         */
-        std::set<std::string> signatures;
-        signatures.insert("tdb_open");
-        signatures.insert("tdb_close");
-        signatures.insert("tdb_table_names");
-        signatures.insert("tdb_tbl_create");
-        signatures.insert("tdb_tbl_create2");
-        signatures.insert("tdb_tbl_delete");
-        signatures.insert("tdb_tbl_exists");
-        signatures.insert("tdb_tbl_col_count");
-        signatures.insert("tdb_tbl_col_names");
-        signatures.insert("tdb_tbl_col_types");
-        signatures.insert("tdb_tbl_row_count");
-        //signatures.insert("tdb_delete_col");
-        //signatures.insert("tdb_delete_row");
-        //signatures.insert("tdb_insert_col");
-        signatures.insert("tdb_insert_row");
-        signatures.insert("tdb_insert_row2");
-        signatures.insert("tdb_read_col");
-        //signatures.insert("tdb_read_row");
-        //signatures.insert("tdb_update_col");
-        //signatures.insert("tdb_update_row");
-        signatures.insert("tdb_stmt_exec");
-
         try {
-            c->moduleHandle = new sharemind::TdbModule(logger,
-                                                       consensusService,
-                                                       c->conf,
-                                                       signatures);
+            c->moduleHandle =
+                    new sharemind::TdbModule(
+                        logger,
+                        consensusService,
+                        c->conf,
+                        // List of required submodule syscall signatures:
+                        std::vector<std::string>{
+                            "tdb_open",
+                            "tdb_close",
+                            "tdb_table_names",
+                            "tdb_tbl_create",
+                            "tdb_tbl_create2",
+                            "tdb_tbl_delete",
+                            "tdb_tbl_exists",
+                            "tdb_tbl_col_count",
+                            "tdb_tbl_col_names",
+                            "tdb_tbl_col_types",
+                            "tdb_tbl_row_count",
+                            // "tdb_delete_col",
+                            // "tdb_delete_row",
+                            // "tdb_insert_col",
+                            "tdb_insert_row",
+                            "tdb_insert_row2",
+                            "tdb_read_col",
+                            // "tdb_read_row",
+                            // "tdb_update_col",
+                            // "tdb_update_row",
+                            "tdb_stmt_exec"
+                        });
         } catch (...) {
             logger.printCurrentException();
             throw;

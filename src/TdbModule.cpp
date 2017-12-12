@@ -30,9 +30,9 @@ namespace sharemind {
 TdbModule::TdbModule(const LogHard::Logger & logger,
                      SharemindConsensusFacility * consensusService,
                      const std::string & config,
-                     const std::set<std::string> & signatures)
+                     std::vector<std::string> requiredSyscallSignatures)
     : m_logger(logger, "[TdbModule]")
-    , m_dbModuleLoader(signatures, m_logger)
+    , m_dbModuleLoader(std::move(requiredSyscallSignatures), m_logger)
 {
     // Load module configuration
     std::unique_ptr<TdbConfiguration> configuration;

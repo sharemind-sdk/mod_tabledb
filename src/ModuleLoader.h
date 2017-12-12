@@ -24,12 +24,12 @@
 #include <cassert>
 #include <cstring>
 #include <LogHard/Logger.h>
-#include <map>
 #include <memory>
 #include <sharemind/DebugOnly.h>
 #include <sharemind/libmodapi/libmodapi.h>
 #include <sharemind/likely.h>
 #include <sharemind/MakeUnique.h>
+#include <sharemind/SimpleUnorderedStringMap.h>
 #include <string>
 #include <vector>
 
@@ -41,7 +41,7 @@ class __attribute__ ((visibility("internal"))) ModuleLoader {
 private: /* Types: */
 
     using SyscallMap =
-            std::map<std::string, std::unique_ptr<SharemindSyscallWrapper> >;
+            SimpleUnorderedStringMap<std::unique_ptr<SharemindSyscallWrapper> >;
 
 public: /* Methods: */
 
@@ -90,7 +90,9 @@ public: /* Methods: */
 
             const char * const moduleName = SharemindModule_name(m);
             assert(moduleName);
-            if (unlikely(m_moduleSyscallMap.count(moduleName))) {
+            if (unlikely(m_moduleSyscallMap.find(moduleName)
+                         != m_moduleSyscallMap.end()))
+            {
                 m_logger.error() << "Module name \"" << moduleName
                                  << "\" is already provided by another module.";
                 throw GracefulException();
@@ -98,7 +100,6 @@ public: /* Methods: */
 
 
             /* Load system calls */
-            assert(!m_moduleSyscallMap.count(moduleName));
             SyscallMap syscallMap;
             for (auto const & required : m_reqSignatures) {
                 auto * const sc =
@@ -178,7 +179,7 @@ private: /* Fields: */
 
     std::vector<SharemindModule *> m_modules;
     SharemindModuleApi * m_modApi;
-    std::map<std::string, SyscallMap> m_moduleSyscallMap;
+    SimpleUnorderedStringMap<SyscallMap> m_moduleSyscallMap;
 
     std::vector<std::string> m_reqSignatures;
 

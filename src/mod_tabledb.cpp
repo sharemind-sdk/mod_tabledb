@@ -155,7 +155,6 @@ MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_row_count)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_insert_row)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_insert_row2)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_read_col)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_stmt_exec)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_table_names)
 
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
@@ -1623,8 +1622,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
                             "tdb_read_col",
                             // "tdb_read_row",
                             // "tdb_update_col",
-                            // "tdb_update_row",
-                            "tdb_stmt_exec"
+                            // "tdb_update_row"
                         });
         } catch (...) {
             logger.printCurrentException();
@@ -1679,9 +1677,6 @@ SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
     //, { "tdb_read_row",   &tdb_read_row }
     //, { "tdb_update_col", &tdb_update_col }
     //, { "tdb_update_row", &tdb_update_row }
-
-    /* Table database statement API */
-    , { "tdb_stmt_exec",                    &tdb_stmt_exec }
 
     /* Parameter and result vector map API */
     /* Constructor/Destructor */

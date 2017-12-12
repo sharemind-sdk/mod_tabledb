@@ -1592,35 +1592,35 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     }
 
     /*
-     * Construct a list of syscalls that must be defined in the submodules
-     */
-    std::set<std::string> signatures;
-    signatures.insert("tdb_open");
-    signatures.insert("tdb_close");
-    signatures.insert("tdb_table_names");
-    signatures.insert("tdb_tbl_create");
-    signatures.insert("tdb_tbl_create2");
-    signatures.insert("tdb_tbl_delete");
-    signatures.insert("tdb_tbl_exists");
-    signatures.insert("tdb_tbl_col_count");
-    signatures.insert("tdb_tbl_col_names");
-    signatures.insert("tdb_tbl_col_types");
-    signatures.insert("tdb_tbl_row_count");
-    //signatures.insert("tdb_delete_col");
-    //signatures.insert("tdb_delete_row");
-    //signatures.insert("tdb_insert_col");
-    signatures.insert("tdb_insert_row");
-    signatures.insert("tdb_insert_row2");
-    signatures.insert("tdb_read_col");
-    //signatures.insert("tdb_read_row");
-    //signatures.insert("tdb_update_col");
-    //signatures.insert("tdb_update_row");
-    signatures.insert("tdb_stmt_exec");
-
-    /*
      * Initialize the module handle
      */
     try {
+        /*
+         * Construct a list of syscalls that must be defined in the submodules
+         */
+        std::set<std::string> signatures;
+        signatures.insert("tdb_open");
+        signatures.insert("tdb_close");
+        signatures.insert("tdb_table_names");
+        signatures.insert("tdb_tbl_create");
+        signatures.insert("tdb_tbl_create2");
+        signatures.insert("tdb_tbl_delete");
+        signatures.insert("tdb_tbl_exists");
+        signatures.insert("tdb_tbl_col_count");
+        signatures.insert("tdb_tbl_col_names");
+        signatures.insert("tdb_tbl_col_types");
+        signatures.insert("tdb_tbl_row_count");
+        //signatures.insert("tdb_delete_col");
+        //signatures.insert("tdb_delete_row");
+        //signatures.insert("tdb_insert_col");
+        signatures.insert("tdb_insert_row");
+        signatures.insert("tdb_insert_row2");
+        signatures.insert("tdb_read_col");
+        //signatures.insert("tdb_read_row");
+        //signatures.insert("tdb_update_col");
+        //signatures.insert("tdb_update_row");
+        signatures.insert("tdb_stmt_exec");
+
         try {
             c->moduleHandle = new sharemind::TdbModule(logger,
                                                        consensusService,

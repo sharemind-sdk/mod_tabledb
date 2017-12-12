@@ -1597,6 +1597,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     signatures.insert("tdb_close");
     signatures.insert("tdb_table_names");
     signatures.insert("tdb_tbl_create");
+    signatures.insert("tdb_tbl_create2");
     signatures.insert("tdb_tbl_delete");
     signatures.insert("tdb_tbl_exists");
     signatures.insert("tdb_tbl_col_count");
@@ -1607,6 +1608,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
     //signatures.insert("tdb_delete_row");
     //signatures.insert("tdb_insert_col");
     signatures.insert("tdb_insert_row");
+    signatures.insert("tdb_insert_row2");
     signatures.insert("tdb_read_col");
     //signatures.insert("tdb_read_row");
     //signatures.insert("tdb_update_col");

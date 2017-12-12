@@ -46,7 +46,7 @@ private: /* Types: */
 public: /* Methods: */
 
     ModuleLoader(std::vector<std::string> requiredSyscallSignatures,
-                 const LogHard::Logger & logger)
+                 LogHard::Logger const & logger)
         : m_reqSignatures(std::move(requiredSyscallSignatures))
         , m_logger(logger, "ModuleLoader:")
     {
@@ -64,8 +64,8 @@ public: /* Methods: */
         SharemindModuleApi_free(m_modApi);
     }
 
-    SharemindModule * addModule(const std::string & filename,
-                                const std::string & config = std::string())
+    SharemindModule * addModule(std::string const & filename,
+                                std::string const & config = std::string())
     {
         struct GracefulException {};
         SharemindModule * const m =
@@ -88,7 +88,7 @@ public: /* Methods: */
                 throw GracefulException();
             }
 
-            const char * const moduleName = SharemindModule_name(m);
+            char const * const moduleName = SharemindModule_name(m);
             assert(moduleName);
             if (unlikely(m_moduleSyscallMap.find(moduleName)
                          != m_moduleSyscallMap.end()))
@@ -97,7 +97,6 @@ public: /* Methods: */
                                  << "\" is already provided by another module.";
                 throw GracefulException();
             }
-
 
             /* Load system calls */
             SyscallMap syscallMap;
@@ -126,43 +125,41 @@ public: /* Methods: */
                 throw;
             }
             return m;
-        } catch (const std::exception & e) {
+        } catch (std::exception const & e) {
             m_logger.error() << "Error loading database module " << filename
                              << ": " << e.what();
             SharemindModule_free(m);
             return nullptr;
-        } catch (const GracefulException &) {
+        } catch (GracefulException const &) {
             SharemindModule_free(m);
             return nullptr;
         }
     }
 
-    inline bool hasModule(const std::string & module) const {
-        return m_moduleSyscallMap.find(module) != m_moduleSyscallMap.end();
-    }
+    bool hasModule(std::string const & module) const
+    { return m_moduleSyscallMap.find(module) != m_moduleSyscallMap.end(); }
 
-    SharemindSyscallWrapper getSyscall(const std::string & module,
-                                       const std::string & signature)
-            const
+    SharemindSyscallWrapper getSyscall(std::string const & module,
+                                       std::string const & signature) const
     {
         auto const msit(m_moduleSyscallMap.find(module));
         if (msit == m_moduleSyscallMap.end())
             return { nullptr, nullptr };
 
-        const SyscallMap & syscallMap = msit->second;
-        SyscallMap::const_iterator sit = syscallMap.find(signature);
+        auto const & syscallMap = msit->second;
+        auto const sit = syscallMap.find(signature);
         if (sit == syscallMap.end())
             return { nullptr, nullptr };
 
         return *(sit->second);
     }
 
-    inline void setModuleFacility(const char * name,
-                                  void * facility,
-                                  void * context = nullptr)
+    void setModuleFacility(char const * name,
+                           void * facility,
+                           void * context = nullptr)
     {
         assert(name);
-        const auto r = SharemindModuleApi_setModuleFacility(m_modApi,
+        auto const r = SharemindModuleApi_setModuleFacility(m_modApi,
                                                             name,
                                                             facility,
                                                             context);
@@ -170,7 +167,7 @@ public: /* Methods: */
             throw std::bad_alloc(); /// \todo Throw a better exception
     }
 
-    inline const SharemindFacility * moduleFacility(const char * name) {
+    SharemindFacility const * moduleFacility(char const * name) {
         assert(name);
         return SharemindModuleApi_moduleFacility(m_modApi, name);
     }
@@ -183,7 +180,7 @@ private: /* Fields: */
 
     std::vector<std::string> m_reqSignatures;
 
-    const LogHard::Logger m_logger;
+    LogHard::Logger const m_logger;
 
 }; /* class ModuleLoader { */
 

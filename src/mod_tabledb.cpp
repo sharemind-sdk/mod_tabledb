@@ -144,6 +144,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_error_code,
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_open)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_close)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_create)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_create2)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_delete)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_exists)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_count)
@@ -151,6 +152,7 @@ MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_names)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_types)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_row_count)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_insert_row)
+MOD_TABLEDB_FORWARD_SYSCALL(tdb_insert_row2)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_read_col)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_stmt_exec)
 MOD_TABLEDB_FORWARD_SYSCALL(tdb_table_names)
@@ -1661,6 +1663,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
 
     /* Table database API */
     , { "tdb_tbl_create",                   &tdb_tbl_create }
+    , { "tdb_tbl_create2",                  &tdb_tbl_create2 }
     , { "tdb_tbl_delete",                   &tdb_tbl_delete }
     , { "tdb_tbl_exists",                   &tdb_tbl_exists }
     , { "tdb_tbl_col_count",                &tdb_tbl_col_count }
@@ -1671,6 +1674,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
     //, { "tdb_delete_row", &tdb_delete_row }
     //, { "tdb_insert_col", &tdb_insert_col }
     , { "tdb_insert_row",                   &tdb_insert_row }
+    , { "tdb_insert_row2",                  &tdb_insert_row2 }
     , { "tdb_read_col",                     &tdb_read_col }
     //, { "tdb_read_row",   &tdb_read_row }
     //, { "tdb_update_col", &tdb_update_col }

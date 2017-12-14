@@ -22,6 +22,7 @@
 #include <sharemind/compiler-support/GccIsNothrowDestructible.h>
 #include <sharemind/datastoreapi.h>
 #include <sharemind/module-apis/api_0x1.h>
+#include <string>
 #include <vector>
 #include "TdbModule.h"
 #include "TdbTypesUtil.h"

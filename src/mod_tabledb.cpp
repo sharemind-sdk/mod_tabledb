@@ -116,22 +116,29 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_error_code,
     }
 }
 
+template <typename Ref>
+bool haveNtcsRefs(Ref * refs, std::size_t howManyToCheck) noexcept {
+    for (; howManyToCheck; --howManyToCheck, ++refs)
+        if (refs->size == 0
+            || static_cast<const char *>(refs->pData)[refs->size - 1u] != '\0')
+            return false;
+    return true;
+}
+
+template <typename T>
+std::string refToString(T const & ref)
+{ return std::string(static_cast<char const *>(ref.pData), ref.size - 1u); }
+
 #define MOD_TABLEDB_FORWARD_SYSCALL(syscallName) \
     SHAREMIND_MODULE_API_0x1_SYSCALL(syscallName, \
                                      args, num_args, refs, crefs, \
                                      returnValue, c) \
     { \
         /* The other arguments will be checked by the submodules */ \
-        if (!crefs || !crefs[0].pData) \
-            return SHAREMIND_MODULE_API_0x1_INVALID_CALL; \
-        if ((crefs[0u].size == 0u) \
-            || (static_cast<const char *>(crefs[0u].pData)[crefs[0u].size - 1u]\
-                != '\0')) \
+        if (!haveNtcsRefs(crefs, 1u)) \
             return SHAREMIND_MODULE_API_0x1_INVALID_CALL; \
         try { \
-            std::string const dsName( \
-                    static_cast<const char *>(crefs[0u].pData), \
-                    crefs[0u].size - 1u); \
+            auto const dsName(refToString(crefs[0u])); \
             sharemind::TdbModule & m = \
                     *static_cast<sharemind::TdbModule *>(c->moduleHandle); \
             return m.doSyscall(dsName, #syscallName, args, num_args, refs, \

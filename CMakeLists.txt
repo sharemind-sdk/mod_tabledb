@@ -91,12 +91,15 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
 # Install CMake files:
 SharemindCreateCMakeFindFiles(
     INCLUDE_DIRS
+        ${SharemindLibDataStoreManager_INCLUDE_DIRS}
         "${CMAKE_INSTALL_PREFIX}/include"
     DEFINITIONS
+        ${SharemindLibDataStoreManager_DEFINITIONS}
         "-D__STDC_LIMIT_MACROS"
         "-D__STDC_CONSTANT_MACROS"
         "-D__STDC_FORMAT_MACROS"
     LIBRARIES
+        ${SharemindLibModapi_LIBRARIES}
         "-L${CMAKE_INSTALL_PREFIX}/lib"
         "-lsharemind_mod_tabledb"
 )

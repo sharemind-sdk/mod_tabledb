@@ -84,6 +84,7 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
         ${SharemindLibConfiguration_LIBRARIES}
         ${SharemindLibConsensusService_LIBRARIES}
         ${SharemindLibDbCommon_LIBRARIES}
+        ${SharemindLibModapi_LIBRARIES}
 )
 
 

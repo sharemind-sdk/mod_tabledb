@@ -36,7 +36,7 @@ using namespace sharemind;
 
 namespace {
 
-auto const rulesetNameRange(asLiteralStringRange("sharemind:mod_tabledb"));
+auto const rulesetNameRange(asLiteralStringRange("sharemind:tabledb"));
 auto const rulesetNamePredicate(
         getOrCreateTemporaryStringHashTablePredicate(rulesetNameRange));
 auto const wildcardObjectNameRange(asLiteralStringRange("*:*:*:*"));

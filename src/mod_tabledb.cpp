@@ -20,8 +20,10 @@
 #include <cassert>
 #include <LogHard/Logger.h>
 #include <sharemind/compiler-support/GccIsNothrowDestructible.h>
+#include <sharemind/AccessControlProcessFacility.h>
 #include <sharemind/datastoreapi.h>
 #include <sharemind/module-apis/api_0x1.h>
+#include <sharemind/libprocessfacility.h>
 #include <string>
 #include <vector>
 #include "TdbModule.h"
@@ -30,9 +32,43 @@
 #include "TdbVectorMap.h"
 
 
+using namespace sharemind;
+
 namespace {
 
-using namespace sharemind;
+auto const rulesetNameRange(asLiteralStringRange("sharemind:mod_tabledb"));
+auto const rulesetNamePredicate(
+        getOrCreateTemporaryStringHashTablePredicate(rulesetNameRange));
+auto const wildcardObjectNameRange(asLiteralStringRange("*:*:*:*"));
+auto const wildcardObjectNamePredicate(
+        getOrCreateTemporaryStringHashTablePredicate(wildcardObjectNameRange));
+
+bool checkPermission(AccessControlProcessFacility const & aclFacility,
+                     std::string const & ds,
+                     std::string const & tbl,
+                     std::string const & perm,
+                     std::string const & prog)
+{
+    return aclFacility.check(
+                rulesetNamePredicate,
+                ds + ':' + tbl + ':' + perm + ':' + prog,
+                ds + ':' + tbl + ':' + perm + ":*",
+                ds + ':' + tbl + ":*:" + prog,
+                ds + ':' + tbl + ":*:*",
+                ds + ":*:" + perm + ':' + prog,
+                ds + ":*:" + perm + ":*",
+                ds + ":*:*:" + prog,
+                ds + ":*:*:*",
+                std::string("*:") + tbl + ':' + perm + ':' + prog,
+                std::string("*:") + tbl + ':' + perm + ":*",
+                std::string("*:") + tbl + ":*:" + prog,
+                std::string("*:") + tbl + ":*:*",
+                std::string("*:*:") + perm + ':' + prog,
+                std::string("*:*:") + perm + ":*",
+                std::string("*:*:*:") + prog,
+                wildcardObjectNamePredicate
+            ) == AccessResult::Allowed;
+}
 
 template < size_t NumArgs
          , bool   NeedReturnValue = false
@@ -129,18 +165,19 @@ template <typename T>
 std::string refToString(T const & ref)
 { return std::string(static_cast<char const *>(ref.pData), ref.size - 1u); }
 
-#define MOD_TABLEDB_FORWARD_SYSCALL(syscallName) \
+#define MOD_TABLEDB_FORWARD_SYSCALL(syscallName, numCheckArgs, ...) \
     SHAREMIND_MODULE_API_0x1_SYSCALL(syscallName, \
                                      args, num_args, refs, crefs, \
                                      returnValue, c) \
     { \
         /* The other arguments will be checked by the submodules */ \
-        if (!haveNtcsRefs(crefs, 1u)) \
+        if (!haveNtcsRefs(crefs, numCheckArgs)) \
             return SHAREMIND_MODULE_API_0x1_INVALID_CALL; \
         try { \
             auto const dsName(refToString(crefs[0u])); \
             sharemind::TdbModule & m = \
                     *static_cast<sharemind::TdbModule *>(c->moduleHandle); \
+            __VA_ARGS__ \
             return m.doSyscall(dsName, #syscallName, args, num_args, refs, \
                                crefs, returnValue, c); \
         } catch (const std::bad_alloc &) { \
@@ -149,21 +186,50 @@ std::string refToString(T const & ref)
             return SHAREMIND_MODULE_API_0x1_MODULE_ERROR; \
         } \
     }
+#define MOD_TABLEDB_FORWARD_SYSCALL1(syscallName) \
+    MOD_TABLEDB_FORWARD_SYSCALL(syscallName, 1u,)
+#define MOD_TABLEDB_FORWARD_SYSCALL2(syscallName,...) \
+    MOD_TABLEDB_FORWARD_SYSCALL(syscallName, 2u, __VA_ARGS__)
+#define MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(syscallName,permission) \
+    MOD_TABLEDB_FORWARD_SYSCALL2( \
+        syscallName, \
+        auto const * const aclFacility_ = \
+                c->processFacility(c, "AccessControlProcessFacility"); \
+        if (!aclFacility_) \
+            return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY; \
+        auto const & aclFacility = \
+            *static_cast<AccessControlProcessFacility const *>(aclFacility_); \
+        auto const * const processFacility_ = \
+                c->processFacility(c, "ProcessFacility"); \
+        if (!processFacility_) \
+            return SHAREMIND_MODULE_API_0x1_MISSING_FACILITY; \
+        auto const & processFacility = \
+            *static_cast<SharemindProcessFacility const *>(processFacility_); \
+        auto const tblName(refToString(crefs[1u])); \
+        std::string const programName( \
+                processFacility.programName(&processFacility)); \
+        if (!checkPermission(aclFacility, \
+                             dsName, \
+                             tblName, \
+                             permission, \
+                             programName)) \
+            return SHAREMIND_MODULE_API_0x1_ACCESS_DENIED; \
+        )
 
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_open)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_close)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_create)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_create2)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_delete)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_exists)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_count)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_names)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_col_types)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_tbl_row_count)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_insert_row)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_insert_row2)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_read_col)
-MOD_TABLEDB_FORWARD_SYSCALL(tdb_table_names)
+MOD_TABLEDB_FORWARD_SYSCALL1(tdb_open)
+MOD_TABLEDB_FORWARD_SYSCALL1(tdb_close)
+MOD_TABLEDB_FORWARD_SYSCALL1(tdb_table_names)
+MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(tdb_tbl_create, "write")
+MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(tdb_tbl_create2, "write")
+MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(tdb_tbl_delete, "write")
+MOD_TABLEDB_FORWARD_SYSCALL1(tdb_tbl_exists)
+MOD_TABLEDB_FORWARD_SYSCALL1(tdb_tbl_col_count)
+MOD_TABLEDB_FORWARD_SYSCALL1(tdb_tbl_col_names)
+MOD_TABLEDB_FORWARD_SYSCALL1(tdb_tbl_col_types)
+MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(tdb_tbl_row_count, "read")
+MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(tdb_insert_row, "write")
+MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(tdb_insert_row2, "write")
+MOD_TABLEDB_FORWARD_SYSCALL2_WITH_CHECK(tdb_read_col, "read")
 
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
                                  args, num_args, refs, crefs,

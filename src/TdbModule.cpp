@@ -131,7 +131,7 @@ SharemindModuleApi0x1Error TdbModule::doSyscall(const std::string & dsName,
                                                 SharemindModuleApi0x1SyscallContext * c) const
 {
     // Get the data source object
-    DataSource * src = m_dataSourceManager.getDataSource(dsName);
+    DataSource * const src = m_dataSourceManager.getDataSource(dsName);
     if (!src) {
         m_logger.error() << "Data source \"" << dsName << "\" is not defined.";
         return SHAREMIND_MODULE_API_0x1_GENERAL_ERROR;

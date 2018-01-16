@@ -47,13 +47,13 @@ const char * SharemindDataSource_conf(SharemindDataSource * src) {
 
 namespace sharemind {
 
-DataSource::DataSource(const std::string & name, const std::string & module, const std::string & conf)
+DataSource::DataSource(std::string name, std::string module, std::string conf)
     : ::SharemindDataSource{&SharemindDataSource_name,
                             &SharemindDataSource_module,
                             &SharemindDataSource_conf}
-    , m_name(name)
-    , m_module(module)
-    , m_conf(conf)
+    , m_name(std::move(name))
+    , m_module(std::move(module))
+    , m_conf(std::move(conf))
 {}
 
 } /* namespace sharemind { */

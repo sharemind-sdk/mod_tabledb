@@ -50,14 +50,14 @@ DataSourceManager::DataSourceManager()
     : ::SharemindDataSourceManager{&SharemindDataSourceManager_get_source}
 {}
 
-bool DataSourceManager::addDataSource(const std::string & name,
-                                      const std::string & dbModule,
-                                      const std::string & config)
+bool DataSourceManager::addDataSource(std::string name,
+                                      std::string dbModule,
+                                      std::string config)
 {
-    return m_dataSources.emplace(name,
-                                 makeUnique<DataSource>(name,
-                                                        dbModule,
-                                                        config)).second;
+    auto ds(makeUnique<DataSource>(std::move(name),
+                                   std::move(dbModule),
+                                   std::move(config)));
+    return m_dataSources.emplace(ds->name(), std::move(ds)).second;
 }
 
 DataSource * DataSourceManager::getDataSource(std::string const & name) const {

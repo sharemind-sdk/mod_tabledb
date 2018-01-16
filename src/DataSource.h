@@ -36,7 +36,7 @@ private: /* Types: */
 
 public: /* Methods: */
 
-    DataSource(const std::string & name, const std::string & module, const std::string & conf);
+    DataSource(std::string name, std::string module, std::string conf);
 
     inline std::string & name() { return m_name; }
     inline const std::string & name() const { return m_name; }

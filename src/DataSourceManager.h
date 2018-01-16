@@ -23,6 +23,7 @@
 #include <map>
 #include <memory>
 #include <sharemind/dbcommon/datasourceapi.h>
+#include <sharemind/SimpleUnorderedStringMap.h>
 #include <string>
 #include "DataSource.h"
 
@@ -41,7 +42,9 @@ public: /* Methods: */
 
     DataSourceManager();
 
-    bool addDataSource(const std::string & name, const std::string & dbModule, const std::string & config);
+    bool addDataSource(std::string name,
+                       std::string dbModule,
+                       std::string config);
     DataSource * getDataSource(std::string const & name) const;
     bool hasDataSource(const std::string & name) const;
 
@@ -53,7 +56,7 @@ public: /* Methods: */
 
 private: /* Fields: */
 
-    std::map<std::string, std::unique_ptr<DataSource> > m_dataSources;
+    SimpleUnorderedStringMap<std::unique_ptr<DataSource> > m_dataSources;
 
 }; /* class DataSourceManager { */
 

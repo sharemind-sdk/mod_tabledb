@@ -60,9 +60,4 @@ bool DataSourceManager::addDataSource(std::string name,
     return m_dataSources.emplace(ds->name(), std::move(ds)).second;
 }
 
-DataSource * DataSourceManager::getDataSource(std::string const & name) const {
-    auto const it(m_dataSources.find(name));
-    return (it != m_dataSources.end()) ? it->second.get() : nullptr;
-}
-
 } /* namespace sharemind { */

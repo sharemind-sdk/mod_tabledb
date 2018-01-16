@@ -37,6 +37,8 @@ class __attribute__ ((visibility("internal"))) DataSourceManager
 private: /* Types: */
 
     using Wrapper = ::SharemindDataSourceManager;
+    using DataSourcesContainer =
+            SimpleUnorderedStringMap<std::unique_ptr<DataSource> >;
 
 public: /* Methods: */
 
@@ -45,7 +47,15 @@ public: /* Methods: */
     bool addDataSource(std::string name,
                        std::string dbModule,
                        std::string config);
-    DataSource * getDataSource(std::string const & name) const;
+
+    template <typename ... Args>
+    DataSource * getDataSource(Args && ... args) const
+            noexcept(noexcept(std::declval<DataSourcesContainer const &>().find(
+                                  std::forward<Args>(args)...)))
+    {
+        auto const it(m_dataSources.find(std::forward<Args>(args)...));
+        return (it != m_dataSources.end()) ? it->second.get() : nullptr;
+    }
 
     static DataSourceManager & fromWrapper(Wrapper & wrapper) noexcept
     { return static_cast<DataSourceManager &>(wrapper); }
@@ -55,7 +65,7 @@ public: /* Methods: */
 
 private: /* Fields: */
 
-    SimpleUnorderedStringMap<std::unique_ptr<DataSource> > m_dataSources;
+    DataSourcesContainer m_dataSources;
 
 }; /* class DataSourceManager { */
 

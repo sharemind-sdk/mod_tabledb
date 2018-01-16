@@ -24,6 +24,7 @@
 #include <sharemind/datastoreapi.h>
 #include <sharemind/module-apis/api_0x1.h>
 #include <sharemind/libprocessfacility.h>
+#include <sharemind/StringHashTablePredicate.h>
 #include <string>
 #include <vector>
 #include "TdbModule.h"

@@ -65,7 +65,4 @@ DataSource * DataSourceManager::getDataSource(std::string const & name) const {
     return (it != m_dataSources.end()) ? it->second.get() : nullptr;
 }
 
-bool DataSourceManager::hasDataSource(const std::string & name) const
-{ return m_dataSources.find(name) != m_dataSources.end(); }
-
 } /* namespace sharemind { */

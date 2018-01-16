@@ -46,7 +46,6 @@ public: /* Methods: */
                        std::string dbModule,
                        std::string config);
     DataSource * getDataSource(std::string const & name) const;
-    bool hasDataSource(const std::string & name) const;
 
     static DataSourceManager & fromWrapper(Wrapper & wrapper) noexcept
     { return static_cast<DataSourceManager &>(wrapper); }

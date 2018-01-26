@@ -22,6 +22,7 @@ FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(LogHard REQUIRED)
 FIND_PACKAGE(SharemindCHeaders REQUIRED)
 FIND_PACKAGE(SharemindCxxHeaders REQUIRED)
+FIND_PACKAGE(SharemindLibAccessControlProcessFacility REQUIRED)
 FIND_PACKAGE(SharemindLibConfiguration REQUIRED)
 FIND_PACKAGE(SharemindLibConsensusService REQUIRED)
 FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
@@ -59,6 +60,7 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
         ${LogHard_INCLUDE_DIRS}
         ${SharemindCHeaders_INCLUDE_DIRS}
         ${SharemindCxxHeaders_INCLUDE_DIRS}
+        ${SharemindLibAccessControlProcessFacility_INCLUDE_DIRS}
         ${SharemindLibConfiguration_INCLUDE_DIRS}
         ${SharemindLibConsensusService_INCLUDE_DIRS}
         ${SharemindLibDataStoreManager_INCLUDE_DIRS}
@@ -71,6 +73,7 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
         ${LogHard_DEFINITIONS}
         ${SharemindCHeaders_DEFINITIONS}
         ${SharemindCxxHeaders_DEFINITIONS}
+        ${SharemindLibAccessControlProcessFacility_DEFINITIONS}
         ${SharemindLibConfiguration_DEFINITIONS}
         ${SharemindLibConsensusService_DEFINITIONS}
         ${SharemindLibDataStoreManager_DEFINITIONS}

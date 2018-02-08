@@ -28,6 +28,7 @@ FIND_PACKAGE(SharemindLibConsensusService REQUIRED)
 FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon REQUIRED)
 FIND_PACKAGE(SharemindLibModapi REQUIRED)
+FIND_PACKAGE(SharemindLibProcessFacility REQUIRED)
 FIND_PACKAGE(SharemindModuleApis REQUIRED)
 
 
@@ -66,6 +67,7 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
         ${SharemindLibDataStoreManager_INCLUDE_DIRS}
         ${SharemindLibDbCommon_INCLUDE_DIRS}
         ${SharemindLibModapi_INCLUDE_DIRS}
+        ${SharemindLibProcessFacility_INCLUDE_DIRS}
         ${SharemindModuleApis_INCLUDE_DIRS}
     COMPILE_DEFINITIONS
         "SHAREMIND_INTERNAL_"
@@ -79,6 +81,7 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
         ${SharemindLibDataStoreManager_DEFINITIONS}
         ${SharemindLibDbCommon_DEFINITIONS}
         ${SharemindLibModapi_DEFINITIONS}
+        ${SharemindLibProcessFacility_DEFINITIONS}
     LINK_LIBRARIES
         ${Boost_LIBRARIES}
         ${LogHard_LIBRARIES}

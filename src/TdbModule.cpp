@@ -109,9 +109,7 @@ bool TdbModule::getErrorCode(
     return dataStoreAction(
                 ctx,
                 "mod_tabledb/errors",
-                [this, &dsName, &code](SharemindDataStore * const errors)
-                        noexcept
-                {
+                [&dsName, &code](SharemindDataStore * const errors) noexcept {
                     SharemindTdbError const * const e =
                             static_cast<SharemindTdbError *>(
                                 errors->get(errors, dsName.c_str()));

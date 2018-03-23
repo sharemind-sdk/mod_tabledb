@@ -26,16 +26,19 @@
 extern "C" {
 #endif
 
+const char * SharemindDataSource_name(SharemindDataSource * src);
 const char * SharemindDataSource_name(SharemindDataSource * src) {
     assert(src);
     return sharemind::DataSource::fromWrapper(*src).name().c_str();
 }
 
+const char * SharemindDataSource_module(SharemindDataSource * src);
 const char * SharemindDataSource_module(SharemindDataSource * src) {
     assert(src);
     return sharemind::DataSource::fromWrapper(*src).module().c_str();
 }
 
+const char * SharemindDataSource_conf(SharemindDataSource * src);
 const char * SharemindDataSource_conf(SharemindDataSource * src) {
     assert(src);
     return sharemind::DataSource::fromWrapper(*src).conf().c_str();

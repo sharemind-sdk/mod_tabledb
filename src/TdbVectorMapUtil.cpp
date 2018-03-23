@@ -28,6 +28,9 @@ extern "C" {
 
 SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(
         SharemindTdbVectorMapUtil * util,
+        SharemindDataStore * datastore);
+SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(
+        SharemindTdbVectorMapUtil * util,
         SharemindDataStore * datastore)
 {
     assert(util);
@@ -44,6 +47,9 @@ SharemindTdbVectorMap * SharemindTdbVectorMapUtil_new_map(
 
 bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util,
                                           SharemindDataStore * datastore,
+                                          const uint64_t vmapId);
+bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util,
+                                          SharemindDataStore * datastore,
                                           const uint64_t vmapId)
 {
     assert(util);
@@ -57,6 +63,10 @@ bool SharemindTdbVectorMapUtil_delete_map(SharemindTdbVectorMapUtil * util,
     }
 }
 
+SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(
+        SharemindTdbVectorMapUtil * util,
+        SharemindDataStore * datastore,
+        const uint64_t vmapId);
 SharemindTdbVectorMap * SharemindTdbVectorMapUtil_get_map(
         SharemindTdbVectorMapUtil * util,
         SharemindDataStore * datastore,

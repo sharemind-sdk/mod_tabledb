@@ -28,6 +28,9 @@ extern "C" {
 
 SharemindDataSource * SharemindDataSourceManager_get_source(
         SharemindDataSourceManager * mgr,
+        const char * name);
+SharemindDataSource * SharemindDataSourceManager_get_source(
+        SharemindDataSourceManager * mgr,
         const char * name)
 {
     assert(mgr);

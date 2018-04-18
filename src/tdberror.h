@@ -48,7 +48,10 @@ enum SharemindTdbError_ {
     SHAREMIND_TDB_TABLE_NOT_FOUND,
 
     /** Cannot create table, already exists. */
-    SHAREMIND_TDB_TABLE_ALREADY_EXISTS
+    SHAREMIND_TDB_TABLE_ALREADY_EXISTS,
+
+    /** Missing facility. */
+    SHAREMIND_TDB_MISSING_FACILITY
 
 };
 typedef enum SharemindTdbError_ SharemindTdbError;

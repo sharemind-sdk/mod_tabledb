@@ -129,7 +129,7 @@ SharemindAddComponentPackage("dev"
     DESCRIPTION "Sharemind TableDB module development headers"
     DEB_SECTION "libdevel"
     DEB_DEPENDS
-        "libsharemind-mod-tabledb (= ${SharemindModTableDb_VERSION})"
+        "libsharemind-mod-tabledb (= ${SharemindModTableDb_DEB_lib_PACKAGE_VERSION})"
         "libc6-dev (>= 2.19)"
 )
 SharemindAddComponentPackage("debug"
@@ -137,6 +137,6 @@ SharemindAddComponentPackage("debug"
     DESCRIPTION "Sharemind TableDb module debug symbols"
     DEB_SECTION "debug"
     DEB_DEPENDS
-        "libsharemind-mod-tabledb (= ${SharemindModTableDb_VERSION})"
+        "libsharemind-mod-tabledb (= ${SharemindModTableDb_DEB_lib_PACKAGE_VERSION})"
 )
 SharemindPackagingFinalize()

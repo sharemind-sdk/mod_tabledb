@@ -29,7 +29,7 @@ FIND_PACKAGE(SharemindLibDataStoreManager REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon REQUIRED)
 FIND_PACKAGE(SharemindLibModapi REQUIRED)
 FIND_PACKAGE(SharemindLibProcessFacility REQUIRED)
-FIND_PACKAGE(SharemindModuleApis REQUIRED)
+FIND_PACKAGE(SharemindModuleApis 1.0.0 REQUIRED)
 
 
 # Headers:

@@ -23,7 +23,7 @@ FIND_PACKAGE(LogHard 0.3.0 REQUIRED)
 FIND_PACKAGE(SharemindCHeaders 1.1.0 REQUIRED)
 FIND_PACKAGE(SharemindCxxHeaders 0.2.0 REQUIRED)
 FIND_PACKAGE(SharemindLibAccessControlProcessFacility 0.1.0 REQUIRED)
-FIND_PACKAGE(SharemindLibConfiguration REQUIRED)
+FIND_PACKAGE(SharemindLibConfiguration 0.2.0 REQUIRED)
 FIND_PACKAGE(SharemindLibConsensusService 0.1.0 REQUIRED)
 FIND_PACKAGE(SharemindLibDataStoreManager 0.1.0 REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon REQUIRED)
@@ -119,7 +119,7 @@ SharemindAddComponentPackage("lib"
     DEB_SECTION "libs"
     DEB_DEPENDS
         "libsharemind-modapi (>= 0.3.0)"
-        "libsharemind-configuration (>= 0.1.0)"
+        "libsharemind-configuration (>= 0.2.0)"
         "libloghard (>= 0.3.0)"
         "libstdc++6 (>= 4.8.0)"
         "libc6 (>= 2.19)"

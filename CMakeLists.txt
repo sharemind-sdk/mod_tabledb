@@ -19,7 +19,7 @@ SharemindSetProjectVersion()
 
 
 FIND_PACKAGE(Boost REQUIRED)
-FIND_PACKAGE(LogHard REQUIRED)
+FIND_PACKAGE(LogHard 0.3.0 REQUIRED)
 FIND_PACKAGE(SharemindCHeaders 1.1.0 REQUIRED)
 FIND_PACKAGE(SharemindCxxHeaders 0.2.0 REQUIRED)
 FIND_PACKAGE(SharemindLibAccessControlProcessFacility 0.1.0 REQUIRED)
@@ -120,7 +120,7 @@ SharemindAddComponentPackage("lib"
     DEB_DEPENDS
         "libsharemind-modapi (>= 0.3.0)"
         "libsharemind-configuration (>= 0.1.0)"
-        "libloghard (>= 0.1.0)"
+        "libloghard (>= 0.3.0)"
         "libstdc++6 (>= 4.8.0)"
         "libc6 (>= 2.19)"
 )

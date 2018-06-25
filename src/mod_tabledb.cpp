@@ -1275,7 +1275,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
                                  args, num_args, refs, crefs,
                                  returnValue, c)
 {
-    if (!SyscallArgs<2u, false, 0u, 4u>::check(args, num_args, refs, crefs, returnValue))
+    if (!SyscallArgs<3u, false, 0u, 4u>::check(args, num_args, refs, crefs, returnValue))
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
     if (crefs[0u].size == 0u
@@ -1295,13 +1295,13 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
     try {
         const uint64_t vmapId = args[0].uint64[0];
         const uint64_t typeSize = args[1].uint64[0];
+        const bool isScalar = static_cast<bool>(args[2u].uint8[0]);
         const std::string name(static_cast<const char *>(crefs[0u].pData), crefs[0u].size - 1u);
 
         uint64_t bufSize = 0;
-        // If the buffer size equal the type size, we assume it is a scalar
-        // value and the workaround does not apply to it.
-        if (crefs[3u].size == typeSize) {
-            bufSize = crefs[3u].size;
+
+        if (isScalar) {
+            bufSize = typeSize;
         } else {
             // TODO: the following is a workaround! We are always allocating one
             // byte too much as VM does not allow us to allocate 0 sized memory block.

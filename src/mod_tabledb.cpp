@@ -1287,9 +1287,6 @@ SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_push_back_value,
             || static_cast<const char *>(crefs[2u].pData)[crefs[2u].size - 1u] != '\0')
         return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
 
-    if (crefs[3u].size == 0u)
-        return SHAREMIND_MODULE_API_0x1_INVALID_CALL;
-
     sharemind::TdbModule * m = static_cast<sharemind::TdbModule *>(c->moduleHandle);
 
     try {

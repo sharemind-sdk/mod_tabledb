@@ -19,7 +19,6 @@
 
 #include <cassert>
 #include <LogHard/Logger.h>
-#include <sharemind/compiler-support/GccIsNothrowDestructible.h>
 #include <sharemind/AccessControlProcessFacility.h>
 #include <sharemind/datastoreapi.h>
 #include <sharemind/module-apis/api_0x1.h>
@@ -1753,7 +1752,7 @@ SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) __attribute__ ((visibility("default"))
 SHAREMIND_MODULE_API_0x1_DEINITIALIZER(c) {
     assert(c);
     assert(c->moduleHandle);
-    static_assert(is_nothrow_destructible<sharemind::TdbModule>::value, "");
+    static_assert(std::is_nothrow_destructible<sharemind::TdbModule>::value, "");
     delete static_cast<sharemind::TdbModule *>(c->moduleHandle);
     c->moduleHandle = nullptr;
 }

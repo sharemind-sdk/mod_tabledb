@@ -28,7 +28,6 @@
 #include <sharemind/DebugOnly.h>
 #include <sharemind/libmodapi/libmodapi.h>
 #include <sharemind/likely.h>
-#include <sharemind/MakeUnique.h>
 #include <sharemind/SimpleUnorderedStringMap.h>
 #include <string>
 #include <vector>
@@ -111,7 +110,7 @@ public: /* Methods: */
                 SHAREMIND_DEBUG_ONLY(auto const rv =)
                         syscallMap.emplace(
                             required,
-                            makeUnique<SharemindSyscallWrapper>(
+                            std::make_unique<SharemindSyscallWrapper>(
                                 SharemindSyscall_wrapper(sc)));
                 assert(rv.second);
             }

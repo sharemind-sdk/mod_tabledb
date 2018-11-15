@@ -19,6 +19,7 @@
 
 #include "TdbModule.h"
 
+#include <memory>
 #include <sstream>
 #include "DataSource.h"
 #include "TdbConfiguration.h"
@@ -37,7 +38,7 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     // Load module configuration
     std::unique_ptr<TdbConfiguration> configuration;
     try {
-        configuration = makeUnique<TdbConfiguration>(config);
+        configuration = std::make_unique<TdbConfiguration>(config);
     } catch (...) {
         std::throw_with_nested(
                     ConfigurationException("Failed to parse configuration!"));

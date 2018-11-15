@@ -20,7 +20,6 @@
 #include "DataSourceManager.h"
 
 #include <cassert>
-#include <sharemind/MakeUnique.h>
 #include "DataSource.h"
 
 
@@ -57,9 +56,9 @@ bool DataSourceManager::addDataSource(std::string name,
                                       std::string dbModule,
                                       std::string config)
 {
-    auto ds(makeUnique<DataSource>(std::move(name),
-                                   std::move(dbModule),
-                                   std::move(config)));
+    auto ds(std::make_unique<DataSource>(std::move(name),
+                                         std::move(dbModule),
+                                         std::move(config)));
     return m_dataSources.emplace(ds->name(), std::move(ds)).second;
 }
 

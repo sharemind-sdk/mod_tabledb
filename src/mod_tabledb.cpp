@@ -267,6 +267,7 @@ MOD_TABLEDB_FORWARD_SYSCALL2(tdb_tbl_row_count, "read")
 MOD_TABLEDB_FORWARD_SYSCALL2(tdb_insert_row, "write")
 MOD_TABLEDB_FORWARD_SYSCALL2(tdb_insert_row2, "write")
 MOD_TABLEDB_FORWARD_SYSCALL2(tdb_read_col, "read")
+MOD_TABLEDB_FORWARD_SYSCALL2(tdb_set_attributes, "write")
 
 SHAREMIND_MODULE_API_0x1_SYSCALL(tdb_vmap_new,
                                  args, num_args, refs, crefs,
@@ -1728,6 +1729,7 @@ SHAREMIND_MODULE_API_0x1_INITIALIZER(c) {
                             "tdb_insert_row",
                             "tdb_insert_row2",
                             "tdb_read_col",
+                            "tdb_set_attributes",
                             // "tdb_read_row",
                             // "tdb_update_col",
                             // "tdb_update_row"
@@ -1785,6 +1787,7 @@ SHAREMIND_MODULE_API_0x1_SYSCALL_DEFINITIONS(
     //, { "tdb_read_row",   &tdb_read_row }
     //, { "tdb_update_col", &tdb_update_col }
     //, { "tdb_update_row", &tdb_update_row }
+    , { "tdb_set_attributes",               &tdb_set_attributes }
 
     /* Parameter and result vector map API */
     /* Constructor/Destructor */

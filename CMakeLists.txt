@@ -126,6 +126,8 @@ SharemindAddComponentPackage("lib"
         "libloghard (>= 0.3.0)"
         "libstdc++6 (>= 4.8.0)"
         "libc6 (>= 2.19)"
+  DEB_EXTRA_CONTROL_FILES
+      "${CMAKE_CURRENT_SOURCE_DIR}/packaging/debian/conffiles"
 )
 SharemindAddComponentPackage("dev"
     NAME "libsharemind-mod-tabledb-dev"

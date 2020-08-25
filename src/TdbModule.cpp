@@ -20,6 +20,7 @@
 #include "TdbModule.h"
 
 #include <memory>
+#include <sharemind/libconfiguration/Configuration.h>
 #include <sstream>
 #include "DataSource.h"
 #include "TdbConfiguration.h"
@@ -39,7 +40,7 @@ TdbModule::TdbModule(const LogHard::Logger & logger,
     std::unique_ptr<TdbConfiguration> configuration;
     try {
         configuration = std::make_unique<TdbConfiguration>(config);
-    } catch (...) {
+    } catch (Configuration::Exception const &) {
         std::throw_with_nested(
                     ConfigurationException("Failed to parse configuration!"));
     }

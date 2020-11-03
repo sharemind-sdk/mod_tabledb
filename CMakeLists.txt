@@ -20,10 +20,10 @@ FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(LogHard 0.3.0 REQUIRED)
 FIND_PACKAGE(SharemindCHeaders 1.1.0 REQUIRED)
 FIND_PACKAGE(SharemindCxxHeaders 0.5.0 REQUIRED)
+FIND_PACKAGE(SharemindDataStoreApi 0.1.0 REQUIRED)
 FIND_PACKAGE(SharemindLibAccessControlProcessFacility 0.1.0 REQUIRED)
 FIND_PACKAGE(SharemindLibConfiguration 0.2.0 REQUIRED)
 FIND_PACKAGE(SharemindLibConsensusService 0.1.0 REQUIRED)
-FIND_PACKAGE(SharemindLibDataStoreManager 0.1.0 REQUIRED)
 FIND_PACKAGE(SharemindLibDbCommon 0.1.1 REQUIRED)
 FIND_PACKAGE(SharemindLibModapi 0.3.0 REQUIRED)
 FIND_PACKAGE(SharemindLibProcessFacility 0.1.0 REQUIRED)
@@ -47,7 +47,7 @@ SharemindSetCxx14CompileOptions()
 FILE(GLOB SharemindModTableDb_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 FILE(GLOB SharemindModTableDb_HEADERS_P "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 LIST(REMOVE_ITEM SharemindModTableDb_HEADERS_P ${SharemindModTableDb_HEADERS})
-SharemindAddSharedLibrary("sharemind_mod_tabledb"
+SharemindAddSharedLibrary(ModTableDb
     OUTPUT_NAME "sharemind_mod_tabledb"
     MODULE
     SOURCES
@@ -90,6 +90,7 @@ SharemindAddSharedLibrary("sharemind_mod_tabledb"
         ${SharemindLibDbCommon_LIBRARIES}
         ${SharemindLibModapi_LIBRARIES}
 )
+TARGET_LINK_LIBRARIES(ModTableDb PRIVATE Sharemind::DataStoreApi)
 
 
 # Install CMake files:

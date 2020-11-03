@@ -20,7 +20,6 @@
 #include <cassert>
 #include <LogHard/Logger.h>
 #include <sharemind/AccessControlProcessFacility.h>
-#include <sharemind/datastoreapi.h>
 #include <sharemind/module-apis/api_0x1.h>
 #include <sharemind/libprocessfacility.h>
 #include <sharemind/StringHashTablePredicate.h>

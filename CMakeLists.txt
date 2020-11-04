@@ -136,6 +136,7 @@ SharemindAddComponentPackage("dev"
     DEB_SECTION "libdevel"
     DEB_DEPENDS
         "libsharemind-mod-tabledb (= ${SharemindModTableDb_DEB_lib_PACKAGE_VERSION})"
+        "libsharemind-data-store-api-dev (>= 0.1.0)"
         "libc6-dev (>= 2.19)"
 )
 SharemindAddComponentPackage("debug"

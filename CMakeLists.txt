@@ -13,21 +13,21 @@ PROJECT(SharemindModTableDb VERSION 0.3.0 LANGUAGES CXX)
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/config.local" OPTIONAL)
 INCLUDE("${CMAKE_CURRENT_BINARY_DIR}/config.local" OPTIONAL)
 
-FIND_PACKAGE(SharemindCMakeHelpers 1.4 REQUIRED)
+FIND_PACKAGE(SharemindCMakeHelpers 1.6 REQUIRED)
 
 
-FIND_PACKAGE(Boost REQUIRED)
-FIND_PACKAGE(LogHard 0.3.0 REQUIRED)
-FIND_PACKAGE(SharemindCHeaders 1.1.0 REQUIRED)
-FIND_PACKAGE(SharemindCxxHeaders 0.5.0 REQUIRED)
+FIND_PACKAGE(Boost 1.62 REQUIRED)
+FIND_PACKAGE(LogHard 0.5.0 REQUIRED)
+FIND_PACKAGE(SharemindCHeaders 1.3.0 REQUIRED)
+FIND_PACKAGE(SharemindCxxHeaders 0.8.0 REQUIRED)
 FIND_PACKAGE(SharemindDataStoreApi 0.1.0 REQUIRED)
-FIND_PACKAGE(SharemindLibAccessControlProcessFacility 0.1.0 REQUIRED)
-FIND_PACKAGE(SharemindLibConfiguration 0.2.0 REQUIRED)
-FIND_PACKAGE(SharemindLibConsensusService 0.1.0 REQUIRED)
-FIND_PACKAGE(SharemindLibDbCommon 0.1.1 REQUIRED)
-FIND_PACKAGE(SharemindLibModapi 0.3.0 REQUIRED)
-FIND_PACKAGE(SharemindLibProcessFacility 0.1.0 REQUIRED)
-FIND_PACKAGE(SharemindModuleApis 1.0.0 REQUIRED)
+FIND_PACKAGE(SharemindLibAccessControlProcessFacility 0.3.0 REQUIRED)
+FIND_PACKAGE(SharemindLibConfiguration 0.5.0 REQUIRED)
+FIND_PACKAGE(SharemindLibConsensusService 0.2.0 REQUIRED)
+FIND_PACKAGE(SharemindLibDbCommon 0.2.0 REQUIRED)
+FIND_PACKAGE(SharemindLibModapi 0.4.0 REQUIRED)
+FIND_PACKAGE(SharemindLibProcessFacility 0.2.0 REQUIRED)
+FIND_PACKAGE(SharemindModuleApis 1.1.0 REQUIRED)
 
 
 # Headers:
@@ -54,60 +54,35 @@ SharemindAddSharedLibrary(ModTableDb
         ${SharemindModTableDb_SOURCES}
         ${SharemindModTableDb_HEADERS}
         ${SharemindModTableDb_HEADERS_P}
-    INCLUDE_DIRECTORIES
-        ${Boost_INCLUDE_DIRS}
-        ${LogHard_INCLUDE_DIRS}
-        ${SharemindCHeaders_INCLUDE_DIRS}
-        ${SharemindCxxHeaders_INCLUDE_DIRS}
-        ${SharemindLibAccessControlProcessFacility_INCLUDE_DIRS}
-        ${SharemindLibConfiguration_INCLUDE_DIRS}
-        ${SharemindLibConsensusService_INCLUDE_DIRS}
-        ${SharemindLibDataStoreManager_INCLUDE_DIRS}
-        ${SharemindLibDbCommon_INCLUDE_DIRS}
-        ${SharemindLibModapi_INCLUDE_DIRS}
-        ${SharemindLibProcessFacility_INCLUDE_DIRS}
-        ${SharemindModuleApis_INCLUDE_DIRS}
-    COMPILE_DEFINITIONS
+    )
+TARGET_COMPILE_DEFINITIONS(ModTableDb
+    PRIVATE
         "SHAREMIND_INTERNAL_"
-    LEGACY_DEFINITIONS
-        ${LogHard_DEFINITIONS}
-        ${SharemindCHeaders_DEFINITIONS}
-        ${SharemindCxxHeaders_DEFINITIONS}
-        ${SharemindLibAccessControlProcessFacility_DEFINITIONS}
-        ${SharemindLibConfiguration_DEFINITIONS}
-        ${SharemindLibConsensusService_DEFINITIONS}
-        ${SharemindLibDataStoreManager_DEFINITIONS}
-        ${SharemindLibDbCommon_DEFINITIONS}
-        ${SharemindLibModapi_DEFINITIONS}
-        ${SharemindLibProcessFacility_DEFINITIONS}
-    LINK_LIBRARIES
-        ${Boost_LIBRARIES}
-        ${LogHard_LIBRARIES}
-        ${SharemindCHeaders_LIBRARIES}
-        ${SharemindCxxHeaders_LIBRARIES}
-        ${SharemindLibConfiguration_LIBRARIES}
-        ${SharemindLibConsensusService_LIBRARIES}
-        ${SharemindLibDbCommon_LIBRARIES}
-        ${SharemindLibModapi_LIBRARIES}
-)
-TARGET_LINK_LIBRARIES(ModTableDb PRIVATE Sharemind::DataStoreApi)
-
-
-# Install CMake files:
-SharemindCreateCMakeFindFiles(
-    INCLUDE_DIRS
-        ${SharemindLibDataStoreManager_INCLUDE_DIRS}
-        "${CMAKE_INSTALL_PREFIX}/include"
-    DEFINITIONS
-        ${SharemindLibDataStoreManager_DEFINITIONS}
-        "-D__STDC_LIMIT_MACROS"
-        "-D__STDC_CONSTANT_MACROS"
-        "-D__STDC_FORMAT_MACROS"
-    LIBRARIES
-        ${SharemindLibModapi_LIBRARIES}
-        "-L${CMAKE_INSTALL_PREFIX}/lib"
-        "-lsharemind_mod_tabledb"
-)
+    PUBLIC
+        "__STDC_LIMIT_MACROS"
+        "__STDC_CONSTANT_MACROS"
+        "__STDC_FORMAT_MACROS"
+    )
+TARGET_LINK_LIBRARIES(ModTableDb
+    PRIVATE
+        Boost::boost
+        LogHard::LogHard
+        Sharemind::CHeaders
+        Sharemind::CxxHeaders
+        Sharemind::LibAccessControlProcessFacility
+        Sharemind::LibConfiguration
+        Sharemind::LibConsensusService
+        Sharemind::LibDbCommon
+        Sharemind::LibModapi
+        Sharemind::LibProcessFacility
+        Sharemind::ModuleApis
+    PUBLIC
+        Sharemind::DataStoreApi
+    )
+SharemindCreateCMakeFindFilesForTarget(ModTableDb
+    DEPENDENCIES
+        "SharemindLibDataStoreManager 0.2.0"
+    )
 
 # Configuration files:
 INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/packaging/configs/sharemind/"
@@ -122,9 +97,9 @@ SharemindAddComponentPackage("lib"
     DESCRIPTION "Sharemind TableDB module"
     DEB_SECTION "libs"
     DEB_DEPENDS
-        "libsharemind-modapi (>= 0.3.0)"
-        "libsharemind-configuration (>= 0.2.0)"
-        "libloghard (>= 0.3.0)"
+        "libsharemind-modapi (>= 0.4.0)"
+        "libsharemind-configuration (>= 0.5.0)"
+        "libloghard (>= 0.5.0)"
         "libstdc++6 (>= 4.8.0)"
         "libc6 (>= 2.19)"
   DEB_EXTRA_CONTROL_FILES

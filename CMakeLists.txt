@@ -49,11 +49,16 @@ FILE(GLOB SharemindModTableDb_HEADERS_P "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 LIST(REMOVE_ITEM SharemindModTableDb_HEADERS_P ${SharemindModTableDb_HEADERS})
 SharemindAddSharedLibrary(ModTableDb
     OUTPUT_NAME "sharemind_mod_tabledb"
-    MODULE
+    # TODO: Not MODULE, because mod_tabledb_* need to link back to it.
     SOURCES
         ${SharemindModTableDb_SOURCES}
         ${SharemindModTableDb_HEADERS}
         ${SharemindModTableDb_HEADERS_P}
+    )
+TARGET_INCLUDE_DIRECTORIES(ModTableDb
+    INTERFACE # TODO Remove when ModTableDb is converted back to AGAIN again:
+        # $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src> # TODO
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
     )
 TARGET_COMPILE_DEFINITIONS(ModTableDb
     PRIVATE

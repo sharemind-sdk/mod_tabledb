@@ -81,7 +81,7 @@ TARGET_LINK_LIBRARIES(ModTableDb
     )
 SharemindCreateCMakeFindFilesForTarget(ModTableDb
     DEPENDENCIES
-        "SharemindLibDataStoreManager 0.2.0"
+        "SharemindDataStoreApi 0.1.0"
     )
 
 # Configuration files:

@@ -43,7 +43,6 @@ INSTALL(FILES ${SharemindModTableDb_HEADERS}
 
 
 # The module:
-SharemindSetCxx14CompileOptions()
 FILE(GLOB SharemindModTableDb_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 FILE(GLOB SharemindModTableDb_HEADERS_P "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 LIST(REMOVE_ITEM SharemindModTableDb_HEADERS_P ${SharemindModTableDb_HEADERS})

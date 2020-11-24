@@ -57,7 +57,7 @@ SharemindAddSharedLibrary(ModTableDb
 TARGET_INCLUDE_DIRECTORIES(ModTableDb
     INTERFACE # TODO Remove when ModTableDb is converted back to AGAIN again:
         # $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src> # TODO
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+        $<INSTALL_INTERFACE:include>
     )
 TARGET_COMPILE_DEFINITIONS(ModTableDb
     PRIVATE
